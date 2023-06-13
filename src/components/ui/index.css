@@ -1,0 +1,159 @@
+.titulos {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    color: #605d5f !important;
+}
+
+.subtitulos {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    color: #605d5f !important;
+  }
+
+  .contSubtitulo-cliente {
+    display: flex; 
+    flex-direction: column;
+    width: 100%;
+    padding-right: 25px;
+  }
+
+/*//!------Boton agregar--------*/
+.btnAddCosecha {
+  margin-left: auto;
+  margin-right: -2px;
+  border: none;
+  font-size: 18px !important;
+  color: #00b33c;
+  background-color: transparent; 
+}
+.ant-btn-default.btnAddCosecha{
+  box-shadow: none;
+  margin-top: 2px;
+  transition: none !important;
+}
+.btnAddCosecha:active:hover {
+  background: none !important;
+  border-color: #ffffff !important;
+}
+.btnAddCosecha:disabled {
+  background-color: #ffffff !important;
+}
+.ant-btn .ant-btn-default .btnAddCosecha:focus{
+  border-color: none !important;
+  box-shadow: none !important;
+}
+.ant-btn-default:not(:disabled).btnAddCosecha:hover {
+  /* #8fd14a */
+  color: #8fd14a;
+  border-color: #8fd14a;
+  transition: none;
+}
+.ant-btn-default:not(:disabled).btnAddCosecha:focus {
+  color: #8fd14a;
+  border-color: #8fd14a;
+  transition: none;
+  box-shadow: none !important;
+  border: none !important;
+}
+.ant-btn-default:not(:disabled).btnAddCosecha:active{
+  box-shadow: none !important;
+  border: none !important;
+}
+.btnAddCosecha:focus:not(.focus-visible) {
+  outline: 0;
+}
+/*//!------Fin boton agregar--------*/
+
+/*//!------Boton editar--------*/
+.btnEditEncuesta {
+  margin-left: auto;
+  margin-right: -2px;
+  border: none;
+  font-size: 18px !important;
+  color: #00b33c;
+  background-color: transparent; 
+}
+.ant-btn-default.btnEditEncuesta{
+  box-shadow: none;
+  margin-top: 2px;
+  transition: none !important;
+}
+.btnEditEncuesta:active:hover {
+  background: none !important;
+  border-color: #ffffff !important;
+}
+.btnEditEncuesta:disabled {
+  background-color: #ffffff !important;
+}
+.ant-btn .ant-btn-default .btnEditEncuesta:focus{
+  border-color: none !important;
+  box-shadow: none !important;
+}
+.ant-btn-default:not(:disabled).btnEditEncuesta:hover {
+  /* #8fd14a */
+  color: #8fd14a;
+  border-color: #8fd14a;
+  transition: none;
+}
+.ant-btn-default:not(:disabled).btnEditEncuesta:focus {
+  color: #8fd14a;
+  border-color: #8fd14a;
+  transition: none;
+  box-shadow: none !important;
+  border: none !important;
+}
+.ant-btn-default:not(:disabled).btnEditEncuesta:active{
+  box-shadow: none !important;
+  border: none !important;
+}
+.btnEditEncuesta:focus:not(.focus-visible) {
+  outline: 0;
+}
+/*//!------Fin boton editar--------*/
+
+/*//!------Boton nuevo evento--------*/
+.btnNuevoEvento {
+  margin-left: auto;
+  margin-right: -2px;
+  border: none;
+  font-size: 18px !important;
+  color: #F6BB42;
+  background-color: transparent; 
+}
+.ant-btn-default.btnNuevoEvento{
+  box-shadow: none;
+  margin-top: 2px;
+  transition: none !important;
+}
+.btnNuevoEvento:active:hover {
+  background: none !important;
+  border-color: #ffffff !important;
+}
+.btnNuevoEvento:disabled {
+  background-color: #ffffff !important;
+}
+.ant-btn .ant-btn-default .btnNuevoEvento:focus{
+  border-color: none !important;
+  box-shadow: none !important;
+}
+.ant-btn-default:not(:disabled).btnNuevoEvento:hover {
+  /* #F6BB42 */
+  color: #F6BB42;
+  border-color: #F6BB42;
+  transition: none;
+}
+.ant-btn-default:not(:disabled).btnNuevoEvento:focus {
+  color: #F6BB42;
+  border-color: #F6BB42;
+  transition: none;
+  box-shadow: none !important;
+  border: none !important;
+}
+.ant-btn-default:not(:disabled).btnNuevoEvento:active{
+  box-shadow: none !important;
+  border: none !important;
+}
+.btnNuevoEvento:focus:not(.focus-visible) {
+  outline: 0;
+}
+/*//!------Fin boton nuevo evento--------*/

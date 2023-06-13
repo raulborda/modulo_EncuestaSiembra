@@ -1,0 +1,29 @@
+.titulos {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    color: #605d5f !important;
+}
+
+.subtitulos {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    color: #605d5f !important;
+  }
+
+  /* .listAgregarEncuesta .ant-list-items{
+    padding: 2px 16px !important;
+  } */
+
+  /* .custom-list .ant-list-bordered.ant-list-sm .ant-list-item,
+  .custom-list .ant-list-bordered.ant-list-sm .ant-list-header,
+  .custom-list .ant-list-bordered.ant-list-sm .ant-list-footer {
+    padding: 1px 16px !important;
+  } */
+
+  .custom-list {
+    pointer-events: none; /* Deshabilitar la interacción con los elementos del listado */
+    background-color: #f5f5f5; /* Establecer el color de fondo en gris */
+    opacity: 0.5; /* Establecer la opacidad para dar un efecto visual de deshabilitado */
+  }
+  
+  

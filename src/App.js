@@ -34,6 +34,8 @@ function App() {
   const [cultivos, setCultivos] = useState([]);
   const [addEncCliente, setAddEncCliente] = useState(null);
   const [addEncCultivos, setAddEncCultivos] = useState();
+  const [infoEncuesta, setInfoEncuesta] = useState({});
+  const [editarEncuesta, setEditarEncuesta] = useState([]);
 
   const [upload, setUpload] = useState(false);
 
@@ -106,6 +108,8 @@ function App() {
         isModalOpen, setIsModalOpen,
         isModalOpenEdit, setIsModalOpenEdit,
         upload, setUpload,
+        infoEncuesta, setInfoEncuesta,
+        editarEncuesta, setEditarEncuesta,
       }}
     >
       {/* <ApolloProvider client={client}> */}

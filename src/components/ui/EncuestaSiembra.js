@@ -75,6 +75,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     isModalOpen, setIsModalOpen,
     isModalOpenEdit, setIsModalOpenEdit,
     upload, setUpload,
+    infoEncuesta, setInfoEncuesta,
+    editarEncuesta, setEditarEncuesta,
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState('0');
@@ -107,6 +109,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   //! Fin - Modal - Agregar
 
   const columns = [
+    {
+      key: 'idCliente',
+      width: '1%', // Ajustar el ancho de la columna
+    },
+    {
+      key: 'idEncuesta',
+      width: '1%', // Ajustar el ancho de la columna
+    },
     {
       title: 'CLIENTE',
       dataIndex: 'cliente',
@@ -166,27 +176,30 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       ),
     },
   ];
+  const visibleColumns = columns.slice(2); //En esta linea saco las dos primeras columnas para que no se visualicen
 
   const data = infoTable.map(item => {
     const cultivo = item.ciclo !== "0" ? item.acult_desc + ' / ' + item.ciclo + '°' : item.acult_desc;
     let estadoTag;
     switch (item.aencc_estado) {
       case "3":
-        estadoTag = <Tag color="green">OK</Tag>;
+        estadoTag = <Tag color="green" key={3}>OK</Tag>;
         break;
       case "2":
-        estadoTag = <Tag color="red">NS</Tag>;
+        estadoTag = <Tag color="red" key={2}>NS</Tag>;
         break;
       case "1":
-        estadoTag = <Tag color="red">NA</Tag>;
+        estadoTag = <Tag color="red" key={1}>NA</Tag>;
         break;
       case "0":
-        estadoTag = <Tag color="red">NE</Tag>;
+        estadoTag = <Tag color="red" key={2}>NE</Tag>;
         break;
       default:
         estadoTag = null;
     }
     return {
+      idCliente: item.cli_id,
+      idEncuesta: item.aencc_id,
       cliente: item.cli_nombre,
       cultivo: cultivo,
       supEstimado: item.superficie,
@@ -200,15 +213,16 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const handleEditClick = (record, index) => {
     // Aquí puedes acceder a los datos de la fila correspondiente
     console.log('Registro seleccionado:', record);
-    console.log('Índice de la fila:', index);
-  
+    // console.log('Índice de la fila:', index);
+
     // Puedes guardar los datos en el estado o realizar cualquier otra operación
-    // ...
-  
+    setInfoEncuesta(record);
+    // console.log('Registro seleccionado - setInfoEncuesta:', infoEncuesta);
+
     // Abre el modal de edición
     showModalEdit();
   };
-  
+
 
 
 
@@ -314,7 +328,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           const data = resp;
           const objetoData = JSON.parse(data);
           const LotesConTodos = [{ alote_id: "todos", alote_nombre: "TODOS" }, { alote_id: "0", alote_nombre: "SIN LOTES" }, ...objetoData];
-          console.log('objetoData - encuesta-siembra_listLotes: ', objetoData);
+          // console.log('objetoData - encuesta-siembra_listLotes: ', objetoData);
           if (idCli === 0) {
             setLotes([]);
           } else {
@@ -498,17 +512,17 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     dataAdd.append("idU", usu);
     dataAdd.append("idC", idCli);
     if (selectedLote === 'todos' || selectedLote === '' || selectedLote === -1) {
-      console.log('selectedLote: ', selectedLote);
+      // console.log('selectedLote: ', selectedLote);
       dataAdd.append("idLote", '');
     } else {
       dataAdd.append("idLote", selectedLote);
     }
     if (cosechaSeleccionada) {
-      console.log('cosechaSeleccionada0: ', cosechaSeleccionada);
+      // console.log('cosechaSeleccionada0: ', cosechaSeleccionada);
       dataAdd.append("idCos", cosechaSeleccionada);
     } else {
-      console.log('cosechaSeleccionada1: ', cosechaSeleccionada);
-      console.log('cosechaSeleccionada: ', cosechaActiva);
+      // console.log('cosechaSeleccionada1: ', cosechaSeleccionada);
+      // console.log('cosechaSeleccionada: ', cosechaActiva);
       dataAdd.append("idCos", cosechaActiva);
     }
     if (selectedCultivo === 'todos') {
@@ -528,6 +542,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       response.text().then((resp) => {
         try {
           const objetoData = JSON.parse(resp);
+          // console.log('objetoData - encuesta-siembra_datosTable :', objetoData);
           setInfoTable(objetoData);
         } catch (error) {
           console.error('Error al analizar la respuesta JSON:', error);
@@ -536,6 +551,38 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       });
     });
   }, [idCli, selectedLote, cosechaSeleccionada, selectedCultivo, selectedAcosDesc, selectedEstado, upload]);
+
+
+
+  useEffect(() => {
+    // console.log('infoEncuesta.idCliente: ', infoEncuesta.idCliente);
+    // console.log('infoEncuesta.idEncuesta: ', infoEncuesta.idEncuesta);
+    if (infoEncuesta.idCliente && infoEncuesta.idEncuesta) {
+      console.log('ENTRO')
+      const dataAdd = new FormData();
+      dataAdd.append("idU", usu);
+      dataAdd.append("idC", parseInt(infoEncuesta.idCliente));
+      dataAdd.append("idEnc", parseInt(infoEncuesta.idEncuesta));
+      fetch(`${URL}encuesta-siembra_consultarEncuestaEditar.php`, {
+        method: "POST",
+        body: dataAdd,
+      }).then(function (response) {
+        response.json().then((resp) => {
+          try {
+            console.log('Resp:', resp);
+            setEditarEncuesta(resp);
+            // const objetoData = JSON.parse(resp);
+            // console.log('objetoData - encuesta-siembra_consultarEncuestaEditar :', objetoData);
+            // setInfoTable(objetoData);
+          } catch (error) {
+            console.error('Error al analizar la respuesta JSON:', error);
+            console.log('Respuesta no válida:', resp);
+          }
+        });
+      });
+    }
+  }, [infoEncuesta]);
+
 
 
   //!
@@ -549,7 +596,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   return (
     <>
-      <div style={{ userSelect: 'none'}}>
+      <div style={{ userSelect: 'none' }}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
           <div>
             <h1 className='titulos'>
@@ -703,10 +750,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             />
           </div>
         </div>
-        <Modal title="NUEVA ENCUESTA" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} width={650} style={{ userSelect: 'none'}}>
+        <Modal title="NUEVA ENCUESTA" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} width={650} style={{ userSelect: 'none' }}>
           <NuevaEncuesta />
         </Modal>
-        <Modal title="EDITAR ENCUESTA" open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none'}}>
+        <Modal title="EDITAR ENCUESTA" open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
 
@@ -809,7 +856,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           </div>
         </div> */}
         <div>
-          <Table columns={columns} dataSource={data} size="small" />
+          <Table columns={visibleColumns} dataSource={data} size="small" />
         </div>
       </div>
     </>

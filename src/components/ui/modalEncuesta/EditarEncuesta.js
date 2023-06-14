@@ -23,6 +23,8 @@ export const EditarEncuesta = () => {
         addEncCultivos, setAddEncCultivos,
         isModalOpenEdit, setIsModalOpenEdit,
         upload, setUpload,
+        infoEncuesta, setInfoEncuesta,
+        editarEncuesta, setEditarEncuesta,
     } = useContext(GlobalContext);
     const [loteEncuestaAdd, setLoteEncuestaAdd] = useState();
     const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
@@ -34,7 +36,7 @@ export const EditarEncuesta = () => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
         if (e.target.value === 0 || e.target.value === 1 || e.target.value === 2) {
-            setDisabledInputs(true);
+            // setDisabledInputs(true);
         } else {
             setDisabledInputs(false);
         }
@@ -99,8 +101,8 @@ export const EditarEncuesta = () => {
         form.resetFields();
     }, [isModalOpenEdit]);
 
-
-
+    console.log('editarEncuesta && parseInt(editarEncuesta.aencc_estado): ',  editarEncuesta[0]?.aencc_estado);
+    console.log('editarEncuesta: ',  editarEncuesta);
     return (
         <>
             {/* Renderizar el componente de mensaje */}
@@ -120,12 +122,19 @@ export const EditarEncuesta = () => {
                                         message: "Por favor selecciona un estado",
                                     },
                                 ]}
-                                className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                                className="hidden-asterisk"
+                                defaultValue={editarEncuesta && parseInt(editarEncuesta[0]?.aencc_estado)}
                             >
-                                <Radio.Group onChange={onChange} value={value}>
-                                    <Radio style={{ paddingRight: '15px' }} value={3}>ENCUESTA OK</Radio>
-                                    <Radio style={{ paddingRight: '15px' }} value={0}>NO ENCUESTADO</Radio>
-                                    <Radio style={{ paddingRight: '15px' }} value={1}>NO ACCEDE</Radio>
+                                <Radio.Group onChange={onChange} >
+                                    <Radio style={{ paddingRight: '15px' }} value={3}>
+                                        ENCUESTA OK
+                                    </Radio>
+                                    <Radio style={{ paddingRight: '15px' }} value={0}>
+                                        NO ENCUESTADO
+                                    </Radio>
+                                    <Radio style={{ paddingRight: '15px' }} value={1}>
+                                        NO ACCEDE
+                                    </Radio>
                                     <Radio value={2}>NO SIEMBRA</Radio>
                                 </Radio.Group>
                             </Form.Item>
@@ -148,14 +157,19 @@ export const EditarEncuesta = () => {
                             >
                                 <List
                                     disabled={true}
-                                    // className="custom-list"
-                                    style={{ height: '170px', overflow: 'auto', pointerEvents: 'none', opacity: '4', backgroundColor: '#f5f5f5'}}
+                                    style={{
+                                        height: '170px',
+                                        overflow: 'auto',
+                                        pointerEvents: 'none',
+                                        opacity: '4',
+                                        backgroundColor: '#f5f5f5'
+                                    }}
                                     size="small"
                                     bordered
-                                    dataSource={lotes.length > 0 ? lotes : (addEncCliente ? [{ alote_id: "0", alote_nombre: "SIN LOTES" }] : [])}
+                                    dataSource={Object.values(editarEncuesta).map(item => item.alote_nombre)}
                                     renderItem={(lote) => (
-                                        <List.Item style={{color: '#0000003F'}} key={lote.alote_id}>
-                                            {lote.alote_nombre}
+                                        <List.Item style={{ color: '#0000003F' }} key={lote}>
+                                            {lote}
                                         </List.Item>
                                     )}
                                 />

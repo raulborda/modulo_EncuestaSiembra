@@ -1,4 +1,4 @@
-import { Button, Checkbox, DatePicker, Form, Input, List, Radio, Select, message } from 'antd';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, List, Radio, Select, message } from 'antd';
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../context/GlobalContext';
 
@@ -25,6 +25,9 @@ export const EditarEncuesta = () => {
         upload, setUpload,
         infoEncuesta, setInfoEncuesta,
         editarEncuesta, setEditarEncuesta,
+
+        selectedCosechaId,
+        encuestaSeleccionada,
     } = useContext(GlobalContext);
     const [loteEncuestaAdd, setLoteEncuestaAdd] = useState();
     const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
@@ -35,33 +38,30 @@ export const EditarEncuesta = () => {
     const onChange = (e) => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
+
         if (e.target.value === 0 || e.target.value === 1 || e.target.value === 2) {
-            // setDisabledInputs(true);
+            form.setFieldsValue({
+                hasEst: 0,
+                rinde: 0,
+                costo: 0
+            });
         } else {
-            setDisabledInputs(false);
+            form.setFieldsValue({
+                hasEst: encuestaSeleccionada && encuestaSeleccionada.superficie,
+                rinde: encuestaSeleccionada && encuestaSeleccionada.rindeEst,
+                costo: encuestaSeleccionada && encuestaSeleccionada.costoEst,
+            });
         }
     };
 
 
     const onSubmitEdit = async (values) => {
         try {
-            // Parsear la fecha en formato GMT
-            const fechaSiembra = new Date(values.fechaSiembra);
-            // Obtener los componentes de la fecha
-            const year = fechaSiembra.getFullYear();
-            const month = String(fechaSiembra.getMonth() + 1).padStart(2, '0'); // El mes es base 0, por lo tanto se suma 1
-            const day = String(fechaSiembra.getDate()).padStart(2, '0');
-            // Formatear la fecha en el formato "yyyy-mm-dd"
-            const fechaFormateada = `${year}-${month}-${day}`;
-
             const dataAdd = new FormData();
             dataAdd.append("usuid", usu);
+            console.log("encid: ", encuestaSeleccionada.idEncuesta);
+            dataAdd.append("encid", encuestaSeleccionada.idEncuesta);
             dataAdd.append("opciones", values.estado);
-            dataAdd.append("newc_clienc", values.cliente);
-            dataAdd.append("newc_lote", lotesSeleccionados);
-            dataAdd.append("newc_cosa", values.cosecha);
-            dataAdd.append("newc_cult", values.cultivo);
-            dataAdd.append("newc_ciclo", values.ciclo);
             if (values.estado === 1 || values.estado === 2 || values.estado === 0) {
                 dataAdd.append("newc_has", 0);
                 dataAdd.append("newc_rinde", 0);
@@ -71,10 +71,8 @@ export const EditarEncuesta = () => {
                 dataAdd.append("newc_rinde", values.rinde);
                 dataAdd.append("newc_costo", values.costo);
             }
-            dataAdd.append("newc_fechas", fechaFormateada);
-            dataAdd.append("newc_culta", values.cultivoAnterior);
 
-            const response = await fetch(`${URL}encuesta-siembra_nuevaEncuesta.php`, {
+            const response = await fetch(`${URL}encuesta-siembra_editarEncuesta.php`, {
                 method: "POST",
                 body: dataAdd,
             });
@@ -101,8 +99,9 @@ export const EditarEncuesta = () => {
         form.resetFields();
     }, [isModalOpenEdit]);
 
-    console.log('editarEncuesta && parseInt(editarEncuesta.aencc_estado): ',  editarEncuesta[0]?.aencc_estado);
-    console.log('editarEncuesta: ',  editarEncuesta);
+    // infoEncuesta
+    // console.log('editarEncuesta && parseInt(editarEncuesta.aencc_estado): ', editarEncuesta[0]?.aencc_estado);
+    // console.log('editarEncuesta: ', editarEncuesta);
     return (
         <>
             {/* Renderizar el componente de mensaje */}
@@ -123,7 +122,7 @@ export const EditarEncuesta = () => {
                                     },
                                 ]}
                                 className="hidden-asterisk"
-                                defaultValue={editarEncuesta && parseInt(editarEncuesta[0]?.aencc_estado)}
+                                initialValue={encuestaSeleccionada && parseInt(encuestaSeleccionada.estado)}
                             >
                                 <Radio.Group onChange={onChange} >
                                     <Radio style={{ paddingRight: '15px' }} value={3}>
@@ -147,13 +146,6 @@ export const EditarEncuesta = () => {
                         <div>
                             <Form.Item
                                 name="lote"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Por favor seleccione al menos un lote",
-                                    },
-                                ]}
-                                className="hidden-asterisk"
                             >
                                 <List
                                     disabled={true}
@@ -185,35 +177,13 @@ export const EditarEncuesta = () => {
                             </div>
                             <div>
                                 <Form.Item
-                                    // disabled={true}
                                     name="cosecha"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Por favor seleccione una cosecha",
-                                        },
-                                    ]}
-                                    className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
-                                    initialValue={listCosechas.length > 0 ? listCosechas[0].acos_id : undefined}
+                                    initialValue={encuestaSeleccionada && encuestaSeleccionada.cosecha.acos_desc}
                                 >
-                                    <Select
-                                        disabled={true}
-                                        style={{ width: 200, textAlign: 'right' }}
-                                        onChange={(value) => setSelectedAcosDesc(value)}
-                                    >
-                                        {listCosechas.length > 0 &&
-                                            listCosechas.map((cosecha) => {
-                                                return (
-                                                    <Select.Option
-                                                        key={cosecha.acos_id}
-                                                        value={cosecha.acos_id}
-                                                    >
-                                                        {cosecha.acos_desc}
-                                                    </Select.Option>
-                                                );
-                                            })}
-                                    </Select>
+                                    <Input disabled={true} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
+
+
                             </div>
                         </div>
                         <div style={{ paddingRight: '5px' }}>
@@ -224,31 +194,9 @@ export const EditarEncuesta = () => {
                                 <Form.Item
                                     // disabled={true}
                                     name="cultivo"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Por favor seleccione un cultivo",
-                                        },
-                                    ]}
-                                    className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                                    initialValue={encuestaSeleccionada && encuestaSeleccionada.cultivo.acult_desc}
                                 >
-                                    <Select
-                                        disabled={true}
-                                        // defaultValue='TODOS'
-                                        style={{ width: 200 }}
-                                        showSearch
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                    // onChange={(value) => setAddEncCultivos(value)}
-                                    >
-                                        {addEncCultivos && addEncCultivos.length > 0 && addEncCultivos.map((cultivo) => (
-                                            <Select.Option key={cultivo.acult_id} value={cultivo.acult_id}>
-                                                {cultivo.acult_desc}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                    <Input disabled={true} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>
@@ -260,25 +208,9 @@ export const EditarEncuesta = () => {
                                 <Form.Item
                                     // disabled={true}
                                     name="ciclo"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Por favor seleccione un ciclo",
-                                        },
-                                    ]}
-                                    className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                                    initialValue={encuestaSeleccionada && `${encuestaSeleccionada.ciclo}°`}
                                 >
-                                    <Select
-                                        disabled={true}
-                                        // defaultValue="TODOS"
-                                        style={{ width: 200 }}
-                                        placeholder='SELECCIONE'
-                                        // onChange={(value) => setSelectedEstado(value)}
-                                        options={[
-                                            { value: '1', label: '1°' },
-                                            { value: '2', label: '2°' }
-                                        ]}
-                                    />
+                                    <Input disabled={true} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>
@@ -291,15 +223,9 @@ export const EditarEncuesta = () => {
                             <div>
                                 <Form.Item
                                     name="hasEst"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Por favor ingrese un valor",
-                                        },
-                                    ]}
-                                    className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                                    initialValue={value === 0 || value === 1 || value === 2 ? 0 : (encuestaSeleccionada && encuestaSeleccionada.superficie)}
                                 >
-                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} defaultValue={disabledInputs ? 0 : undefined} />
+                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>
@@ -310,15 +236,9 @@ export const EditarEncuesta = () => {
                             <div>
                                 <Form.Item
                                     name="rinde"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Por favor ingrese un valor",
-                                        },
-                                    ]}
-                                    className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                                    initialValue={value === 0 || value === 1 || value === 2 ? 0 : (encuestaSeleccionada && encuestaSeleccionada.rindeEst)}
                                 >
-                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} defaultValue={disabledInputs ? 0 : undefined} />
+                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>
@@ -329,22 +249,16 @@ export const EditarEncuesta = () => {
                             <div>
                                 <Form.Item
                                     name="costo"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Por favor ingrese un valor",
-                                        },
-                                    ]}
-                                    className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                                    initialValue={value === 0 || value === 1 || value === 2 ? 0 : (encuestaSeleccionada && encuestaSeleccionada.costoEst)}
                                 >
-                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} defaultValue={disabledInputs ? 0 : undefined} />
+                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <div style={{ paddingRight: '5px' }}>
-                            <Button type="primary" htmlType="submitAdd">Guardar</Button>
+                            <Button type="primary" htmlType="submitEdit">Guardar</Button>
                         </div>
                         <div>
                             <Button onClick={() => (form.resetFields(), setIsModalOpenEdit(false))}>Cancelar</Button>

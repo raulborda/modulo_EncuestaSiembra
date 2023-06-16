@@ -74,9 +74,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setCosechaSeleccionada,
     isModalOpen, setIsModalOpen,
     isModalOpenEdit, setIsModalOpenEdit,
+    isModalOpenEvent, setIsModalOpenEvent,
     upload, setUpload,
     infoEncuesta, setInfoEncuesta,
     editarEncuesta, setEditarEncuesta,
+
+    selectedCosechaId, setSelectedCosechaId,
+    encuestaSeleccionada, setEncuestaSeleccionada,
+    addEncCultivos,
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState('0');
@@ -105,6 +110,16 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   };
   const handleCancelEdit = () => {
     setIsModalOpenEdit(false);
+  };
+
+  const showModalEvent = () => {
+    setIsModalOpenEvent(true);
+  };
+  const handleOkEvent = () => {
+    setIsModalOpenEvent(false);
+  };
+  const handleCancelEvent = () => {
+    setIsModalOpenEvent(false);
   };
   //! Fin - Modal - Agregar
 
@@ -164,16 +179,39 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       key: 'botones',
       align: 'center', // Centrar el contenido de la columna
       width: '10%', // Ajustar el ancho de la columna
-      render: (_, record, index) => (
-        <span>
-          <EditOutlined
-            style={{ paddingRight: '5px' }}
-            className='btnEditEncuesta'
-            onClick={() => handleEditClick(record, index)}
-          />
-          <ProfileOutlined className='btnNuevoEvento' />
-        </span>
-      ),
+      render: (_, record, index) => {
+        if (
+          record.estado &&
+          (record.estado.props.children === 'NS' ||
+            record.estado.props.children === 'NA' ||
+            record.estado.props.children === 'NE')
+        ) {
+          return (
+            <span>
+              <ProfileOutlined
+                style={{ paddingRight: '5px' }}
+                className='btnNuevoEvento'
+              // onClick={() => handleEditClick(record, index)}
+              />
+            </span>
+          );
+        } else {
+          return (
+            <span>
+              <EditOutlined
+                style={{ paddingRight: '5px' }}
+                className='btnEditEncuesta'
+                onClick={() => handleEditClick(record, index)}
+              />
+              <ProfileOutlined
+                style={{ paddingRight: '5px' }}
+                className='btnNuevoEvento'
+              // onClick={() => handleEditClick(record, index)}
+              />
+            </span>
+          );
+        }
+      },
     },
   ];
   const visibleColumns = columns.slice(2); //En esta linea saco las dos primeras columnas para que no se visualicen
@@ -210,21 +248,21 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     };
   });
 
-  const handleEditClick = (record, index) => {
-    // Aquí puedes acceder a los datos de la fila correspondiente
-    console.log('Registro seleccionado:', record);
-    // console.log('Índice de la fila:', index);
 
-    // Puedes guardar los datos en el estado o realizar cualquier otra operación
+  //*Este useEffect es para que me traiga la info actualizada y no atrasada
+  useEffect(() => {
+    if (Object.keys(infoEncuesta).length > 0 && editarEncuesta.length > 0) {
+      // console.log('Registro seleccionado - setInfoEncuesta - useEffect:', infoEncuesta);
+      // console.log('selectedCosechaId: ', selectedCosechaId);
+      showModalEdit();
+    }
+  }, [editarEncuesta]);
+
+  const handleEditClick = (record) => {
+    // console.log('Registro seleccionado:', record);
     setInfoEncuesta(record);
     // console.log('Registro seleccionado - setInfoEncuesta:', infoEncuesta);
-
-    // Abre el modal de edición
-    showModalEdit();
   };
-
-
-
 
   //! GRAFICOS ENCUESTA SIEMBRA
 
@@ -295,28 +333,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }
 
 
-  // function traeLotes() {
-  //   const data = new FormData();
-  //   data.append("idC", idCli);
-  //   fetch(`${URL}encuesta-siembre_listLotes.php`, {
-  //     method: "POST",
-  //     body: data,
-  //   }).then(function (response) {
-  //     response.text().then((resp) => {
-  //       const data = resp;
-  //       const objetoData = JSON.parse(data);
-  //       const LotesConTodos = [{ alote_id: "TODOS", alote_nombre: "TODOS" }, ...objetoData];
-  //       setLotes(LotesConTodos);
-  //       console.log('objetoData - encuesta-siembra_listLotes: ', LotesConTodos)
-  //     });
-  //   });
-  // }
-
-
 
   useEffect(() => {
     if (idCli) {
-      console.log('idCli: ', idCli);
+      // console.log('idCli: ', idCli);
       // setLotes([]);
       const data = new FormData();
       data.append("idC", idCli);
@@ -558,7 +578,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     // console.log('infoEncuesta.idCliente: ', infoEncuesta.idCliente);
     // console.log('infoEncuesta.idEncuesta: ', infoEncuesta.idEncuesta);
     if (infoEncuesta.idCliente && infoEncuesta.idEncuesta) {
-      console.log('ENTRO')
+      // console.log('ENTRO')
       const dataAdd = new FormData();
       dataAdd.append("idU", usu);
       dataAdd.append("idC", parseInt(infoEncuesta.idCliente));
@@ -571,9 +591,22 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           try {
             console.log('Resp:', resp);
             setEditarEncuesta(resp);
-            // const objetoData = JSON.parse(resp);
-            // console.log('objetoData - encuesta-siembra_consultarEncuestaEditar :', objetoData);
-            // setInfoTable(objetoData);
+            // setSelectedCosechaId(listCosechas.find(cosecha => cosecha.acos_id === resp[0]?.cos_id));
+            setEncuestaSeleccionada({
+              cosecha: listCosechas.find(cosecha => cosecha.acos_id === resp[0]?.cos_id),
+              cultivo: addEncCultivos.find(cultivo => cultivo.acult_id === resp[0]?.acult_id),
+              ciclo: resp[0]?.ciclo,
+              rindeEst: resp[0]?.rindeest,
+              superficie: resp[0]?.superficie,
+              costoEst: resp[0]?.costoest,
+              estado: resp[0]?.aencc_estado,
+              idEncuesta: resp[0]?.aencc_id,
+              idCliente: resp[0]?.cli_id,
+              nombreCli: resp[0]?.cli_nombre,
+            });
+
+            // console.log('encuestaSeleccionada: ', encuestaSeleccionada);
+
           } catch (error) {
             console.error('Error al analizar la respuesta JSON:', error);
             console.log('Respuesta no válida:', resp);
@@ -753,7 +786,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         <Modal title="NUEVA ENCUESTA" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} width={650} style={{ userSelect: 'none' }}>
           <NuevaEncuesta />
         </Modal>
-        <Modal title="EDITAR ENCUESTA" open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
+        <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
+          <EditarEncuesta />
+        </Modal>
+        <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
 

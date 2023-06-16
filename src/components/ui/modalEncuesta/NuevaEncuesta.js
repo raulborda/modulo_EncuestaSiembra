@@ -51,7 +51,7 @@ export const NuevaEncuesta = () => {
                 response.text().then((resp) => {
                     const data = resp;
                     const objetoData = JSON.parse(data);
-                    console.log("objetoData Nueva Encuesta - encuesta-siembra_listLotes: ", objetoData);
+                    // console.log("objetoData Nueva Encuesta - encuesta-siembra_listLotes: ", objetoData);
                     setLotes(objetoData); // Establecer los nuevos lotes
                     setLotesSeleccionados([]); // Reiniciar los lotes seleccionados al obtener nuevos lotes
                 });

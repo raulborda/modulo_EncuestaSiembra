@@ -26,4 +26,10 @@
     opacity: 0.5; /* Establecer la opacidad para dar un efecto visual de deshabilitado */
   }
   
+  .contSubtitulo-cliente {
+    display: flex; 
+    flex-direction: column;
+    /* width: 100%; */
+    padding-right: 25px;
+  }
   

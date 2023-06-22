@@ -1,11 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './index.css';
-import { Button, Empty, Modal, Select, Table, Tag } from 'antd';
+import { Button, Drawer, Empty, Modal, Select, Table, Tag } from 'antd';
 import { GlobalContext } from '../context/GlobalContext';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector, Tooltip } from 'recharts';
-import { EditOutlined, PlusCircleOutlined, ProfileOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EnvironmentOutlined, PlusCircleOutlined, ProfileOutlined } from '@ant-design/icons';
 import { NuevaEncuesta } from './modalEncuesta/NuevaEncuesta';
 import { EditarEncuesta } from './modalEncuesta/EditarEncuesta';
+import Swal from 'sweetalert2';
+import { NuevoEvento } from './modalEncuesta/NuevoEvento';
+import LotesEncuestas from './LotesEncuestas';
+
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -77,7 +81,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     isModalOpenEvent, setIsModalOpenEvent,
     upload, setUpload,
     infoEncuesta, setInfoEncuesta,
+    infoEncuestaEvent, setInfoEncuestaEvent,
     editarEncuesta, setEditarEncuesta,
+    infoEventoNew, setInfoEventoNew,
+    dataLotes, setDataLotes,
 
     selectedCosechaId, setSelectedCosechaId,
     encuestaSeleccionada, setEncuestaSeleccionada,
@@ -89,6 +96,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const [selectedCultivo, setSelectedCultivo] = useState("todos");
   const [selectedEstado, setSelectedEstado] = useState("todos");
   const [infoTable, setInfoTable] = useState([]);
+  const [eliminarEncuesta, setEliminarEncuesta] = useState({});
+  const [openDrawer, setOpenDrawer] = useState(false);
 
 
   //! Inicio - Modal - Agregar
@@ -120,6 +129,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   };
   const handleCancelEvent = () => {
     setIsModalOpenEvent(false);
+  };
+
+
+  const showDrawer = () => {
+    setOpenDrawer(true);
+  };
+  const onClose = () => {
+    setOpenDrawer(false);
   };
   //! Fin - Modal - Agregar
 
@@ -191,8 +208,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               <ProfileOutlined
                 style={{ paddingRight: '5px' }}
                 className='btnNuevoEvento'
-              // onClick={() => handleEditClick(record, index)}
+                onClick={() => handleEventClick(record, index)}
               />
+              <EnvironmentOutlined
+                style={{ paddingRight: '5px' }}
+                // className='btnNuevoEvento'
+                onClick={() => handleLoteClick(record, index)}
+              />
+              <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirmation(record, index)} />
             </span>
           );
         } else {
@@ -206,8 +229,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               <ProfileOutlined
                 style={{ paddingRight: '5px' }}
                 className='btnNuevoEvento'
-              // onClick={() => handleEditClick(record, index)}
+                onClick={() => handleEventClick(record, index)}
               />
+              <EnvironmentOutlined
+                style={{ paddingRight: '5px' }}
+                // className='btnNuevoEvento'
+                onClick={() => handleLoteClick(record, index)}
+              />
+              <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirmation(record, index)} />
             </span>
           );
         }
@@ -249,20 +278,81 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   });
 
 
+
+  const showDeleteConfirmation = (record) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará la encuesta seleccionada.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        container: 'my-swal-container', // Clase CSS para el contenedor del diálogo
+        title: 'my-swal-title', // Clase CSS para el título
+        content: 'my-swal-content', // Clase CSS para el contenido del mensaje
+        confirmButton: 'my-swal-confirm-button', // Clase CSS para el botón de confirmación
+        cancelButton: 'my-swal-cancel-button' // Clase CSS para el botón de cancelación
+      },
+      confirmButtonColor: '#ff0000', // Color del botón de confirmación (en este caso, rojo)
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const dataAdd = new FormData();
+        dataAdd.append("idU", usu);
+        dataAdd.append("cliid", record.idCliente);
+        dataAdd.append("encid", parseInt(record.idEncuesta));
+
+        fetch(`${URL}encuesta-siembra_eliminarEncuesta.php`, {
+          method: "POST",
+          body: dataAdd,
+        }).then(function (response) {
+          if (response.ok) {
+            response.text().then((resp) => {
+              const data = resp;
+              console.log('data: ', data);
+              Swal.fire('Eliminado', 'El elemento ha sido eliminado exitosamente.', 'success');
+              setUpload(!upload);
+            });
+          } else {
+            // Si la eliminación no fue exitosa, puedes mostrar un mensaje de error aquí
+            Swal.fire('Error', 'No se pudo eliminar el elemento.', 'error');
+          }
+        });
+      }
+    });
+  };
+
+
+
+
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
   useEffect(() => {
     if (Object.keys(infoEncuesta).length > 0 && editarEncuesta.length > 0) {
-      // console.log('Registro seleccionado - setInfoEncuesta - useEffect:', infoEncuesta);
-      // console.log('selectedCosechaId: ', selectedCosechaId);
       showModalEdit();
     }
   }, [editarEncuesta]);
 
   const handleEditClick = (record) => {
-    // console.log('Registro seleccionado:', record);
     setInfoEncuesta(record);
-    // console.log('Registro seleccionado - setInfoEncuesta:', infoEncuesta);
   };
+
+
+
+  //*Este useEffect es para que me traiga la info actualizada y no atrasada
+  useEffect(() => {
+    if (Object.keys(infoEncuestaEvent).length > 0 && infoEventoNew.length > 0) {
+      showModalEvent();
+    }
+  }, [infoEventoNew]);
+
+  const handleEventClick = (record) => {
+    console.log('Registro seleccionado:', record);
+    setInfoEncuestaEvent(record);
+    // console.log('Registro seleccionado - infoEncuestaEvent:', infoEncuestaEvent);
+  };
+
+
+
 
   //! GRAFICOS ENCUESTA SIEMBRA
 
@@ -297,8 +387,37 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   //   setSelectedAcosDesc(value);
   // }
 
+  const handleLoteClick = (record) => {
+    console.log('Registro seleccionado:', record);
+
+    const data = new FormData();
+    data.append("idEnc", record.idEncuesta);
+
+    fetch(`${URL}encuesta-siembra_viewLotesEncuesta.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        // console.log('resp view lotes: ', resp);
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        setDataLotes(objetoData);
+        // console.log('siembra_viewLotesEncuesta - objetoData: ', objetoData);
+        // console.log('siembra_viewLotesEncuesta- dataLotes: ', dataLotes);
+      });
+    });
+    // setOpenDrawer(true);
+  };
+    //*Este useEffect es para que me traiga la info actualizada y no atrasada para Lotes
+    useEffect(() => {
+      console.log('siembra_viewLotesEncuesta- dataLotes: ', dataLotes);
+      if (Object.keys(dataLotes).length > 0) {
+        setOpenDrawer(true);
+      }
+    }, [dataLotes]);
 
 
+    
   function traeCultivos() {
     const data = new FormData();
     fetch(`${URL}clientview_listCultivos.php`, {
@@ -618,6 +737,53 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
 
 
+
+  useEffect(() => {
+    // console.log('infoEncuesta.idCliente: ', infoEncuesta.idCliente);
+    // console.log('infoEncuesta.idEncuesta: ', infoEncuesta.idEncuesta);
+    if (infoEncuestaEvent.idCliente && infoEncuestaEvent.idEncuesta) {
+      // console.log('ENTRO')
+      const dataAdd = new FormData();
+      dataAdd.append("idU", usu);
+      dataAdd.append("idC", parseInt(infoEncuestaEvent.idCliente));
+      dataAdd.append("idEnc", parseInt(infoEncuestaEvent.idEncuesta));
+      fetch(`${URL}encuesta-siembra_consultarEncuestaEditar.php`, {
+        method: "POST",
+        body: dataAdd,
+      }).then(function (response) {
+        response.json().then((resp) => {
+          try {
+            console.log('Resp:', resp);
+            // setEditarEncuesta(resp);
+            setInfoEventoNew(resp);
+            // setSelectedCosechaId(listCosechas.find(cosecha => cosecha.acos_id === resp[0]?.cos_id));
+            setEncuestaSeleccionada({
+              cosecha: listCosechas.find(cosecha => cosecha.acos_id === resp[0]?.cos_id),
+              cultivo: addEncCultivos.find(cultivo => cultivo.acult_id === resp[0]?.acult_id),
+              ciclo: resp[0]?.ciclo,
+              rindeEst: resp[0]?.rindeest,
+              superficie: resp[0]?.superficie,
+              costoEst: resp[0]?.costoest,
+              estado: resp[0]?.aencc_estado,
+              idEncuesta: resp[0]?.aencc_id,
+              idCliente: resp[0]?.cli_id,
+              nombreCli: resp[0]?.cli_nombre,
+            });
+
+            // console.log('encuestaSeleccionada: ', encuestaSeleccionada);
+
+          } catch (error) {
+            console.error('Error al analizar la respuesta JSON:', error);
+            console.log('Respuesta no válida:', resp);
+          }
+        });
+      });
+    }
+  }, [infoEncuestaEvent]);
+
+
+
+
   //!
 
 
@@ -789,9 +955,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
-        <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={650} style={{ userSelect: 'none' }}>
-          <EditarEncuesta />
+        <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={700} style={{ userSelect: 'none' }}>
+          <NuevoEvento />
         </Modal>
+        <Drawer title={`LOTES ENCUESTA / `} placement="bottom" onClose={onClose} open={openDrawer}>
+          <LotesEncuestas />
+        </Drawer>
 
 
         {/* <div style={{ display: 'flex', flexDirection: 'column' }}>

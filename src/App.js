@@ -36,7 +36,10 @@ function App() {
   const [addEncCliente, setAddEncCliente] = useState(null);
   const [addEncCultivos, setAddEncCultivos] = useState();
   const [infoEncuesta, setInfoEncuesta] = useState({});
+  const [infoEncuestaEvent ,setInfoEncuestaEvent] = useState({});
   const [editarEncuesta, setEditarEncuesta] = useState([]);
+  const [infoEventoNew, setInfoEventoNew] = useState([]);
+  const [dataLotes, setDataLotes] = useState({});
 
   const [upload, setUpload] = useState(false);
 
@@ -114,7 +117,10 @@ function App() {
         isModalOpenEdit, setIsModalOpenEdit,
         upload, setUpload,
         infoEncuesta, setInfoEncuesta,
+        infoEncuestaEvent ,setInfoEncuestaEvent,
         editarEncuesta, setEditarEncuesta,
+        infoEventoNew, setInfoEventoNew,
+        dataLotes, setDataLotes,
 
         selectedCosechaId, setSelectedCosechaId,
         encuestaSeleccionada, setEncuestaSeleccionada,

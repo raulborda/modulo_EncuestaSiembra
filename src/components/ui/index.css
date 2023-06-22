@@ -157,3 +157,10 @@
   outline: 0;
 }
 /*//!------Fin boton nuevo evento--------*/
+
+.my-swal-container{
+  user-select: 'none';
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+}

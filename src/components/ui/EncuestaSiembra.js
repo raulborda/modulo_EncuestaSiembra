@@ -3,12 +3,13 @@ import './index.css';
 import { Button, Drawer, Empty, Modal, Select, Table, Tag } from 'antd';
 import { GlobalContext } from '../context/GlobalContext';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector, Tooltip } from 'recharts';
-import { DeleteOutlined, EditOutlined, EnvironmentOutlined, PlusCircleOutlined, ProfileOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EnvironmentOutlined, PlusCircleOutlined, ProfileOutlined, ReadOutlined } from '@ant-design/icons';
 import { NuevaEncuesta } from './modalEncuesta/NuevaEncuesta';
 import { EditarEncuesta } from './modalEncuesta/EditarEncuesta';
 import Swal from 'sweetalert2';
 import { NuevoEvento } from './modalEncuesta/NuevoEvento';
 import LotesEncuestas from './LotesEncuestas';
+import { VerEncuesta } from './modalEncuesta/VerEncuesta';
 
 
 const renderActiveShape = (props) => {
@@ -89,6 +90,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedCosechaId, setSelectedCosechaId,
     encuestaSeleccionada, setEncuestaSeleccionada,
     addEncCultivos,
+    isModalOpenVerEncuesta, setIsModalOpenVerEncuesta,
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState('0');
@@ -130,6 +132,17 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const handleCancelEvent = () => {
     setIsModalOpenEvent(false);
   };
+
+  const showModalVerEncuesta = () => {
+    setIsModalOpenEvent(true);
+  };
+  const handleOkVerEncuesta = () => {
+    setIsModalOpenEvent(false);
+  };
+  const handleCancelVerEncuesta = () => {
+    setIsModalOpenEvent(false);
+  };
+
 
 
   const showDrawer = () => {
@@ -206,37 +219,52 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           return (
             <span>
               <ProfileOutlined
+                title='Agregar Evento'
                 style={{ paddingRight: '5px' }}
                 className='btnNuevoEvento'
                 onClick={() => handleEventClick(record, index)}
               />
+              <ReadOutlined
+                title='Ver Encuesta'
+                style={{ paddingRight: '5px' }}
+                className='btnVerEncuesta'
+              />
               <EnvironmentOutlined
+                title='Ver Lotes Encuesta'
                 style={{ paddingRight: '5px' }}
                 // className='btnNuevoEvento'
                 onClick={() => handleLoteClick(record, index)}
               />
-              <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirmation(record, index)} />
+              <DeleteOutlined title='Borrar Encuesta' style={{ color: 'red' }} onClick={() => showDeleteConfirmation(record, index)} />
             </span>
           );
         } else {
           return (
             <span>
               <EditOutlined
+                title='Editar Encuesta'
                 style={{ paddingRight: '5px' }}
                 className='btnEditEncuesta'
                 onClick={() => handleEditClick(record, index)}
               />
               <ProfileOutlined
+                title='Agregar Evento'
                 style={{ paddingRight: '5px' }}
                 className='btnNuevoEvento'
                 onClick={() => handleEventClick(record, index)}
               />
+              <ReadOutlined
+                title='Ver Encuesta'
+                style={{ paddingRight: '5px' }}
+                className='btnVerEncuesta'
+              />
               <EnvironmentOutlined
+                title='Ver Lotes Encuesta'
                 style={{ paddingRight: '5px' }}
                 // className='btnNuevoEvento'
                 onClick={() => handleLoteClick(record, index)}
               />
-              <DeleteOutlined style={{ color: 'red' }} onClick={() => showDeleteConfirmation(record, index)} />
+              <DeleteOutlined title='Borrar Encuesta' style={{ color: 'red' }} onClick={() => showDeleteConfirmation(record, index)} />
             </span>
           );
         }
@@ -324,7 +352,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
 
 
-
+//! INICIO - Abrir Editar Encuesta
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
   useEffect(() => {
     if (Object.keys(infoEncuesta).length > 0 && editarEncuesta.length > 0) {
@@ -335,9 +363,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const handleEditClick = (record) => {
     setInfoEncuesta(record);
   };
+//! FIN - Abrir Editar Encuesta
 
-
-
+//! INICIO - Abrir Nuevo Evento
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
   useEffect(() => {
     if (Object.keys(infoEncuestaEvent).length > 0 && infoEventoNew.length > 0) {
@@ -350,7 +378,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setInfoEncuestaEvent(record);
     // console.log('Registro seleccionado - infoEncuestaEvent:', infoEncuestaEvent);
   };
-
+//! FIN - Abrir Nuevo Evento
 
 
 
@@ -386,11 +414,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   // const handleSelectChange = (value) => {
   //   setSelectedAcosDesc(value);
   // }
-
+  var nombreClienteDrawer = ''
   const handleLoteClick = (record) => {
     setDataLotes({});
     console.log('Registro seleccionado:', record);
-
+    nombreClienteDrawer = record.cliente;
+    // console.log(nombreClienteDrawer)
     const data = new FormData();
     data.append("idEnc", record.idEncuesta);
 
@@ -485,18 +514,26 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   useEffect(() => {
     const dataAdd = new FormData();
     dataAdd.append("idU", usu);
-    dataAdd.append("idC", idCliente);
+    dataAdd.append("idC", idCli);
     if (cosechaSeleccionada) {
       dataAdd.append("idCos", cosechaSeleccionada);
     } else {
       dataAdd.append("idCos", cosechaActiva);
     }
-    if (selectedCultivo === 'TODOS') {
+    if (selectedCultivo === 'todos') {
       dataAdd.append("idCul", '');
     } else {
       dataAdd.append("idCul", selectedCultivo);
     }
-    fetch(`${URL}clientview_SupEncuestasCultivo.php`, {
+    if (selectedLote === 'todos' || selectedLote === '0') {
+      dataAdd.append("idLote", '');
+    } else {
+      dataAdd.append("idLote", selectedLote);
+    }
+
+
+
+    fetch(`${URL}encuesta-siembra_SupEncuestasCultivo.php`, {
       method: "POST",
       body: dataAdd,
     }).then(function (response) {
@@ -508,35 +545,43 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         const transformedData = objetoData.map((item) => {
           return { name: item[0], value: item[1], colors: item[2] };
         });
+        console.log('transformedData: ', transformedData);
         setCultivosSupEncuestadas(transformedData);
 
 
-        // // Calcular el total de los valores
-        // const total = transformedData.reduce((accumulator, currentValue) => {
-        //   return accumulator + currentValue.value;
-        // }, 0);
-        // // Hacer algo con el total, como asignarlo a un estado
-        // // setSupEncuestadas(total);
-        // setTotalSuperficie(total.toLocaleString());
+        // Calcular el total de los valores
+        const total = transformedData.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value;
+        }, 0);
+        // Hacer algo con el total, como asignarlo a un estado
+        // setSupEncuestadas(total);
+        setTotalSuperficie(total.toLocaleString());
       });
     });
-  }, [selectedCultivo, selectedAcosDesc])
+  }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
 
   useEffect(() => {
     const dataAdd = new FormData();
     dataAdd.append("idU", usu);
-    dataAdd.append("idC", idCliente);
+    dataAdd.append("idC", parseInt(idCli));
     if (cosechaSeleccionada) {
       dataAdd.append("idCos", cosechaSeleccionada);
     } else {
       dataAdd.append("idCos", cosechaActiva);
     }
-    if (selectedCultivo === 'TODOS') {
+    if (selectedCultivo === 'todos') {
       dataAdd.append("idCul", '');
     } else {
       dataAdd.append("idCul", selectedCultivo);
     }
-    fetch(`${URL}clientview_ProdEncuestasCultivo.php`, {
+
+    if (selectedLote === 'todos' || selectedLote === '0') {
+      dataAdd.append("idLote", '');
+    } else {
+      dataAdd.append("idLote", selectedLote);
+    }
+    // dataAdd.append("idLote", selectedLote);
+    fetch(`${URL}encuesta-siembra_ProdEncuestasCultivo.php`, {
       method: "POST",
       body: dataAdd,
     }).then(function (response) {
@@ -552,34 +597,83 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
 
 
-        // // Calcular el total de los valores
-        // const total = transformedData.reduce((accumulator, currentValue) => {
-        //   return accumulator + currentValue.value;
-        // }, 0);
-        // setTotalProduccion(total.toLocaleString());
+        // Calcular el total de los valores
+        const total = transformedData.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value;
+        }, 0);
+        setTotalProduccion(total.toLocaleString());
       });
     });
-  }, [selectedCultivo, selectedAcosDesc])
+  }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
 
   useEffect(() => {
     const dataAdd = new FormData();
     dataAdd.append("idU", usu);
-    dataAdd.append("idC", idCliente);
+    dataAdd.append("idC", parseInt(idCli));
+    console.log('cosechaSeleccionada: ', cosechaSeleccionada);
     if (cosechaSeleccionada) {
       dataAdd.append("idCos", cosechaSeleccionada);
     } else {
       dataAdd.append("idCos", cosechaActiva);
     }
-    if (selectedCultivo === 'TODOS') {
+    if (selectedCultivo === 'todos') {
       dataAdd.append("idCul", '');
     } else {
       dataAdd.append("idCul", selectedCultivo);
     }
-    fetch(`${URL}clientview_CostoEncuestasCultivo.php`, {
+    if (selectedLote === 'todos' || selectedLote === '0') {
+      dataAdd.append("idLote", '');
+    } else {
+      dataAdd.append("idLote", selectedLote);
+    }
+    fetch(`${URL}encuesta-siembra_CostoEncuestaCultivo.php`, {
       method: "POST",
       body: dataAdd,
     }).then(function (response) {
       response.text().then((resp) => {
+
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        // console.log('objetoData - clientview_CostoEncuestasCultivo.php: ', objetoData)
+        // Transformar los datos antes de asignarlos al estado
+        const transformedData = objetoData.map((item) => {
+          return { name: item[0], value: item[1], colors: item[2] };
+        });
+
+        console.log('setCultivosCostoEncuestadas: ', transformedData)
+        setCultivosCostoEncuestadas(transformedData);
+
+        // Calcular el total de los valores
+        const total = transformedData.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value;
+        }, 0);
+        setTotalCosto(total.toLocaleString());
+      });
+    });
+  }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
+
+
+  useEffect(() => {
+    const dataAdd = new FormData();
+    dataAdd.append("idU", usu);
+    dataAdd.append("idC", parseInt(idCli));
+    if (cosechaSeleccionada) {
+      dataAdd.append("idCos", cosechaSeleccionada);
+    } else {
+      dataAdd.append("idCos", cosechaActiva);
+    }
+    if (selectedCultivo === 'todos') {
+      dataAdd.append("idCul", '');
+    } else {
+      dataAdd.append("idCul", selectedCultivo);
+    }
+    dataAdd.append("idLote", selectedLote);
+    fetch(`${URL}encuesta-siembra_CostoEncuestaCultivo.php`, {
+      method: "POST",
+      body: dataAdd,
+    }).then(function (response) {
+      response.text().then((resp) => {
+
         const data = resp;
         const objetoData = JSON.parse(data);
         // console.log('objetoData - clientview_CostoEncuestasCultivo.php: ', objetoData)
@@ -590,59 +684,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         setCultivosCostoEncuestadas(transformedData);
 
 
-
-
-
-        // // Calcular el total de los valores
-        // const total = transformedData.reduce((accumulator, currentValue) => {
-        //   return accumulator + currentValue.value;
-        // }, 0);
-        // setTotalCosto(total.toLocaleString());
+        // Calcular el total de los valores
+        const total = transformedData.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.value;
+        }, 0);
+        setTotalCosto(total.toLocaleString());
       });
     });
-  }, [selectedCultivo, selectedAcosDesc])
-
-
-  useEffect(() => {
-    const dataAdd = new FormData();
-    dataAdd.append("idU", usu);
-    dataAdd.append("idC", idCliente);
-    if (cosechaSeleccionada) {
-      dataAdd.append("idCos", cosechaSeleccionada);
-    } else {
-      dataAdd.append("idCos", cosechaActiva);
-    }
-    if (selectedCultivo === 'TODOS') {
-      dataAdd.append("idCul", '');
-    } else {
-      dataAdd.append("idCul", selectedCultivo);
-    }
-    fetch(`${URL}clientview_CostoEncuestasCultivo.php`, {
-      method: "POST",
-      body: dataAdd,
-    }).then(function (response) {
-      response.text().then((resp) => {
-        const data = resp;
-        const objetoData = JSON.parse(data);
-        // console.log('objetoData - clientview_CostoEncuestasCultivo.php: ', objetoData)
-        // Transformar los datos antes de asignarlos al estado
-        const transformedData = objetoData.map((item) => {
-          return { name: item[0], value: item[1], colors: item[2] };
-        });
-        setCultivosCostoEncuestadas(transformedData);
-
-
-
-
-
-        // // Calcular el total de los valores
-        // const total = transformedData.reduce((accumulator, currentValue) => {
-        //   return accumulator + currentValue.value;
-        // }, 0);
-        // setTotalCosto(total.toLocaleString());
-      });
-    });
-  }, [selectedCultivo, selectedAcosDesc])
+  }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
 
 
 
@@ -787,7 +836,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
 
   //!
-
+  // console.log('cosechaSeleccionada: ', cosechaSeleccionada);
 
   useEffect(() => {
     traeCultivos();
@@ -957,18 +1006,21 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
+        <Modal title={`VER ENCUESTA / `} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
+          <VerEncuesta />
+        </Modal>
         <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={700} style={{ userSelect: 'none' }}>
           <NuevoEvento />
         </Modal>
-        <Drawer title={`LOTES ENCUESTA / `} placement="bottom" onClose={onClose} open={openDrawer}>
+        <Drawer title={`LOTES ENCUESTA /  `} placement="bottom" onClose={onClose} open={openDrawer}>
           {/* <LotesEncuestas /> */}
           <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
         </Drawer>
 
 
-        {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', flexDirection: 'row', paddingTop: '5px' }}>
-            <div style={{ width: '33%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="grafico-container" style={{ width: '33%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div>
                 <h1 className='titulos'>
                   SUP. ENCUESTADA: {totalSuperficie} HAS.
@@ -980,7 +1032,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 <ResponsiveContainer className="" width="100%" height={260}>
                   <PieChart width={800} height={400} >
                     <Pie
-                      data={cultivosSupEncuestadas}
+                      data={cultivosSupEncuestadas && cultivosSupEncuestadas}
                       activeIndex={legendSupEncuestadas.activeIndex}
                       activeShape={renderActiveShape}
                       cx="50%"
@@ -999,7 +1051,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 </ResponsiveContainer>
               )}
             </div>
-            <div style={{ width: '33%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="grafico-container" style={{ width: '33%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div>
                 <h1 className='titulos'>
                   PRODUCCION ESTIMADA: {totalProduccion} TT
@@ -1011,7 +1063,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 <ResponsiveContainer className="" width="100%" height={260}>
                   <PieChart width={800} height={400} >
                     <Pie
-                      data={cultivosProdEncuestadas}
+                      data={cultivosProdEncuestadas && cultivosProdEncuestadas}
                       activeIndex={legendProdEncuestadas.activeIndex}
                       activeShape={renderActiveShape}
                       cx="50%"
@@ -1030,7 +1082,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 </ResponsiveContainer>
               )}
             </div>
-            <div style={{ width: '33%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="grafico-container" style={{ width: '33%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div>
                 <h1 className='titulos'>
                   COSTO ESTIMADO: U$S {totalCosto}
@@ -1042,7 +1094,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 <ResponsiveContainer className="" width="100%" height={260}>
                   <PieChart width={800} height={400} >
                     <Pie
-                      data={cultivosCostoEncuestadas}
+                      data={cultivosCostoEncuestadas && cultivosCostoEncuestadas}
                       activeIndex={legendCostoEncuestadas.activeIndex}
                       activeShape={renderActiveShape}
                       cx="50%"
@@ -1062,7 +1114,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               )}
             </div>
           </div>
-        </div> */}
+        </div>
         <div>
           <Table columns={visibleColumns} dataSource={data} size="small" />
         </div>

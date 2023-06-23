@@ -24,6 +24,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
   const [isModalOpenEvent, setIsModalOpenEvent] = useState(false);
+  const [isModalOpenVerEncuesta, setIsModalOpenVerEncuesta] = useState(false);
   const [selectedAcosDesc, setSelectedAcosDesc] = useState("");
   const [cosechaSeleccionada, setCosechaSeleccionada] = useState(null);
   const [cosechaAnterior, setCosechaAnterior] = useState("");
@@ -125,6 +126,7 @@ function App() {
         selectedCosechaId, setSelectedCosechaId,
         encuestaSeleccionada, setEncuestaSeleccionada,
         isModalOpenEvent, setIsModalOpenEvent,
+        isModalOpenVerEncuesta, setIsModalOpenVerEncuesta,
       }}
     >
       {/* <ApolloProvider client={client}> */}

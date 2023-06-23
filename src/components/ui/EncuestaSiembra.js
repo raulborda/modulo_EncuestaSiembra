@@ -98,7 +98,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const [infoTable, setInfoTable] = useState([]);
   const [eliminarEncuesta, setEliminarEncuesta] = useState({});
   const [openDrawer, setOpenDrawer] = useState(false);
-
+  const [lotesEncuestasKey, setLotesEncuestasKey] = useState(0);
 
   //! Inicio - Modal - Agregar
   // const [isModalOpen, setIsModalOpen] = useState(false);
@@ -388,6 +388,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   // }
 
   const handleLoteClick = (record) => {
+    setDataLotes({});
     console.log('Registro seleccionado:', record);
 
     const data = new FormData();
@@ -407,17 +408,18 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       });
     });
     // setOpenDrawer(true);
+    setLotesEncuestasKey((prevKey) => prevKey + 1);
   };
-    //*Este useEffect es para que me traiga la info actualizada y no atrasada para Lotes
-    useEffect(() => {
-      console.log('siembra_viewLotesEncuesta- dataLotes: ', dataLotes);
-      if (Object.keys(dataLotes).length > 0) {
-        setOpenDrawer(true);
-      }
-    }, [dataLotes]);
+  //*Este useEffect es para que me traiga la info actualizada y no atrasada para Lotes
+  useEffect(() => {
+    console.log('siembra_viewLotesEncuesta- dataLotes: ', dataLotes);
+    if (Object.keys(dataLotes).length > 0) {
+      setOpenDrawer(true);
+    }
+  }, [dataLotes]);
 
 
-    
+
   function traeCultivos() {
     const data = new FormData();
     fetch(`${URL}clientview_listCultivos.php`, {
@@ -959,7 +961,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           <NuevoEvento />
         </Modal>
         <Drawer title={`LOTES ENCUESTA / `} placement="bottom" onClose={onClose} open={openDrawer}>
-          <LotesEncuestas />
+          {/* <LotesEncuestas /> */}
+          <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
         </Drawer>
 
 

@@ -148,6 +148,7 @@ export const EditarEncuesta = () => {
                                 name="lote"
                             >
                                 <List
+                                    className='listLotesEditar'
                                     disabled={true}
                                     style={{
                                         height: '170px',

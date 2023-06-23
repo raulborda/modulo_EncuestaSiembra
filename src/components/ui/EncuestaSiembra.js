@@ -352,7 +352,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
 
 
-//! INICIO - Abrir Editar Encuesta
+  //! INICIO - Abrir Editar Encuesta
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
   useEffect(() => {
     if (Object.keys(infoEncuesta).length > 0 && editarEncuesta.length > 0) {
@@ -363,9 +363,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const handleEditClick = (record) => {
     setInfoEncuesta(record);
   };
-//! FIN - Abrir Editar Encuesta
+  //! FIN - Abrir Editar Encuesta
 
-//! INICIO - Abrir Nuevo Evento
+  //! INICIO - Abrir Nuevo Evento
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
   useEffect(() => {
     if (Object.keys(infoEncuestaEvent).length > 0 && infoEventoNew.length > 0) {
@@ -378,7 +378,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setInfoEncuestaEvent(record);
     // console.log('Registro seleccionado - infoEncuestaEvent:', infoEncuestaEvent);
   };
-//! FIN - Abrir Nuevo Evento
+  //! FIN - Abrir Nuevo Evento
 
 
 
@@ -653,45 +653,45 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
 
 
-  useEffect(() => {
-    const dataAdd = new FormData();
-    dataAdd.append("idU", usu);
-    dataAdd.append("idC", parseInt(idCli));
-    if (cosechaSeleccionada) {
-      dataAdd.append("idCos", cosechaSeleccionada);
-    } else {
-      dataAdd.append("idCos", cosechaActiva);
-    }
-    if (selectedCultivo === 'todos') {
-      dataAdd.append("idCul", '');
-    } else {
-      dataAdd.append("idCul", selectedCultivo);
-    }
-    dataAdd.append("idLote", selectedLote);
-    fetch(`${URL}encuesta-siembra_CostoEncuestaCultivo.php`, {
-      method: "POST",
-      body: dataAdd,
-    }).then(function (response) {
-      response.text().then((resp) => {
+  // useEffect(() => {
+  //   const dataAdd = new FormData();
+  //   dataAdd.append("idU", usu);
+  //   dataAdd.append("idC", parseInt(idCli));
+  //   if (cosechaSeleccionada) {
+  //     dataAdd.append("idCos", cosechaSeleccionada);
+  //   } else {
+  //     dataAdd.append("idCos", cosechaActiva);
+  //   }
+  //   if (selectedCultivo === 'todos') {
+  //     dataAdd.append("idCul", '');
+  //   } else {
+  //     dataAdd.append("idCul", selectedCultivo);
+  //   }
+  //   dataAdd.append("idLote", selectedLote);
+  //   fetch(`${URL}encuesta-siembra_CostoEncuestaCultivo.php`, {
+  //     method: "POST",
+  //     body: dataAdd,
+  //   }).then(function (response) {
+  //     response.text().then((resp) => {
 
-        const data = resp;
-        const objetoData = JSON.parse(data);
-        // console.log('objetoData - clientview_CostoEncuestasCultivo.php: ', objetoData)
-        // Transformar los datos antes de asignarlos al estado
-        const transformedData = objetoData.map((item) => {
-          return { name: item[0], value: item[1], colors: item[2] };
-        });
-        setCultivosCostoEncuestadas(transformedData);
+  //       const data = resp;
+  //       const objetoData = JSON.parse(data);
+  //       // console.log('objetoData - clientview_CostoEncuestasCultivo.php: ', objetoData)
+  //       // Transformar los datos antes de asignarlos al estado
+  //       const transformedData = objetoData.map((item) => {
+  //         return { name: item[0], value: item[1], colors: item[2] };
+  //       });
+  //       setCultivosCostoEncuestadas(transformedData);
 
 
-        // Calcular el total de los valores
-        const total = transformedData.reduce((accumulator, currentValue) => {
-          return accumulator + currentValue.value;
-        }, 0);
-        setTotalCosto(total.toLocaleString());
-      });
-    });
-  }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
+  //       // Calcular el total de los valores
+  //       const total = transformedData.reduce((accumulator, currentValue) => {
+  //         return accumulator + currentValue.value;
+  //       }, 0);
+  //       setTotalCosto(total.toLocaleString());
+  //     });
+  //   });
+  // }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
 
 
 
@@ -743,7 +743,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }, [idCli, selectedLote, cosechaSeleccionada, selectedCultivo, selectedAcosDesc, selectedEstado, upload]);
 
 
-
+  //! Para editar encuesta
   useEffect(() => {
     // console.log('infoEncuesta.idCliente: ', infoEncuesta.idCliente);
     // console.log('infoEncuesta.idEncuesta: ', infoEncuesta.idEncuesta);
@@ -788,7 +788,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
 
 
-
+  //! Para nuevo evento
   useEffect(() => {
     // console.log('infoEncuesta.idCliente: ', infoEncuesta.idCliente);
     // console.log('infoEncuesta.idEncuesta: ', infoEncuesta.idEncuesta);
@@ -854,7 +854,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </h1>
           </div>
           <div>
-            <PlusCircleOutlined className='btnAddCosecha' onClick={showModal} />
+            <PlusCircleOutlined title='Agregar Encuesta' className='btnAddCosecha' onClick={showModal} />
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
@@ -1006,7 +1006,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
-        <Modal title={`VER ENCUESTA / `} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
+        <Modal title={`INFORMACIÓN ENCUESTA`} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
           <VerEncuesta />
         </Modal>
         <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={700} style={{ userSelect: 'none' }}>
@@ -1016,6 +1016,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           {/* <LotesEncuestas /> */}
           <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
         </Drawer>
+
 
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -1115,6 +1116,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
           </div>
         </div>
+
+
         <div>
           <Table columns={visibleColumns} dataSource={data} size="small" />
         </div>

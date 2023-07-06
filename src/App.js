@@ -10,9 +10,9 @@ function App() {
 
 
   //* Id de usuario que se obtiene desde local storage
-  const idUsu = localStorage.getItem("usuario");
-  // const [usu, setUsu] = useState(idUsu);
-  const [usu, setUsu] = useState(1);
+  //const idUsu = localStorage.getItem("usuario");
+  const idUsu = 1; //.28
+  const [usu, setUsu] = useState(idUsu);
   //* Id de cliente que se obtine desde local storage
   // const idC = localStorage.getItem("cliSelect");
   // const idC = 2; // .153

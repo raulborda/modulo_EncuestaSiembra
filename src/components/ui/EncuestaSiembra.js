@@ -50,7 +50,7 @@ const renderActiveShape = (props) => {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${value.toLocaleString()}`}</text>
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${value.toLocaleString('de-DE')}`}</text>
       <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
         {`(${(percent * 100).toFixed(2)}%)`}
       </text>
@@ -555,7 +555,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         }, 0);
         // Hacer algo con el total, como asignarlo a un estado
         // setSupEncuestadas(total);
-        setTotalSuperficie(total.toLocaleString());
+        setTotalSuperficie(total.toLocaleString('de-DE'));
       });
     });
   }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
@@ -601,7 +601,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         const total = transformedData.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.value;
         }, 0);
-        setTotalProduccion(total.toLocaleString());
+        setTotalProduccion(total.toLocaleString('de-DE'));
       });
     });
   }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
@@ -647,7 +647,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         const total = transformedData.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.value;
         }, 0);
-        setTotalCosto(total.toLocaleString());
+        setTotalCosto(total.toLocaleString('de-DE'));
       });
     });
   }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
@@ -1047,7 +1047,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                         <Cell key={`cell-${index}`} fill={entry.colors} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip formatter={(value) => value.toLocaleString().replace(/,/g, ".")}/>
                   </PieChart>
                 </ResponsiveContainer>
               )}
@@ -1078,7 +1078,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                         <Cell key={`cell-${index}`} fill={entry.colors} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip formatter={(value) => value.toLocaleString().replace(/,/g, ".")}/>
                   </PieChart>
                 </ResponsiveContainer>
               )}
@@ -1109,7 +1109,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                         <Cell key={`cell-${index}`} fill={entry.colors} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip formatter={(value) => value.toLocaleString().replace(/,/g, ".")}/>
                   </PieChart>
                 </ResponsiveContainer>
               )}

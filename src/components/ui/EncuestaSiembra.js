@@ -844,9 +844,16 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     // traeLotes();
   }, [])
 
+  const paginationConfig = {
+    pageSizeOptions: ['5'], // Opciones de cantidad de elementos por página
+    defaultPageSize: 5, // Cantidad de elementos por página por defecto
+    showSizeChanger: true, // Mostrar selector de cantidad de elementos por página
+    showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} registros`, // Texto que muestra la cantidad total de registros
+  };
+
   return (
     <>
-      <div style={{ userSelect: 'none' }}>
+      <div style={{ userSelect: 'none'}}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
           <div>
             <h1 className='titulos'>
@@ -854,7 +861,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </h1>
           </div>
           <div>
-            <PlusCircleOutlined title='Agregar Encuesta' className='btnAddCosecha' onClick={showModal} />
+            {/* <PlusCircleOutlined title='Agregar Encuesta' className='btnAddCosecha' onClick={showModal} /> */}
+            <Button type='primary' style={{borderRadius:"0px", fontWeight:"500"}} onClick={showModal}>
+              NUEVA ENCUESTA
+            </Button>
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
@@ -867,7 +877,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             <Select
               defaultValue={idCli === '0' && 'TODOS'}
               // defaultValue={0}
-              style={{ width: 300 }}
+              style={{ width: 275 }}
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -892,7 +902,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             {idCli === '0' ? (
               <Select
                 defaultValue="TODOS"
-                style={{ width: 300 }}
+                style={{ width: 275 }}
                 // showSearch
                 // optionFilterProp="children"
                 // filterOption={(input, option) =>
@@ -913,7 +923,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             ) : (
               <Select
                 defaultValue="TODOS"
-                style={{ width: 300 }}
+                style={{ width: 275 }}
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
@@ -938,7 +948,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue={selectedAcosDesc && selectedAcosDesc}
-              style={{ width: 250 }}
+              style={{ width: 260 }}
               onChange={(value, option) => {
                 const cosecha = listCosechas.find(c => c.acos_id === option.key);
                 setCosechaSeleccionada(cosecha.acos_id);
@@ -965,7 +975,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue='TODOS'
-              style={{ width: 300 }}
+              style={{ width: 275 }}
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -988,7 +998,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue="TODOS"
-              style={{ width: 250 }}
+              style={{ width: 275 }}
               onChange={(value) => setSelectedEstado(value)}
               options={[
                 { value: 'todos', label: 'TODOS' },
@@ -1000,7 +1010,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             />
           </div>
         </div>
-        <Modal title="NUEVA ENCUESTA" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} width={650} style={{ userSelect: 'none' }}>
+        <Modal title="NUEVA ENCUESTA" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} width={650} style={{ userSelect: 'none', marginTop:"-70px",}}>
           <NuevaEncuesta />
         </Modal>
         <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
@@ -1119,7 +1129,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
 
         <div>
-          <Table columns={visibleColumns} dataSource={data} size="small" />
+          <Table columns={visibleColumns} dataSource={data} pagination={paginationConfig} size="small" />
         </div>
       </div>
     </>

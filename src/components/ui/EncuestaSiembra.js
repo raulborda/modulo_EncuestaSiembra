@@ -828,12 +828,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       }).then(function (response) {
         response.json().then((resp) => {
           try {
-            //console.log('Resp:', resp);
-            // setEditarEncuesta(resp);
             setInfoVerEncuesta(resp);
-            // setEncuestaSeleccionada({
-            //   nombreCli: resp[0]?.cli_nombre,
-            // });
           } catch (error) {
             console.error('Error al analizar la respuesta JSON:', error);
             console.log('Respuesta no válida:', resp);

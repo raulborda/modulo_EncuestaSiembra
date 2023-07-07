@@ -33,3 +33,42 @@
     padding-right: 25px;
   }
   
+  .wrapper_divVerEnc{
+    display: flex;
+    flex-direction: column;
+    margin: 25px 2px 2px 2px;
+  }
+
+  .div_formato_horizontal{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .div_formato_vertical{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .spanTitulo{
+    color: #56b43c;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .spanCuerpo{
+    color:#605d5f;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .spanNumber {
+    font-size: 35px !important;
+  }
+
+  .ant-modal-title{
+    color:#605d5f !important;
+    font-size: 14px !important;
+  }

@@ -238,6 +238,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 title='Ver Encuesta'
                 style={{ paddingRight: '5px' }}
                 className='btnVerEncuesta'
+                onClick={() => handleVerEnc(record, index)}
               />
               <EnvironmentOutlined
                 title='Ver Lotes Encuesta'

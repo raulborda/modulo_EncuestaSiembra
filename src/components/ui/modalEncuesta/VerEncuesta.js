@@ -2,7 +2,7 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import "./modalEncuesta.css";
-import { Divider } from "antd";
+import { Divider, Tag } from "antd";
 
 export const VerEncuesta = () => {
   const { infoVerEncuesta } = useContext(GlobalContext);
@@ -26,13 +26,13 @@ export const VerEncuesta = () => {
 
   if (infoVerEncuesta[0]?.aencc_estado == 3) {
     // estadoMensaje = "ENCUESTA OK";
-    estadoMensaje = <span style={{backgroundColor:"#56b43c", color:"white", fontWeight:"500", padding:"1px 8px", borderRadius:"4px"}}>ENCUESTA OK</span>
+    estadoMensaje = <Tag color="green" style={{paddingTop:"2px"}}>ENCUESTA OK</Tag>
   } else if (infoVerEncuesta[0]?.aencc_estado == 2) {
-    estadoMensaje = <span style={{backgroundColor:"#da4453", color:"white", fontWeight:"500", padding:"1px 8px", borderRadius:"4px"}}>NO SIEMBRA</span>
+    estadoMensaje = <Tag color="red" style={{paddingTop:"2px"}}>NO SIEMBRA</Tag>
   } else if (infoVerEncuesta[0]?.aencc_estado == 1) {
-    estadoMensaje = <span style={{backgroundColor:"#da4453", color:"white", fontWeight:"500", padding:"1px 8px", borderRadius:"4px"}}>NO ACCEDE</span>
+    estadoMensaje = <Tag color="red" style={{paddingTop:"2px"}}>NO ACCEDE</Tag>
   } else if (infoVerEncuesta[0]?.aencc_estado == 0) {
-    estadoMensaje = <span style={{backgroundColor:"#da4453", color:"white", fontWeight:"500", padding:"1px 8px", borderRadius:"4px"}}>NO ENCUESTADO</span>
+    estadoMensaje = <Tag color="red" style={{paddingTop:"2px"}}>NO ENCUESTADO</Tag>
   } else {
     estadoMensaje = "-"; // Manejar otro caso (opcional)
   }

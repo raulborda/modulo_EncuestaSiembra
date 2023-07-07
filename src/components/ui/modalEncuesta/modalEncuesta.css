@@ -64,6 +64,22 @@
     font-weight: 600;
   }
 
+  .spanEstadoOk{
+    background-color:"#56b43c" !important;
+    color:"white" !important;
+    font-weight:"500" !important;
+    padding:"1px 8px" !important;
+    border-radius:"4px" !important;
+  }
+
+  .spanEstadoResto{
+    background-color:"#da4453";
+    color:"white";
+    font-weight:"500";
+    padding:"1px 8px";
+    border-radius:"4px";
+  }
+
   .spanNumber {
     font-size: 35px !important;
   }

@@ -677,50 +677,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
 
 
-  // useEffect(() => {
-  //   const dataAdd = new FormData();
-  //   dataAdd.append("idU", usu);
-  //   dataAdd.append("idC", parseInt(idCli));
-  //   if (cosechaSeleccionada) {
-  //     dataAdd.append("idCos", cosechaSeleccionada);
-  //   } else {
-  //     dataAdd.append("idCos", cosechaActiva);
-  //   }
-  //   if (selectedCultivo === 'todos') {
-  //     dataAdd.append("idCul", '');
-  //   } else {
-  //     dataAdd.append("idCul", selectedCultivo);
-  //   }
-  //   dataAdd.append("idLote", selectedLote);
-  //   fetch(`${URL}encuesta-siembra_CostoEncuestaCultivo.php`, {
-  //     method: "POST",
-  //     body: dataAdd,
-  //   }).then(function (response) {
-  //     response.text().then((resp) => {
-
-  //       const data = resp;
-  //       const objetoData = JSON.parse(data);
-  //       // console.log('objetoData - clientview_CostoEncuestasCultivo.php: ', objetoData)
-  //       // Transformar los datos antes de asignarlos al estado
-  //       const transformedData = objetoData.map((item) => {
-  //         return { name: item[0], value: item[1], colors: item[2] };
-  //       });
-  //       setCultivosCostoEncuestadas(transformedData);
-
-
-  //       // Calcular el total de los valores
-  //       const total = transformedData.reduce((accumulator, currentValue) => {
-  //         return accumulator + currentValue.value;
-  //       }, 0);
-  //       setTotalCosto(total.toLocaleString());
-  //     });
-  //   });
-  // }, [selectedCultivo, selectedAcosDesc, cosechaSeleccionada, idCli, selectedLote])
-
-
-
-
-
   useEffect(() => {
     const dataAdd = new FormData();
     dataAdd.append("idU", usu);
@@ -875,9 +831,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             //console.log('Resp:', resp);
             // setEditarEncuesta(resp);
             setInfoVerEncuesta(resp);
-            setEncuestaSeleccionada({
-              nombreCli: resp[0]?.cli_nombre,
-            });
+            // setEncuestaSeleccionada({
+            //   nombreCli: resp[0]?.cli_nombre,
+            // });
           } catch (error) {
             console.error('Error al analizar la respuesta JSON:', error);
             console.log('Respuesta no válida:', resp);
@@ -1067,7 +1023,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
-        <Modal title={`INFORMACIÓN ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
+        <Modal title={`INFORMACIÓN ENCUESTA / ${infoVerEncuesta[0]?.cli_nombre}`} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
           <VerEncuesta />
         </Modal>
         <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={700} style={{ userSelect: 'none' }}>

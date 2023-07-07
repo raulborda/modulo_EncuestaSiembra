@@ -3,7 +3,7 @@ import './index.css';
 import { Button, Drawer, Empty, Modal, Select, Table, Tag } from 'antd';
 import { GlobalContext } from '../context/GlobalContext';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector, Tooltip } from 'recharts';
-import { DeleteOutlined, EditOutlined, EnvironmentOutlined, PlusCircleOutlined, ProfileOutlined, ReadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EnvironmentOutlined, ProfileOutlined, ReadOutlined } from '@ant-design/icons';
 import { NuevaEncuesta } from './modalEncuesta/NuevaEncuesta';
 import { EditarEncuesta } from './modalEncuesta/EditarEncuesta';
 import Swal from 'sweetalert2';
@@ -77,20 +77,25 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     cultivos, setCultivos,
     setAddEncCultivos,
     setCosechaSeleccionada,
+
     isModalOpen, setIsModalOpen,
     isModalOpenEdit, setIsModalOpenEdit,
     isModalOpenEvent, setIsModalOpenEvent,
+    isModalOpenVerEncuesta, setIsModalOpenVerEncuesta,
+
     upload, setUpload,
     infoEncuesta, setInfoEncuesta,
     infoEncuestaEvent, setInfoEncuestaEvent,
     editarEncuesta, setEditarEncuesta,
     infoEventoNew, setInfoEventoNew,
+    infoVer, setInfoVer,
+    infoVerEncuesta, setInfoVerEncuesta,
     dataLotes, setDataLotes,
 
     selectedCosechaId, setSelectedCosechaId,
     encuestaSeleccionada, setEncuestaSeleccionada,
     addEncCultivos,
-    isModalOpenVerEncuesta, setIsModalOpenVerEncuesta,
+    
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState('0');
@@ -102,8 +107,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [lotesEncuestasKey, setLotesEncuestasKey] = useState(0);
 
-  //! Inicio - Modal - Agregar
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  //! Modal - Nueva Encuesta
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -113,6 +117,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+ //! Modal - Editar Encuesta
   const showModalEdit = () => {
     setIsModalOpenEdit(true);
   };
@@ -122,6 +128,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const handleCancelEdit = () => {
     setIsModalOpenEdit(false);
   };
+
+  //! Modal - Agregar Evento
 
   const showModalEvent = () => {
     setIsModalOpenEvent(true);
@@ -133,14 +141,16 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setIsModalOpenEvent(false);
   };
 
+  //! Modal - Ver Encuesta
+
   const showModalVerEncuesta = () => {
-    setIsModalOpenEvent(true);
+    setIsModalOpenVerEncuesta(true);
   };
   const handleOkVerEncuesta = () => {
-    setIsModalOpenEvent(false);
+    setIsModalOpenVerEncuesta(false);
   };
   const handleCancelVerEncuesta = () => {
-    setIsModalOpenEvent(false);
+    setIsModalOpenVerEncuesta(false);
   };
 
 
@@ -151,7 +161,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const onClose = () => {
     setOpenDrawer(false);
   };
-  //! Fin - Modal - Agregar
+  //! Fin - Modales
 
   const columns = [
     {
@@ -257,6 +267,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 title='Ver Encuesta'
                 style={{ paddingRight: '5px' }}
                 className='btnVerEncuesta'
+                onClick={() => handleVerEnc(record, index)}
               />
               <EnvironmentOutlined
                 title='Ver Lotes Encuesta'
@@ -379,6 +390,19 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     // console.log('Registro seleccionado - infoEncuestaEvent:', infoEncuestaEvent);
   };
   //! FIN - Abrir Nuevo Evento
+
+  //! INICIO - Abrir Ver Encuesta
+  //*Este useEffect es para que me traiga la info actualizada y no atrasada
+  useEffect(() => {
+    if (Object.keys(infoVer).length > 0 && infoVerEncuesta.length > 0) {
+      showModalVerEncuesta();
+    }
+  }, [infoVerEncuesta]);
+
+  const handleVerEnc = (record) => {
+    setInfoVer(record);
+  };
+  //! FIN - Abrir Editar Encuesta
 
 
 
@@ -832,11 +856,38 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     }
   }, [infoEncuestaEvent]);
 
-
-
-
   //!
-  // console.log('cosechaSeleccionada: ', cosechaSeleccionada);
+
+
+  //! Para ver Encuesta
+  useEffect(() => {
+    // console.log('infoVer.idCliente: ', infoVer.idCliente);
+    // console.log('infoVer.idEncuesta: ', infoVer.idEncuesta);
+    if (infoVer.idCliente && infoVer.idEncuesta) {
+      const dataAdd = new FormData();
+      dataAdd.append("idEnc", parseInt(infoVer.idEncuesta));
+      fetch(`${URL}encuesta-siembra_verEncuesta.php`, {
+        method: "POST",
+        body: dataAdd,
+      }).then(function (response) {
+        response.json().then((resp) => {
+          try {
+            //console.log('Resp:', resp);
+            // setEditarEncuesta(resp);
+            setInfoVerEncuesta(resp);
+            setEncuestaSeleccionada({
+              nombreCli: resp[0]?.cli_nombre,
+            });
+          } catch (error) {
+            console.error('Error al analizar la respuesta JSON:', error);
+            console.log('Respuesta no válida:', resp);
+          }
+        });
+      });
+    }
+  }, [infoVer]);
+
+  console.log("infoVerEncuesta: ", infoVerEncuesta)
 
   useEffect(() => {
     traeCultivos();
@@ -1016,7 +1067,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
-        <Modal title={`INFORMACIÓN ENCUESTA`} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
+        <Modal title={`INFORMACIÓN ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
           <VerEncuesta />
         </Modal>
         <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={700} style={{ userSelect: 'none' }}>

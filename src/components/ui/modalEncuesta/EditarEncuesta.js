@@ -1,4 +1,4 @@
-import { Button, Checkbox, DatePicker, Form, Input, InputNumber, List, Radio, Select, message } from 'antd';
+import { Button, Form, Input, List, Radio, message } from 'antd';
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../context/GlobalContext';
 
@@ -10,27 +10,14 @@ export const EditarEncuesta = () => {
     const {
         idCliente,
         usu,
-        selectedAcosDesc,
-        setSelectedAcosDesc,
-        cosechaSeleccionada,
-        listCosechas,
-        clientes,
-        setClientes,
-        lotes,
-        setLotes,
         // cultivos,
-        addEncCliente, setAddEncCliente,
-        addEncCultivos, setAddEncCultivos,
-        isModalOpenEdit, setIsModalOpenEdit,
+        setAddEncCliente,
+        isModalOpenEdit, 
+        setIsModalOpenEdit,
         upload, setUpload,
-        infoEncuesta, setInfoEncuesta,
-        editarEncuesta, setEditarEncuesta,
-
-        selectedCosechaId,
+        editarEncuesta,
         encuestaSeleccionada,
     } = useContext(GlobalContext);
-    const [loteEncuestaAdd, setLoteEncuestaAdd] = useState();
-    const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
 
 
     const [value, setValue] = useState(3);

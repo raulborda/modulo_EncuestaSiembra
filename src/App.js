@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ConfigProvider } from "antd";
 import esES from "antd/lib/locale/es_ES";
 import "./App.css";
@@ -40,6 +41,8 @@ function App() {
   const [infoEncuestaEvent ,setInfoEncuestaEvent] = useState({});
   const [editarEncuesta, setEditarEncuesta] = useState([]);
   const [infoEventoNew, setInfoEventoNew] = useState([]);
+  const [infoVer, setInfoVer] = useState([]);
+  const [infoVerEncuesta, setInfoVerEncuesta] = useState([]);
   const [dataLotes, setDataLotes] = useState({});
 
   const [upload, setUpload] = useState(false);
@@ -119,6 +122,8 @@ function App() {
         upload, setUpload,
         infoEncuesta, setInfoEncuesta,
         infoEncuestaEvent ,setInfoEncuestaEvent,
+        infoVer, setInfoVer,
+        infoVerEncuesta, setInfoVerEncuesta,
         editarEncuesta, setEditarEncuesta,
         infoEventoNew, setInfoEventoNew,
         dataLotes, setDataLotes,
@@ -129,7 +134,6 @@ function App() {
         isModalOpenVerEncuesta, setIsModalOpenVerEncuesta,
       }}
     >
-      {/* <ApolloProvider client={client}> */}
         <ConfigProvider
           locale={esES}
           theme={{
@@ -140,7 +144,6 @@ function App() {
         >
           {selectedAcosDesc && <EncuestaSiembra listadoCosechas={listCosechas} cosechaActiva={cosechaA} />}
         </ConfigProvider>
-      {/* </ApolloProvider> */}
     </GlobalContext.Provider>
   );
 }

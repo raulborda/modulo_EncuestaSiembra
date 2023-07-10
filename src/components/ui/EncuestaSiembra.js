@@ -821,6 +821,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     // console.log('infoVer.idCliente: ', infoVer.idCliente);
     // console.log('infoVer.idEncuesta: ', infoVer.idEncuesta);
     if (infoVer.idCliente && infoVer.idEncuesta) {
+      //console.log('infoVer.idCliente: ', infoVer.idCliente);
       const dataAdd = new FormData();
       dataAdd.append("idEnc", parseInt(infoVer.idEncuesta));
       fetch(`${URL}encuesta-siembra_verEncuesta.php`, {

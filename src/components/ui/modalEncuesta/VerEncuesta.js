@@ -3,7 +3,7 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import "./modalEncuesta.css";
-import { Divider, Empty, Table, Tag } from "antd";
+import { Button, Divider, Empty, Table, Tag } from "antd";
 import pdfIcon from "../icons/pdf.png";
 import jpgIcon from "../icons/jpg.png";
 import pngIcon from "../icons/png.png";
@@ -13,9 +13,7 @@ import wordIcon from "../icons/docx.png";
 // ...
 
 export const VerEncuesta = () => {
-  const { infoVerEncuesta } = useContext(GlobalContext);
-
-  console.log("infoVerEncuesta: ", infoVerEncuesta);
+  const { infoVerEncuesta, setIsModalOpenVerEncuesta } = useContext(GlobalContext);
 
   //!funcion para formatear la fecha
   function formatDate(dateString) {
@@ -290,27 +288,6 @@ export const VerEncuesta = () => {
         {/* LINEA 4 */}
         <span className="spanSuperTitulo">Archivos</span>
         <div className="div_formato_archivo_horizontal">
-          {/* {infoVerEncuesta.up_hashname !== null ? (
-            archivosUnicos.map((archivo) => {
-              const { up_filename, up_hashname, up_mimetype } = archivo;
-              return (
-                <div
-                  className="div_formato_archivo_vertical"
-                  style={{ marginRight: "10px" }}
-                  key={up_hashname}
-                >
-                  <div style={{ marginLeft: "-15px" }}>
-                    {up_mimetype && renderIcon(up_mimetype)}
-                  </div>
-                  <span className="spanArchivos">
-                    {up_filename}.{up_mimetype}
-                  </span>
-                </div>
-              );
-            })
-          ) : (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-          )} */}
           {archivosUnicos.length > 1 ? (
             archivosUnicos.map((archivo) => {
               const { up_filename, up_hashname, up_mimetype } = archivo;
@@ -349,6 +326,12 @@ export const VerEncuesta = () => {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
         <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
+
+        <div style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"flex-end"}}>
+          <Button type="primary" style={{borderRadius:"0px"}} onClick={() =>  setIsModalOpenVerEncuesta(false)}>
+            CERRAR
+          </Button>
+        </div>
       </div>
     </>
   );

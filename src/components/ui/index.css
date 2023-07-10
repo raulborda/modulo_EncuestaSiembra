@@ -230,3 +230,21 @@
 .recharts-layer .recharts-pie-sector {
   font-size: 12px;
 }
+
+/* Estilo personalizado para el botón "Cancelar" */
+.my-swal-cancel-button {
+  /* background-color: white !important;
+  color: #605d5f !important;
+  border: 1px solid #605d5f !important;
+  border-radius: 0px !important;
+  box-shadow: none; */
+}
+
+/* Estilo personalizado para el borde y la letra cuando se hace hover */
+.my-swal-cancel-button:hover,
+.my-swal-cancel-button:focus {
+  /* border: 1px solid #56b43c !important;
+  color: #56b43c !important;
+  background-color: white !important;
+  border-radius: 0px !important; */
+}

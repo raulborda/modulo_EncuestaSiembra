@@ -325,8 +325,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       text: 'Esta acción eliminará la encuesta seleccionada.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Eliminar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'ELIMINAR',
+      cancelButtonText: 'CANCELAR',
       customClass: {
         container: 'my-swal-container', // Clase CSS para el contenedor del diálogo
         title: 'my-swal-title', // Clase CSS para el título

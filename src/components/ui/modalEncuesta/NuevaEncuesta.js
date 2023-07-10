@@ -1,3 +1,6 @@
+/* eslint-disable no-sequences */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Checkbox, DatePicker, Form, Input, List, Radio, Select, message } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../context/GlobalContext';

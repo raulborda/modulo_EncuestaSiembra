@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-sequences */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Form, Input, List, Radio, message } from 'antd';
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../context/GlobalContext';
@@ -8,9 +11,7 @@ export const EditarEncuesta = () => {
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     const {
-        idCliente,
         usu,
-        // cultivos,
         setAddEncCliente,
         isModalOpenEdit, 
         setIsModalOpenEdit,
@@ -246,10 +247,10 @@ export const EditarEncuesta = () => {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <div style={{ paddingRight: '5px' }}>
-                            <Button type="primary" htmlType="submitEdit">Guardar</Button>
+                            <Button type="primary" htmlType="submitEdit" style={{borderRadius:"0px"}} >GUARDAR</Button>
                         </div>
                         <div>
-                            <Button onClick={() => (form.resetFields(), setIsModalOpenEdit(false))}>Cancelar</Button>
+                            <Button style={{borderRadius:"0px"}} onClick={() => (form.resetFields(), setIsModalOpenEdit(false))}>CANCELAR</Button>
                         </div>
                     </div>
                 </div>

@@ -460,10 +460,10 @@ export const NuevaEncuesta = () => {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <div style={{ paddingRight: '5px' }}>
-                            <Button type="primary" htmlType="submitAdd">Guardar</Button>
+                            <Button type="primary" htmlType="submitAdd" style={{borderRadius:"0px"}} >GUARDAR</Button>
                         </div>
                         <div>
-                            <Button onClick={() => (form.resetFields(), setIsModalOpen(false))}>Cancelar</Button>
+                            <Button style={{borderRadius:"0px"}}  onClick={() => (form.resetFields(), setIsModalOpen(false))}>CANCELAR</Button>
                         </div>
                     </div>
 

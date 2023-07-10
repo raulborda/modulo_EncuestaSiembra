@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-sequences */
 import { Button, Form, Input, Select, message } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import './modalEncuesta.css';
@@ -6,14 +9,12 @@ import { GlobalContext } from '../../context/GlobalContext';
 export const NuevoEvento = () => {
     const URL = process.env.REACT_APP_URL;
     const [form] = Form.useForm();
-    const [messageApi, contextHolder] = message.useMessage();
     const {
         setIsModalOpenEvent,
         isModalOpenEvent,
         setUpload,
         upload,
         usu,
-        setInfoEventoNew,
         infoEventoNew,
     } = useContext(GlobalContext);
 
@@ -28,40 +29,6 @@ export const NuevoEvento = () => {
     // console.log('infoEventoNew: ', infoEventoNew);
     const onSubmitAddEvent = async (values) => {
         try {
-
-            console.log("idUsu", usu);
-            console.log("idCli", infoEventoNew[0]?.cli_id);
-            console.log("idEnc", infoEventoNew[0]?.aencc_id);
-
-            if (parseInt(values.tipoEvento) === 0) {
-                console.log("newc_rinde", parseInt(values.rindeReal));
-                console.log("newc_acopio", 0);
-                console.log("newc_cantd", 0);
-                console.log("newc_destino", 0);
-                console.log("newc_has", 0);
-
-            } else if (parseInt(values.tipoEvento) === 1) {
-                console.log("newc_rinde", 0);
-                console.log("newc_acopio", parseInt(values.estAcopio));
-                console.log("newc_cantd", 0);
-                console.log("newc_destino", 0);
-                console.log("newc_has", 0);
-
-            } else if (parseInt(values.tipoEvento) === 2) {
-                console.log("newc_rinde", 0);
-                console.log("newc_acopio", 0);
-                console.log("newc_cantd", 0);
-                console.log("newc_destino", 0);
-                console.log("newc_has", parseInt(values.supReal));
-            } else {
-                console.log("newc_rinde", 0);
-                console.log("newc_acopio", 0);
-                console.log("newc_destino", 0);
-                console.log("newc_cantd", parseInt(values.destino));
-                console.log("newc_has", parseInt(values.hectareas));
-            }
-
-
             const dataAdd = new FormData();
             dataAdd.append("idUsu", usu);
             dataAdd.append("idCli", infoEventoNew[0]?.cli_id);
@@ -337,10 +304,10 @@ export const NuevoEvento = () => {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <div style={{ paddingRight: '5px' }}>
-                        <Button type="primary" htmlType="submitAddEvent">Guardar</Button>
+                        <Button type="primary" htmlType="submitAddEvent" style={{borderRadius:"0px"}} >GUARDAR</Button>
                     </div>
                     <div>
-                        <Button onClick={() => (form.resetFields(), setIsModalOpenEvent(false), setValorSeleccionado(''))}>Cancelar</Button>
+                        <Button style={{borderRadius:"0px"}}  onClick={() => (form.resetFields(), setIsModalOpenEvent(false), setValorSeleccionado(''))}>CANCELAR</Button>
                     </div>
                 </div>
             </Form>

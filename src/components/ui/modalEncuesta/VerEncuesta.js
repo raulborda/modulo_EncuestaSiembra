@@ -1,13 +1,24 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable eqeqeq */
 import React, { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import "./modalEncuesta.css";
-import { Divider, Tag } from "antd";
+import { Divider, Table, Tag } from "antd";
+import pdfIcon from "../icons/pdf.png";
+import jpgIcon from "../icons/jpg.png";
+import pngIcon from "../icons/png.png";
+import excelIcon from "../icons/xlsx.png";
+import wordIcon from "../icons/docx.png";
+
+// ...
+
 
 export const VerEncuesta = () => {
   const { infoVerEncuesta } = useContext(GlobalContext);
 
-  //funcion para formatear la fecha
+  console.log("infoVerEncuesta: ", infoVerEncuesta);
+
+  //!funcion para formatear la fecha
   function formatDate(dateString) {
     if (!dateString) {
       return "-"; // Manejar caso de fecha vacía o indefinida
@@ -21,21 +32,125 @@ export const VerEncuesta = () => {
     return `${day}/${month}/${year}`;
   }
 
-  //validacion que determina que estado tiene la encuesta
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+  //!validacion que determina que estado tiene la encuesta
   let estadoMensaje;
 
   if (infoVerEncuesta[0]?.aencc_estado == 3) {
     // estadoMensaje = "ENCUESTA OK";
-    estadoMensaje = <Tag color="green" style={{paddingTop:"2px"}}>ENCUESTA OK</Tag>
+    estadoMensaje = (
+      <Tag color="green" style={{ paddingTop: "2px" }}>
+        ENCUESTA OK
+      </Tag>
+    );
   } else if (infoVerEncuesta[0]?.aencc_estado == 2) {
-    estadoMensaje = <Tag color="red" style={{paddingTop:"2px"}}>NO SIEMBRA</Tag>
+    estadoMensaje = (
+      <Tag color="red" style={{ paddingTop: "2px" }}>
+        NO SIEMBRA
+      </Tag>
+    );
   } else if (infoVerEncuesta[0]?.aencc_estado == 1) {
-    estadoMensaje = <Tag color="red" style={{paddingTop:"2px"}}>NO ACCEDE</Tag>
+    estadoMensaje = (
+      <Tag color="red" style={{ paddingTop: "2px" }}>
+        NO ACCEDE
+      </Tag>
+    );
   } else if (infoVerEncuesta[0]?.aencc_estado == 0) {
-    estadoMensaje = <Tag color="red" style={{paddingTop:"2px"}}>NO ENCUESTADO</Tag>
+    estadoMensaje = (
+      <Tag color="red" style={{ paddingTop: "2px" }}>
+        NO ENCUESTADO
+      </Tag>
+    );
   } else {
     estadoMensaje = "-"; // Manejar otro caso (opcional)
   }
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+
+//! SECCION ICONO DE ARCHIVOS
+const archivos = [...new Set(infoVerEncuesta.map((item) => item.up_hashname))];
+
+function renderIcon(filename) {
+  const extension = filename.split(".").pop().toLowerCase();
+
+  let icono = null;
+  if (extension === "pdf") {
+    icono = <img style={{ width: "40px", height: "40px" }} src={pdfIcon} alt="PDF Icon" />;
+  } else if (extension === "jpg") {
+    icono = <img style={{ width: "40px", height: "40px" }} src={jpgIcon} alt="Image Icon" />;
+  } else if (extension === "png") {
+    icono = <img style={{ width: "40px", height: "40px" }} src={pngIcon} alt="Image Icon" />;
+  } else if (extension === "xlsx" || extension === "xls") {
+    icono = <img style={{ width: "40px", height: "40px" }} src={excelIcon} alt="Excel Icon" />;
+  } else if (extension === "docx") {
+    icono = <img style={{ width: "40px", height: "40px" }} src={wordIcon} alt="Word Icon" />;
+  }
+  return icono;
+}
+
+// Eliminar duplicados de archivos
+const archivosUnicos = archivos.map((filename) => {
+  const archivo = infoVerEncuesta.find((item) => item.up_hashname === filename);
+  return {
+    up_filename: archivo.up_filename,
+    up_hashname: archivo.up_hashname,
+    up_mimetype: archivo.up_mimetype,
+  };
+});
+
+console.log("archivosUnicos: ", archivosUnicos)
+
+//! FIN SECCION ICONO DE ARCHIVOS
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+  //! SECCION LOTES
+  const lotesUnicos = [...new Set(infoVerEncuesta.map((item) => item.alote_nombre))];
+
+
+  const columns = [
+    {
+      title: 'CAMPO',
+      dataIndex: 'campo',
+      key: 'campo',
+      align: 'left',
+    },
+    {
+      title: 'LOTE',
+      dataIndex: 'lote',
+      key: 'lote',
+      align: 'left',
+    },
+    {
+      title: 'HAS.',
+      dataIndex: 'has',
+      key: 'has',
+      align: 'center',
+    }
+  ];
+
+  const data = lotesUnicos.map((lote) => {
+    const items = infoVerEncuesta.filter((item) => item.alote_nombre === lote);
+    const campo = items[0].cam_nombre;
+    const has = items[0].ahas_usuario;
+  
+    return {
+      campo,
+      lote,
+      has,
+    };
+  });
+
+  const paginationConfig = {
+    pageSizeOptions: ['5'], // Opciones de cantidad de elementos por página
+    defaultPageSize: 5, // Cantidad de elementos por página por defecto
+    showSizeChanger: true, // Mostrar selector de cantidad de elementos por página
+    showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} registros`, // Texto que muestra la cantidad total de registros
+  };
+
+    //! FIN SECCION LOTES
 
   return (
     <>
@@ -64,7 +179,7 @@ export const VerEncuesta = () => {
             {estadoMensaje}
           </div>
         </div>
-        <Divider />
+        <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
         {/* LINEA 2 */}
         <div className="div_formato_horizontal">
           <div className="div_formato_vertical">
@@ -98,8 +213,9 @@ export const VerEncuesta = () => {
             </span>
           </div>
         </div>
-        <Divider />
+        <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
         {/* LINEA 3 */}
+        <span className="spanSuperTitulo">Eventos</span>
         <div className="div_formato_horizontal">
           <div className="div_formato_vertical">
             <span className="spanTitulo">Sup. Real(Has)</span>
@@ -118,7 +234,7 @@ export const VerEncuesta = () => {
             </span>
           </div>
           <div className="div_formato_vertical">
-            <span className="spanTitulo">% EST. ACOPIO</span>
+            <span className="spanTitulo">% Est. Acopio</span>
             <span className="spanCuerpo spanNumber">
               {infoVerEncuesta[0]?.est_acopio
                 ? infoVerEncuesta[0]?.est_acopio
@@ -126,7 +242,7 @@ export const VerEncuesta = () => {
             </span>
           </div>
           <div className="div_formato_vertical">
-            <span className="spanTitulo">DESTINO</span>
+            <span className="spanTitulo">Destino</span>
             <span className="spanCuerpo spanNumber">
               {infoVerEncuesta[0]?.dest_desc
                 ? infoVerEncuesta[0]?.dest_desc
@@ -134,8 +250,22 @@ export const VerEncuesta = () => {
             </span>
           </div>
         </div>
-        <Divider />
+        <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
         {/* LINEA 4 */}
+        <span className="spanSuperTitulo">Archivos</span>
+        <div className="div_formato_archivo_horizontal">
+          {archivosUnicos.map((archivo) => (
+            <div className="div_formato_archivo_vertical" style={{marginRight:"10px"}} key={archivo.up_hashname}>
+              <div style={{marginLeft:"-15px"}}>{renderIcon(archivo.up_mimetype)}</div>
+              <span className="spanArchivos">{archivo.up_filename}.{archivo.up_mimetype}</span>
+            </div>
+          ))}
+        </div>
+        <Divider />
+        {/* LINEA 5 */}
+        <span className="spanSuperTitulo">Lotes</span>
+        <Table columns={columns} dataSource={data} pagination={paginationConfig} size="small" />
+        <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
       </div>
     </>
   );

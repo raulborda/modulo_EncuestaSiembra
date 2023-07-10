@@ -230,19 +230,19 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             <span>
               <ProfileOutlined
                 title='Agregar Evento'
-                style={{ paddingRight: '5px' }}
+                style={{ marginRight: '5px' }}
                 className='btnNuevoEvento'
                 onClick={() => handleEventClick(record, index)}
               />
               <ReadOutlined
                 title='Ver Encuesta'
-                style={{ paddingRight: '5px' }}
+                style={{ marginRight: '5px' }}
                 className='btnVerEncuesta'
                 onClick={() => handleVerEnc(record, index)}
               />
               <EnvironmentOutlined
                 title='Ver Lotes Encuesta'
-                style={{ paddingRight: '5px' }}
+                style={{ marginRight: '5px' }}
                 // className='btnNuevoEvento'
                 onClick={() => handleLoteClick(record, index)}
               />
@@ -254,25 +254,25 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             <span>
               <EditOutlined
                 title='Editar Encuesta'
-                style={{ paddingRight: '5px' }}
+                style={{ marginRight: '5px' }}
                 className='btnEditEncuesta'
                 onClick={() => handleEditClick(record, index)}
               />
               <ProfileOutlined
                 title='Agregar Evento'
-                style={{ paddingRight: '5px' }}
+                style={{ marginRight: '5px' }}
                 className='btnNuevoEvento'
                 onClick={() => handleEventClick(record, index)}
               />
               <ReadOutlined
                 title='Ver Encuesta'
-                style={{ paddingRight: '5px' }}
+                style={{ marginRight: '5px' }}
                 className='btnVerEncuesta'
                 onClick={() => handleVerEnc(record, index)}
               />
               <EnvironmentOutlined
                 title='Ver Lotes Encuesta'
-                style={{ paddingRight: '5px' }}
+                style={{ marginRight: '5px' }}
                 // className='btnNuevoEvento'
                 onClick={() => handleLoteClick(record, index)}
               />
@@ -299,7 +299,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         estadoTag = <Tag color="red" key={1}>NA</Tag>;
         break;
       case "0":
-        estadoTag = <Tag color="red" key={2}>NE</Tag>;
+        estadoTag = <Tag color="red" key={0}>NE</Tag>;
         break;
       default:
         estadoTag = null;
@@ -1019,7 +1019,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         <Modal title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEdit} onOk={handleOkEdit} onCancel={handleCancelEdit} footer={null} width={650} style={{ userSelect: 'none' }}>
           <EditarEncuesta />
         </Modal>
-        <Modal title={`INFORMACIÓN ENCUESTA / ${infoVerEncuesta[0]?.cli_nombre}`} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none' }}>
+        <Modal title={`INFORMACIÓN ENCUESTA / ${infoVerEncuesta[0]?.cli_nombre}`} open={isModalOpenVerEncuesta} onOk={handleOkVerEncuesta} onCancel={handleCancelVerEncuesta} footer={null} width={700} style={{ userSelect: 'none', marginTop:"-70px", }}>
           <VerEncuesta />
         </Modal>
         <Modal title={`NUEVO EVENTO / ${encuestaSeleccionada.nombreCli}`} open={isModalOpenEvent} onOk={handleOkEvent} onCancel={handleCancelEvent} footer={null} width={700} style={{ userSelect: 'none' }}>

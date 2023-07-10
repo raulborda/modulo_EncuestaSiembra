@@ -46,6 +46,28 @@
     align-items: center;
   }
 
+  .div_formato_archivo_horizontal{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .div_formato_archivo_vertical{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .spanArchivos{
+    color:#605d5f;
+    margin-left: 0px;
+    font-size: 14px;
+    font-weight: 600;
+    width: 118px;
+  }
+
   .div_formato_vertical{
     display: flex;
     flex-direction: column;
@@ -55,6 +77,12 @@
   .spanTitulo{
     color: #56b43c;
     font-size: 16px;
+    font-weight: 700;
+  }
+
+  .spanSuperTitulo{
+    color: #56b43c;
+    font-size: 18px;
     font-weight: 700;
   }
 

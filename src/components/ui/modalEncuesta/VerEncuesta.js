@@ -130,7 +130,7 @@ export const VerEncuesta = () => {
     };
   });
 
-  console.log("archivosUnicos: ", archivosUnicos);
+  //console.log("archivosUnicos: ", archivosUnicos);
 
   //! FIN SECCION ICONO DE ARCHIVOS
 

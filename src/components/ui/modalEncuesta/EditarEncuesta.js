@@ -24,7 +24,7 @@ export const EditarEncuesta = () => {
     const [value, setValue] = useState(3);
     const [disabledInputs, setDisabledInputs] = useState(false);
     const onChange = (e) => {
-        console.log('radio checked', e.target.value);
+        //console.log('radio checked', e.target.value);
         setValue(e.target.value);
 
         if (e.target.value === 0 || e.target.value === 1 || e.target.value === 2) {
@@ -47,7 +47,7 @@ export const EditarEncuesta = () => {
         try {
             const dataAdd = new FormData();
             dataAdd.append("usuid", usu);
-            console.log("encid: ", encuestaSeleccionada.idEncuesta);
+            //console.log("encid: ", encuestaSeleccionada.idEncuesta);
             dataAdd.append("encid", encuestaSeleccionada.idEncuesta);
             dataAdd.append("opciones", values.estado);
             if (values.estado === 1 || values.estado === 2 || values.estado === 0) {
@@ -73,7 +73,7 @@ export const EditarEncuesta = () => {
                 throw new Error("Error al agregar encuesta");
             }
         } catch (error) {
-            console.log("Error: ", error);
+            //console.log("Error: ", error);
             message.error("Error al agregar encuesta");
         } finally {
             form.resetFields();

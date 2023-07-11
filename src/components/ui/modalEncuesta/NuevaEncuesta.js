@@ -34,7 +34,7 @@ export const NuevaEncuesta = () => {
     const [value, setValue] = useState(3);
     const [disabledInputs, setDisabledInputs] = useState(false);
     const onChange = (e) => {
-        console.log('radio checked', e.target.value);
+        //console.log('radio checked', e.target.value);
         setValue(e.target.value);
         if (e.target.value === 0 || e.target.value === 1 || e.target.value === 2) {
             setDisabledInputs(true);

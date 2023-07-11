@@ -30,7 +30,7 @@ const LotesEncuestas = () => {
     useEffect(() => {
         mapboxgl.accessToken = MAPBOX_TOKEN;
 
-        console.log('ENTRANDO');
+        //console.log('ENTRANDO');
 
         const initializeMap = ({ setMap, mapContainer }) => {
             const map = new mapboxgl.Map({
@@ -180,7 +180,7 @@ const LotesEncuestas = () => {
             result.push(coordinates);
         }
         setGeoJSON(result);
-        console.log('result geojson: ', result)
+        //console.log('result geojson: ', result)
         return result;
     }
 

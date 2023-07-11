@@ -206,6 +206,53 @@
 }
 /*//!------Fin boton ver encuesta--------*/
 
+/*//!------Boton Uploads--------*/
+.btnUploadEncuesta {
+  margin-left: auto;
+  margin-right: -2px;
+  border: none;
+  font-size: 18px !important;
+  color: #00b33c;
+  background-color: transparent; 
+}
+.ant-btn-default.btnUploadEncuesta{
+  box-shadow: none;
+  margin-top: 2px;
+  transition: none !important;
+}
+.btnUploadEncuesta:active:hover {
+  background: none !important;
+  border-color: #ffffff !important;
+}
+.btnUploadEncuesta:disabled {
+  background-color: #ffffff !important;
+}
+.ant-btn .ant-btn-default .btnUploadEncuesta:focus{
+  border-color: none !important;
+  box-shadow: none !important;
+}
+.ant-btn-default:not(:disabled).btnUploadEncuesta:hover {
+  /* #8fd14a */
+  color: #8fd14a;
+  border-color: #8fd14a;
+  transition: none;
+}
+.ant-btn-default:not(:disabled).btnUploadEncuesta:focus {
+  color: #8fd14a;
+  border-color: #8fd14a;
+  transition: none;
+  box-shadow: none !important;
+  border: none !important;
+}
+.ant-btn-default:not(:disabled).btnUploadEncuesta:active{
+  box-shadow: none !important;
+  border: none !important;
+}
+.btnUploadEncuesta:focus:not(.focus-visible) {
+  outline: 0;
+}
+/*//!------Fin boton editar--------*/
+
 
 
 .my-swal-container{

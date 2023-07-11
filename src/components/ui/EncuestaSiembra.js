@@ -25,7 +25,7 @@ import Swal from "sweetalert2";
 import { NuevoEvento } from "./modalEncuesta/NuevoEvento";
 import LotesEncuestas from "./LotesEncuestas";
 import { VerEncuesta } from "./modalEncuesta/VerEncuesta";
-import DrawerUpload from "./drawerUpload/DrawerUpload";
+
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -1352,24 +1352,35 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             size="small"
           />
           {drawerUpload ? (
-            <Drawer
-              open={drawerUpload}
-              onClose={() => setDrawerUpload(false)}
-              width={650}
-            >
+            // <Drawer
+            //   open={drawerUpload}
+            //   onClose={() => setDrawerUpload(false)}
+            //   width={650}
+            // >
+            //   <iframe
+            //     loading="lazy"
+            //     //src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
+            //     src={`http://10.0.0.28/tati/file/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`} // para probar en tati
+            //     width={"100%"}
+            //     // height={"600"}
+            //     height={"1000"}
+            //     style={{ border: "none" }}
+            //     title="drawer">
+
+            //     </iframe>
+            // </Drawer>
+
+            <div id="iframeContainer">
               <iframe
                 loading="lazy"
-                //src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
-                src={`http://10.0.0.28/tati/file/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`} // para probar en tati
+                src={`http://10.0.0.28/tati/file/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`}
                 width={"100%"}
-                // height={"600"}
                 height={"1000"}
                 style={{ border: "none" }}
-                title="drawer">
-
-                </iframe>
-              {/* <DrawerUpload drawer={"true"} modori_id={5} filter_id={5} usu_id={usu} generico_id={299} cli_id={2049}/> */}
-            </Drawer>
+                title="drawer"
+              ></iframe>
+            </div>
+            
             
           ):(null)}
         </div>

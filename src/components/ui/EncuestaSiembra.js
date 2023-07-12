@@ -1048,7 +1048,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             <Select
               defaultValue={idCli === "0" && "TODOS"}
               // defaultValue={0}
-              style={{ width: 275 }}
+              style={{ width: 250 }}
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -1074,7 +1074,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             {idCli === "0" ? (
               <Select
                 defaultValue="TODOS"
-                style={{ width: 275 }}
+                style={{ width: 250 }}
                 // showSearch
                 // optionFilterProp="children"
                 // filterOption={(input, option) =>
@@ -1095,7 +1095,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             ) : (
               <Select
                 defaultValue="TODOS"
-                style={{ width: 275 }}
+                style={{ width: 250 }}
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
@@ -1148,7 +1148,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue="TODOS"
-              style={{ width: 275 }}
+              style={{ width: 250 }}
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -1170,7 +1170,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue="TODOS"
-              style={{ width: 275 }}
+              style={{ width: 250 }}
               onChange={(value) => setSelectedEstado(value)}
               options={[
                 { value: "todos", label: "TODOS" },

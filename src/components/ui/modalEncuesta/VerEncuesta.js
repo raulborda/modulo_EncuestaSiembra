@@ -14,8 +14,8 @@ import wordIcon from "../icons/docx.png";
 
 export const VerEncuesta = () => {
 
-  //const urlDescarga = window.location.host + ":4001";// para subir al servidor
-  const urlDescarga = '10.0.0.28:4001' // para probar local
+  const urlDescarga = window.location.host + ":4001";// para subir al servidor
+  //const urlDescarga = '10.0.0.28:4001' // para probar local
 
   const { infoVerEncuesta, setIsModalOpenVerEncuesta } = useContext(GlobalContext);
 

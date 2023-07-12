@@ -102,6 +102,11 @@ const renderActiveShape = (props) => {
 export const EncuestaSiembra = ({ cosechaActiva }) => {
   const URL = process.env.REACT_APP_URL;
 
+  const PORT = window.location.port ? window.location.port : 80;
+  const PROTOCOL = window.location.protocol;
+  const HOSTNAME = window.location.hostname;
+  const URLDrawer = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
+
   const {
     usu,
 
@@ -1386,7 +1391,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           >
             <iframe
               loading="lazy"
-              src={`http://10.0.0.28/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`}
+              src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`} // para usar local
               width={"100%"}
               height={"103%"}
               style={{ border: "none" }}

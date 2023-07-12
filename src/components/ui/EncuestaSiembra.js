@@ -26,7 +26,6 @@ import { NuevoEvento } from "./modalEncuesta/NuevoEvento";
 import LotesEncuestas from "./LotesEncuestas";
 import { VerEncuesta } from "./modalEncuesta/VerEncuesta";
 
-
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
   const {
@@ -105,7 +104,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   const {
     usu,
-    
+
     selectedAcosDesc,
     cosechaSeleccionada,
     listCosechas,
@@ -497,16 +496,40 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   };
   //! FIN - Abrir Editar Encuesta
 
-  //! INICIO - Abrir Upload
+  //! INICIO -  Upload
 
   const handleUploadClick = (record) => {
-    console.log(record)
+    console.log(record);
     setDrawerUpload(true);
     setModori(5);
     setFilter(5);
     setGenerico(Number(record.idEncuesta));
-  }
-  //! FIN - Abrir Upload
+  };
+
+  const handleCloseDrawer = () => {
+    setDrawerUpload(false);
+  };  
+
+  const handleMessageFromIframe = (event) => {
+    if (event.data === "closeDrawer") {
+      handleCloseDrawer();
+    }
+  };
+
+  // Agrega el event listener para recibir mensajes del iframe
+  useEffect(() => {
+    window.addEventListener("message", handleMessageFromIframe);
+
+    // Remueve el event listener al desmontar el componente
+    return () => {
+      window.removeEventListener("message", handleMessageFromIframe);
+    };
+  }, []);
+
+  //! FIN - Upload
+
+
+
 
   //! GRAFICOS ENCUESTA SIEMBRA
 
@@ -989,7 +1012,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   return (
     <>
-      <div style={{ userSelect: "none" }}>
+      <div style={{ userSelect: "none", position: "relative" }}>
         <div
           style={{
             display: "flex",
@@ -1344,46 +1367,33 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           </div>
         </div>
 
-        <div>
-          <Table
-            columns={visibleColumns}
-            dataSource={data}
-            pagination={paginationConfig}
-            size="small"
-          />
-          {drawerUpload ? (
-            // <Drawer
-            //   open={drawerUpload}
-            //   onClose={() => setDrawerUpload(false)}
-            //   width={650}
-            // >
-            //   <iframe
-            //     loading="lazy"
-            //     //src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
-            //     src={`http://10.0.0.28/tati/file/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`} // para probar en tati
-            //     width={"100%"}
-            //     // height={"600"}
-            //     height={"1000"}
-            //     style={{ border: "none" }}
-            //     title="drawer">
-
-            //     </iframe>
-            // </Drawer>
-
-            <div id="iframeContainer">
-              <iframe
-                loading="lazy"
-                src={`http://10.0.0.28/tati/file/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`}
-                width={"100%"}
-                height={"1000"}
-                style={{ border: "none" }}
-                title="drawer"
-              ></iframe>
-            </div>
-            
-            
-          ):(null)}
-        </div>
+        <Table
+          columns={visibleColumns}
+          dataSource={data}
+          pagination={paginationConfig}
+          size="small"
+        />
+        {drawerUpload ? (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 999,
+            }}
+          >
+            <iframe
+              loading="lazy"
+              src={`http://10.0.0.28/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`}
+              width={"100%"}
+              height={"1000"}
+              style={{ border: "none" }}
+              title="drawer"
+            ></iframe>
+          </div>
+        ) : null}
       </div>
     </>
   );

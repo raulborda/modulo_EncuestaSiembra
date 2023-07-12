@@ -13,6 +13,10 @@ import wordIcon from "../icons/docx.png";
 // ...
 
 export const VerEncuesta = () => {
+
+  //const urlDescarga = window.location.host + ":4001";// para subir al servidor
+  const urlDescarga = '10.0.0.28:4001' // para probar local
+
   const { infoVerEncuesta, setIsModalOpenVerEncuesta } = useContext(GlobalContext);
 
   //!funcion para formatear la fecha
@@ -184,6 +188,8 @@ export const VerEncuesta = () => {
 
   //! FIN SECCION LOTES
 
+  
+
   return (
     <>
       <div className="wrapper_divVerEnc">
@@ -291,6 +297,12 @@ export const VerEncuesta = () => {
           {archivosUnicos.length > 1 ? (
             archivosUnicos.map((archivo) => {
               const { up_filename, up_hashname, up_mimetype } = archivo;
+              const downloadURL = `http://${urlDescarga}/../../../../static?file=${encodeURIComponent(archivo.up_hashname)}`;
+              const handleDownload = (e) => {
+                e.preventDefault();
+                window.open(downloadURL, "_blank");
+              };
+            
               return (
                 <div
                   className="div_formato_archivo_vertical"
@@ -300,9 +312,18 @@ export const VerEncuesta = () => {
                   <div style={{ marginLeft: "-15px" }}>
                     {up_mimetype && renderIcon(up_mimetype)}
                   </div>
-                  <span className="spanArchivos">
+                  <a
+                    className="spanArchivos"
+                    href={downloadURL}
+                    onClick={handleDownload}
+                    rel="noopener noreferrer"
+                    download
+                  >
                     {up_filename}.{up_mimetype}
-                  </span>
+                  </a>
+                  {/* <span className="spanArchivos">
+                    {up_filename}.{up_mimetype}
+                  </span> */}
                 </div>
               );
             })

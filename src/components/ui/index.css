@@ -296,20 +296,3 @@
   border-radius: 0px !important; */
 }
 
-
-/*//!------Inicio Drawer--------*/
-  #iframeContainer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 600px; /* Ancho deseado del drawer */
-    z-index: 9999 !important; /* Ajusta el z-index según tus necesidades */
-    transform: translateX(100%);
-    transition: transform 0.3s ease-out;
-    background-color: white; /* Ajusta el color de fondo según tus necesidades */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Ajusta la sombra según tus necesidades */
-  }
-
-
-  /*//!------Fin Drawer--------*/

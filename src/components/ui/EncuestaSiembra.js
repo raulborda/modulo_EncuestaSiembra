@@ -1388,7 +1388,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               loading="lazy"
               src={`http://10.0.0.28/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`}
               width={"100%"}
-              height={"1000"}
+              height={"103%"}
               style={{ border: "none" }}
               title="drawer"
             ></iframe>

@@ -1040,7 +1040,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </Button>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", width: "100%" }}>
+        <div style={{ display: "flex", flexDirection: "row", width: "90%" }}>
           <div className="contSubtitulo-cliente">
             <div style={{ marginLeft: "5px" }}>
               <h1 className="subtitulos">CLIENTE</h1>

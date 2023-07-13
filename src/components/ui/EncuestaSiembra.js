@@ -153,7 +153,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     addEncCultivos,
   } = useContext(GlobalContext);
 
-  const [idCli, setIdCli] = useState("0");
+  const [idCli, setIdCli] = useState(0);
   const [selectedLote, setSelectedLote] = useState("todos");
   const [selectedCultivo, setSelectedCultivo] = useState("todos");
   const [selectedEstado, setSelectedEstado] = useState("todos");
@@ -165,6 +165,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const [modori, setModori] = useState(0);
   const [filter, setFilter] = useState(0);
   const [generico, setGenerico] = useState(0);
+  const [cliEnc, setCliEnc] = useState(0);
 
   //! Modal - Nueva Encuesta
   const showModal = () => {
@@ -504,12 +505,18 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   //! INICIO -  Upload
 
   const handleUploadClick = (record) => {
-    console.log(record);
+    console.log("handleUploadClick: ",record);
     setDrawerUpload(true);
     setModori(5);
     setFilter(5);
+    setCliEnc(Number(record.idCliente))
     setGenerico(Number(record.idEncuesta));
   };
+
+  console.log("modori: ",modori);
+  console.log("filter: ",filter);
+  console.log("idCli: ",cliEnc);
+  console.log("generico: ",generico);
 
   const handleCloseDrawer = () => {
     setDrawerUpload(false);
@@ -1387,13 +1394,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               right: 0,
               bottom: 0,
               zIndex: 999,
+              height:"80%"
             }}
           >
             <iframe
               loading="lazy"
-              src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${idCli}`} // para usar local
+              src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
               width={"100%"}
-              height={"103%"}
+              height={"100%"}
               style={{ border: "none" }}
               title="drawer"
             ></iframe>

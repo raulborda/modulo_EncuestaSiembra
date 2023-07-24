@@ -513,9 +513,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setGenerico(Number(record.idEncuesta));
   };
 
-  console.log("modori:", modori);
-  console.log("cliEnc:", cliEnc);
-  console.log("modori:", generico);
+  // console.log("modori:", modori);
+  // console.log("cliEnc:", cliEnc);
+  // console.log("modori:", generico);
 
   const handleCloseDrawer = () => {
     setDrawerUpload(false);

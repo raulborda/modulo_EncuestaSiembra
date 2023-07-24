@@ -163,6 +163,10 @@ const LotesEncuestas = () => {
     if (!map) initializeMap({ setMap, mapContainer });
   });
 
+
+
+
+  //! CONVERSION DEL DATA LOTES A GEOJSON
   function convertirGeoJSON(dataLotes) {
     setGeoJSON([]);
     var result = [];
@@ -177,7 +181,7 @@ const LotesEncuestas = () => {
       result.push(coordinates);
     }
     setGeoJSON(result);
-    //console.log('result geojson: ', result)
+    console.log("result geojson: ", result);
     return result;
   }
 

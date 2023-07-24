@@ -505,7 +505,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   //! INICIO -  Upload
 
   const handleUploadClick = (record) => {
-    console.log("handleUploadClick: ",record);
+    //console.log("handleUploadClick: ",record);
     setDrawerUpload(true);
     setModori(5);
     setFilter(5);
@@ -513,10 +513,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setGenerico(Number(record.idEncuesta));
   };
 
-  console.log("modori: ",modori);
-  console.log("filter: ",filter);
-  console.log("idCli: ",cliEnc);
-  console.log("generico: ",generico);
+  console.log("modori:", modori);
+  console.log("cliEnc:", cliEnc);
+  console.log("modori:", generico);
 
   const handleCloseDrawer = () => {
     setDrawerUpload(false);
@@ -1238,9 +1237,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           placement="bottom"
           onClose={onClose}
           open={openDrawer}
+          style={{marginTop:"-30px", height:"100vh"}}
         >
-          {/* <LotesEncuestas /> */}
-          <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
+          {console.log("lotesEncuestasKey: ", lotesEncuestasKey, "| dataLotes: ", dataLotes)}
+          {openDrawer ? (
+            <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
+          ): null} 
         </Drawer>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -1394,7 +1396,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               right: 0,
               bottom: 0,
               zIndex: 999,
-              height:"80%"
+              height:"100%"
             }}
           >
             <iframe

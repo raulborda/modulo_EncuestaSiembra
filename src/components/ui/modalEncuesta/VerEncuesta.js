@@ -19,7 +19,7 @@ export const VerEncuesta = () => {
 
   const { infoVerEncuesta, setIsModalOpenVerEncuesta } = useContext(GlobalContext);
 
-  console.log("ver encuesta: ", infoVerEncuesta);
+  //console.log("ver encuesta: ", infoVerEncuesta);
 
   //!funcion para formatear la fecha
   function formatDate(dateString) {
@@ -296,7 +296,7 @@ export const VerEncuesta = () => {
         {/* LINEA 4 */}
         <span className="spanSuperTitulo">Archivos</span>
         <div className="div_formato_archivo_horizontal">
-          {archivosUnicos.length > 0 ? (
+          {archivosUnicos.length > 0 && archivosUnicos.every(archivo => archivo.up_hashname && archivo.up_filename && archivo.up_mimetype) ? (
             archivosUnicos.map((archivo) => {
               const { up_filename, up_hashname, up_mimetype } = archivo;
               const downloadURL = `http://${urlDescarga}/../../../../static?file=${encodeURIComponent(archivo.up_hashname)}`;

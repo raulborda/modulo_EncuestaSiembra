@@ -49,10 +49,8 @@ function App() {
   const [selectedCosechaId, setSelectedCosechaId] = useState(null);
   const [encuestaSeleccionada, setEncuestaSeleccionada] = useState([]);
 
-  //!Selects
-  const [selectedLote, setSelectedLote] = useState("todos");
-  const [selectedCultivo, setSelectedCultivo] = useState("todos");
-  const [selectedEstado, setSelectedEstado] = useState("3");
+  //! reinicia selects encuesta
+  const [updateSelects, setUpdatesSelects] = useState(false);
 
   // //* FUNCION QUE TRAE LOS DATOS DE COSECHA ACTIVA Y LAS QUE SE PUEDEN VISUALIZAR DEL CLIENTE
   function cosechas(idCliente) {
@@ -90,6 +88,7 @@ function App() {
       cosechas(idCliente);
     }
   }, [idCliente]);
+
 
   return (
     <GlobalContext.Provider
@@ -153,12 +152,8 @@ function App() {
         isModalOpenVerEncuesta,
         setIsModalOpenVerEncuesta,
 
-        selectedLote,
-        setSelectedLote,
-        selectedCultivo,
-        setSelectedCultivo,
-        selectedEstado,
-        setSelectedEstado,
+        updateSelects, 
+        setUpdatesSelects,
       }}
     >
       <ConfigProvider

@@ -152,15 +152,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setEncuestaSeleccionada,
     addEncCultivos,
 
-    selectedLote, setSelectedLote,
-    selectedCultivo, setSelectedCultivo,
-    selectedEstado, setSelectedEstado,
+    updateSelects, setUpdatesSelects,
+
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState(0);
-  // const [selectedLote, setSelectedLote] = useState("todos");
-  // const [selectedCultivo, setSelectedCultivo] = useState("todos");
-  // const [selectedEstado, setSelectedEstado] = useState("3");
+  const [selectedLote, setSelectedLote] = useState("todos");
+  const [selectedCultivo, setSelectedCultivo] = useState("todos");
+  const [selectedEstado, setSelectedEstado] = useState("3");
   const [infoTable, setInfoTable] = useState([]);
   const [nombreCliLote, setNombreCliLote] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -478,6 +477,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   };
   //! FIN - Abrir Editar Encuesta
 
+
   //! INICIO - Abrir Nuevo Evento
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
   useEffect(() => {
@@ -636,6 +636,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   function traeClientes() {
     const data = new FormData();
+    data.append("idU", usu);
     fetch(`${URL}lot_listClientes.php`, {
       method: "POST",
       body: data,
@@ -674,7 +675,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           } else {
             setLotes(LotesConTodos);
           }
-          // setSelectedLote(null); // Reinicia el lote seleccionado
+          //setSelectedLote(null); // Reinicia el lote seleccionado
         });
       });
     }
@@ -1017,6 +1018,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     // traeLotes();
   }, []);
 
+
+  // useEffect(() => {
+  //   setSelectedLote("todos");
+  // }, [updateSelects])
+  
+
   const paginationConfig = {
     pageSizeOptions: ["5"], // Opciones de cantidad de elementos por página
     defaultPageSize: 5, // Cantidad de elementos por página por defecto
@@ -1080,16 +1087,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             <div style={{ marginLeft: "5px" }}>
               <h1 className="subtitulos">LOTES</h1>
             </div>
-
             {idCli === "0" ? (
               <Select
                 defaultValue="TODOS"
                 style={{ width: 250 }}
-                // showSearch
-                // optionFilterProp="children"
-                // filterOption={(input, option) =>
-                //   option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                // }
                 onChange={(value) => setSelectedLote(value)}
                 options={[
                   {
@@ -1243,7 +1244,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           open={openDrawer}
           style={{marginTop:"-30px", height:"100vh"}}
         >
-          {console.log("lotesEncuestasKey: ", lotesEncuestasKey, "| dataLotes: ", dataLotes)}
+          {/* {console.log("lotesEncuestasKey: ", lotesEncuestasKey, "| dataLotes: ", dataLotes)} */}
           {openDrawer ? (
             <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
           ): null} 

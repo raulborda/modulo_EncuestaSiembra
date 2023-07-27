@@ -42,14 +42,9 @@ export const NuevaEncuesta = () => {
     setUpload,
 
     //selects
-    selectedLote,
-    setSelectedLote,
-    selectedCultivo,
-    setSelectedCultivo,
-    selectedEstado,
-    setSelectedEstado,
+    //updateSelects, setUpdatesSelects,
   } = useContext(GlobalContext);
-  const [loteEncuestaAdd, setLoteEncuestaAdd] = useState();
+  const [loteEncuestaAdd, setLoteEncuestaAdd] = useState([]);
   const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
 
   const [value, setValue] = useState(3);
@@ -76,12 +71,12 @@ export const NuevaEncuesta = () => {
           const data = resp;
           const objetoData = JSON.parse(data);
           // console.log("objetoData Nueva Encuesta - encuesta-siembra_listLotes: ", objetoData);
-          setLotes(objetoData); // Establecer los nuevos lotes
+          setLoteEncuestaAdd(objetoData); // Establecer los nuevos lotes
           setLotesSeleccionados([]); // Reiniciar los lotes seleccionados al obtener nuevos lotes
         });
       });
     } else {
-      setLotes([]); // Establecer los lotes como vacíos
+        setLoteEncuestaAdd([]); // Establecer los lotes como vacíos
       setLotesSeleccionados([]); // Establecer los lotes seleccionados como vacíos
     }
   }, [addEncCliente]);
@@ -157,16 +152,15 @@ export const NuevaEncuesta = () => {
       setIsModalOpen(false);
       setAddEncCliente(null);
       setUpload(!upload);
+      //setUpdatesSelects(!updateSelects);
     }
 
-    setSelectedLote("todos");
-    setSelectedCultivo("todos");
-    setSelectedEstado("3");
+    
   };
 
   useEffect(() => {
     form.resetFields();
-    setLotes([]);
+    setLoteEncuestaAdd([]);
     setAddEncCliente(null);
   }, [isModalOpen]);
 
@@ -271,8 +265,8 @@ export const NuevaEncuesta = () => {
                   bordered
                   // dataSource={lotes}
                   dataSource={
-                    lotes.length > 0
-                      ? lotes
+                    loteEncuestaAdd.length > 0
+                      ? loteEncuestaAdd
                       : addEncCliente
                       ? [{ alote_id: "0", alote_nombre: "SIN LOTES" }]
                       : []

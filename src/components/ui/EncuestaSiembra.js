@@ -151,12 +151,16 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     encuestaSeleccionada,
     setEncuestaSeleccionada,
     addEncCultivos,
+
+    selectedLote, setSelectedLote,
+    selectedCultivo, setSelectedCultivo,
+    selectedEstado, setSelectedEstado,
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState(0);
-  const [selectedLote, setSelectedLote] = useState("todos");
-  const [selectedCultivo, setSelectedCultivo] = useState("todos");
-  const [selectedEstado, setSelectedEstado] = useState("todos");
+  // const [selectedLote, setSelectedLote] = useState("todos");
+  // const [selectedCultivo, setSelectedCultivo] = useState("todos");
+  // const [selectedEstado, setSelectedEstado] = useState("3");
   const [infoTable, setInfoTable] = useState([]);
   const [nombreCliLote, setNombreCliLote] = useState("");
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -1175,7 +1179,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               <h1 className="subtitulos">ESTADO</h1>
             </div>
             <Select
-              defaultValue="TODOS"
+              defaultValue="ENCUESTA OK"
               style={{ width: 250 }}
               onChange={(value) => setSelectedEstado(value)}
               options={[

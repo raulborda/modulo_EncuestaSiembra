@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Spin } from "antd";
 import esES from "antd/lib/locale/es_ES";
 import "./App.css";
 import { useEffect, useState } from "react";
@@ -9,16 +9,15 @@ import { EncuestaSiembra } from "./components/ui/EncuestaSiembra";
 function App() {
   const URL = process.env.REACT_APP_URL;
 
-
   //* Id de usuario que se obtiene desde local storage
-  const idUsu = localStorage.getItem("usuario");
-  //const idUsu = 1; //.28
+  //const idUsu = localStorage.getItem("usuario");
+  const idUsu = 1; //.28
   const [usu, setUsu] = useState(idUsu);
   //* Id de cliente que se obtine desde local storage
-   const idC = localStorage.getItem("cliSelect");
+  //const idC = localStorage.getItem("cliSelect");
   // const idC = 2; // .153
   // const idC = 2083; //.28
-  //const idC = 2049; //.28
+  const idC = 2049; //.28
   const [idCliente, setIdCliente] = useState(idC);
 
   const [addSubmit, setAddSubmit] = useState(false);
@@ -38,7 +37,7 @@ function App() {
   const [addEncCliente, setAddEncCliente] = useState(null);
   const [addEncCultivos, setAddEncCultivos] = useState();
   const [infoEncuesta, setInfoEncuesta] = useState({});
-  const [infoEncuestaEvent ,setInfoEncuestaEvent] = useState({});
+  const [infoEncuestaEvent, setInfoEncuestaEvent] = useState({});
   const [editarEncuesta, setEditarEncuesta] = useState([]);
   const [infoEventoNew, setInfoEventoNew] = useState([]);
   const [infoVer, setInfoVer] = useState([]);
@@ -47,58 +46,61 @@ function App() {
 
   const [upload, setUpload] = useState(false);
 
-
   const [selectedCosechaId, setSelectedCosechaId] = useState(null);
   const [encuestaSeleccionada, setEncuestaSeleccionada] = useState([]);
 
+  //!Selects
+  const [selectedLote, setSelectedLote] = useState("todos");
+  const [selectedCultivo, setSelectedCultivo] = useState("todos");
+  const [selectedEstado, setSelectedEstado] = useState("3");
 
-
-
-    // //* FUNCION QUE TRAE LOS DATOS DE COSECHA ACTIVA Y LAS QUE SE PUEDEN VISUALIZAR DEL CLIENTE
-    function cosechas(idCliente) {
-      const data = new FormData();
-      data.append("idC", idCliente);
-      fetch(`${URL}com_traerCosechas.php`, {
-        method: "POST",
-        body: data,
-      }).then(function (response) {
-        response.text().then((resp) => {
-          const data = resp;
-          const objetoData = JSON.parse(data);
-          setCosechas(objetoData);
-          setCosechaA(objetoData[0].acos_desc);
-          setListCosechas(objetoData);
-          setCosechaSeleccionada(objetoData.length > 0 ? objetoData[0]?.acos_id : null);
-          setSelectedAcosDesc(
-            objetoData.length > 0 ? objetoData[0]?.acos_desc : null
-          );
-          setCosechaAnterior(
-            objetoData.length > 0 ? objetoData[1]?.acos_desc : null
-          );
-        });
+  // //* FUNCION QUE TRAE LOS DATOS DE COSECHA ACTIVA Y LAS QUE SE PUEDEN VISUALIZAR DEL CLIENTE
+  function cosechas(idCliente) {
+    const data = new FormData();
+    data.append("idC", idCliente);
+    fetch(`${URL}com_traerCosechas.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        setCosechas(objetoData);
+        setCosechaA(objetoData[0].acos_desc);
+        setListCosechas(objetoData);
+        setCosechaSeleccionada(
+          objetoData.length > 0 ? objetoData[0]?.acos_id : null
+        );
+        setSelectedAcosDesc(
+          objetoData.length > 0 ? objetoData[0]?.acos_desc : null
+        );
+        setCosechaAnterior(
+          objetoData.length > 0 ? objetoData[1]?.acos_desc : null
+        );
       });
-    }
-  
-    useEffect(() => {
+    });
+  }
+
+  useEffect(() => {
+    cosechas(idCliente);
+  }, []);
+
+  useEffect(() => {
+    if (idCliente) {
       cosechas(idCliente);
-    }, []);
-  
-    useEffect(() => {
-      if (idCliente) {
-        cosechas(idCliente);
-      }
-    }, [idCliente]);
+    }
+  }, [idCliente]);
 
   return (
     <GlobalContext.Provider
       value={{
-        usu, 
+        usu,
         setUsu,
         idCliente,
         setIdCliente,
-        selectedAcosDesc, 
+        selectedAcosDesc,
         setSelectedAcosDesc,
-        cosechaSeleccionada, 
+        cosechaSeleccionada,
         setCosechaSeleccionada,
         infoCosechas,
         setCosechas,
@@ -106,44 +108,86 @@ function App() {
         setListCosechas,
         cosechaA,
         setCosechaA,
-        cosechaAnterior, 
+        cosechaAnterior,
         setCosechaAnterior,
-        clientes, 
+        clientes,
         setClientes,
-        lotes, 
+        lotes,
         setLotes,
-        cultivos, setCultivos,
+        cultivos,
+        setCultivos,
 
-        addEncCliente, setAddEncCliente,
-        addEncCultivos, setAddEncCultivos,
-        addSubmit, setAddSubmit,
-        isModalOpen, setIsModalOpen,
-        isModalOpenEdit, setIsModalOpenEdit,
-        upload, setUpload,
-        infoEncuesta, setInfoEncuesta,
-        infoEncuestaEvent ,setInfoEncuestaEvent,
-        infoVer, setInfoVer,
-        infoVerEncuesta, setInfoVerEncuesta,
-        editarEncuesta, setEditarEncuesta,
-        infoEventoNew, setInfoEventoNew,
-        dataLotes, setDataLotes,
+        addEncCliente,
+        setAddEncCliente,
+        addEncCultivos,
+        setAddEncCultivos,
+        addSubmit,
+        setAddSubmit,
+        isModalOpen,
+        setIsModalOpen,
+        isModalOpenEdit,
+        setIsModalOpenEdit,
+        upload,
+        setUpload,
+        infoEncuesta,
+        setInfoEncuesta,
+        infoEncuestaEvent,
+        setInfoEncuestaEvent,
+        infoVer,
+        setInfoVer,
+        infoVerEncuesta,
+        setInfoVerEncuesta,
+        editarEncuesta,
+        setEditarEncuesta,
+        infoEventoNew,
+        setInfoEventoNew,
+        dataLotes,
+        setDataLotes,
 
-        selectedCosechaId, setSelectedCosechaId,
-        encuestaSeleccionada, setEncuestaSeleccionada,
-        isModalOpenEvent, setIsModalOpenEvent,
-        isModalOpenVerEncuesta, setIsModalOpenVerEncuesta,
+        selectedCosechaId,
+        setSelectedCosechaId,
+        encuestaSeleccionada,
+        setEncuestaSeleccionada,
+        isModalOpenEvent,
+        setIsModalOpenEvent,
+        isModalOpenVerEncuesta,
+        setIsModalOpenVerEncuesta,
+
+        selectedLote,
+        setSelectedLote,
+        selectedCultivo,
+        setSelectedCultivo,
+        selectedEstado,
+        setSelectedEstado,
       }}
     >
-        <ConfigProvider
-          locale={esES}
-          theme={{
-            token: {
-              colorPrimary: "#56b43c",
-            },
-          }}
-        >
-          {selectedAcosDesc && <EncuestaSiembra listadoCosechas={listCosechas} cosechaActiva={cosechaA} />}
-        </ConfigProvider>
+      <ConfigProvider
+        locale={esES}
+        theme={{
+          token: {
+            colorPrimary: "#56b43c",
+          },
+        }}
+      >
+        {selectedAcosDesc.length == 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "10%",
+            }}
+          >
+            <Spin size="large" />
+          </div>
+        ) : (
+          <EncuestaSiembra
+            listadoCosechas={listCosechas}
+            cosechaActiva={cosechaA}
+          />
+        )}
+      </ConfigProvider>
     </GlobalContext.Provider>
   );
 }

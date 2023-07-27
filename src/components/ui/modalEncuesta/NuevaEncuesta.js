@@ -163,7 +163,6 @@ export const NuevaEncuesta = () => {
     setCultivoSeleccionado(v);
   };
 
-  console.log("handleChangeCultivo: ", cultivoSeleccionado);
 
   return (
     <>
@@ -379,17 +378,10 @@ export const NuevaEncuesta = () => {
                 
                   <Form.Item
                     name="ciclo"
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: "Por favor seleccione un ciclo",
-                    //   },
-                    // ]}
-                    // className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
                   >
-                    {cultivoSeleccionado !== 0 || cultivoSeleccionado == 1 || cultivoSeleccionado == 3 ? (
+                    {cultivoSeleccionado == 1 || cultivoSeleccionado == 3 ? (
                     <Select
-                      // defaultValue="TODOS"
+                      
                       style={{ width: 200 }}
                       placeholder="SELECCIONE"
                       // onChange={(value) => setSelectedEstado(value)}
@@ -401,7 +393,7 @@ export const NuevaEncuesta = () => {
                     ) : (
                       <Select
                       disabled="disabled"
-                      // defaultValue="TODOS"
+                      
                       style={{ width: 200 }}
                       placeholder="SELECCIONE"
                       // onChange={(value) => setSelectedEstado(value)}

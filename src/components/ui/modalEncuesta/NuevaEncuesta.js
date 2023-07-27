@@ -43,6 +43,7 @@ export const NuevaEncuesta = () => {
   } = useContext(GlobalContext);
   const [loteEncuestaAdd, setLoteEncuestaAdd] = useState([]);
   const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
+  const [cultivoSeleccionado, setCultivoSeleccionado] = useState(0);
 
   const [value, setValue] = useState(3);
   const [disabledInputs, setDisabledInputs] = useState(false);
@@ -73,7 +74,7 @@ export const NuevaEncuesta = () => {
         });
       });
     } else {
-        setLoteEncuestaAdd([]); // Establecer los lotes como vacíos
+      setLoteEncuestaAdd([]); // Establecer los lotes como vacíos
       setLotesSeleccionados([]); // Establecer los lotes seleccionados como vacíos
     }
   }, [addEncCliente]);
@@ -150,8 +151,6 @@ export const NuevaEncuesta = () => {
       setAddEncCliente(null);
       setUpload(!upload);
     }
-
-    
   };
 
   useEffect(() => {
@@ -159,6 +158,12 @@ export const NuevaEncuesta = () => {
     setLoteEncuestaAdd([]);
     setAddEncCliente(null);
   }, [isModalOpen]);
+
+  const handleChangeCultivo = (v) => {
+    setCultivoSeleccionado(v);
+  };
+
+  console.log("handleChangeCultivo: ", cultivoSeleccionado);
 
   return (
     <>
@@ -350,7 +355,7 @@ export const NuevaEncuesta = () => {
                         .toLowerCase()
                         .indexOf(input.toLowerCase()) >= 0
                     }
-                    // onChange={(value) => setAddEncCultivos(value)}
+                    onChange={(value) => handleChangeCultivo(value)}
                   >
                     {addEncCultivos &&
                       addEncCultivos.length > 0 &&
@@ -371,27 +376,41 @@ export const NuevaEncuesta = () => {
                 <h1 className="subtitulos">Ciclo</h1>
               </div>
               <div>
-                <Form.Item
-                  name="ciclo"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor seleccione un ciclo",
-                    },
-                  ]}
-                  className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
-                >
-                  <Select
-                    // defaultValue="TODOS"
-                    style={{ width: 200 }}
-                    placeholder="SELECCIONE"
-                    // onChange={(value) => setSelectedEstado(value)}
-                    options={[
-                      { value: "1", label: "1°" },
-                      { value: "2", label: "2°" },
-                    ]}
-                  />
-                </Form.Item>
+                
+                  <Form.Item
+                    name="ciclo"
+                    // rules={[
+                    //   {
+                    //     required: true,
+                    //     message: "Por favor seleccione un ciclo",
+                    //   },
+                    // ]}
+                    // className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                  >
+                    {cultivoSeleccionado !== 0 || cultivoSeleccionado == 1 || cultivoSeleccionado == 3 ? (
+                    <Select
+                      // defaultValue="TODOS"
+                      style={{ width: 200 }}
+                      placeholder="SELECCIONE"
+                      // onChange={(value) => setSelectedEstado(value)}
+                      options={[
+                        { value: "1", label: "1°" },
+                        { value: "2", label: "2°" },
+                      ]}
+                    />
+                    ) : (
+                      <Select
+                      disabled="disabled"
+                      // defaultValue="TODOS"
+                      style={{ width: 200 }}
+                      placeholder="SELECCIONE"
+                      // onChange={(value) => setSelectedEstado(value)}
+                      options={[
+                        { value: "1", label: "1°" },
+                        { value: "2", label: "2°" },
+                      ]}
+                    />)}
+                  </Form.Item>
               </div>
             </div>
           </div>

@@ -1019,11 +1019,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }, []);
 
 
-  // useEffect(() => {
-  //   setSelectedLote("todos");
-  // }, [updateSelects])
-  
-
   const paginationConfig = {
     pageSizeOptions: ["5"], // Opciones de cantidad de elementos por página
     defaultPageSize: 5, // Cantidad de elementos por página por defecto

@@ -110,6 +110,17 @@ export const NuevaEncuesta = () => {
       // Formatear la fecha en el formato "yyyy-mm-dd"
       const fechaFormateada = `${year}-${month}-${day}`;
 
+      console.log(values.cultivo)
+
+      if (values.ciclo === undefined) {
+        if (values.cultivo === "1" || values.cultivo === "3") {
+          values.ciclo = 1;
+        } else {
+          values.ciclo = 0;
+        }
+      }
+
+      console.log("ciclo: ", values.ciclo);
       const dataAdd = new FormData();
       dataAdd.append("usuid", usu);
       dataAdd.append("opciones", values.estado);

@@ -731,6 +731,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     cosechaSeleccionada,
     idCli,
     selectedLote,
+    updateSelects
   ]);
 
   useEffect(() => {
@@ -781,6 +782,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     cosechaSeleccionada,
     idCli,
     selectedLote,
+    updateSelects
   ]);
 
   useEffect(() => {
@@ -832,6 +834,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     cosechaSeleccionada,
     idCli,
     selectedLote,
+    updateSelects
   ]);
 
   useEffect(() => {
@@ -889,6 +892,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedAcosDesc,
     selectedEstado,
     upload,
+    updateSelects
   ]);
 
   //! Para editar encuesta

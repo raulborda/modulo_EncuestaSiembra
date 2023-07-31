@@ -40,6 +40,7 @@ export const NuevaEncuesta = () => {
     isModalOpen,
     upload,
     setUpload,
+    updateSelects, setUpdatesSelects,
   } = useContext(GlobalContext);
   const [loteEncuestaAdd, setLoteEncuestaAdd] = useState([]);
   const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
@@ -161,6 +162,7 @@ export const NuevaEncuesta = () => {
       setIsModalOpen(false);
       setAddEncCliente(null);
       setUpload(!upload);
+      setUpdatesSelects(!updateSelects);
     }
   };
 

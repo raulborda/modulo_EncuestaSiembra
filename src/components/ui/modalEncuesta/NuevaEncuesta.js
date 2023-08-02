@@ -197,6 +197,7 @@ export const NuevaEncuesta = () => {
                   },
                 ]}
                 className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
+                initialValue={3}
               >
                 <Radio.Group onChange={onChange} value={value}>
                   <Radio style={{ paddingRight: "15px" }} value={3}>

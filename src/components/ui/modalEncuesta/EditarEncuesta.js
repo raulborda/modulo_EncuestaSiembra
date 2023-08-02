@@ -18,6 +18,8 @@ export const EditarEncuesta = () => {
         upload, setUpload,
         editarEncuesta,
         encuestaSeleccionada,
+        setUpdatesSelects,
+        updateSelects,
     } = useContext(GlobalContext);
 
 
@@ -80,6 +82,7 @@ export const EditarEncuesta = () => {
             setIsModalOpenEdit(false);
             setAddEncCliente(null);
             setUpload(!upload);
+            setUpdatesSelects(!updateSelects);
         }
     };
 

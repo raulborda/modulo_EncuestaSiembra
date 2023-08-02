@@ -454,6 +454,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 "success"
               );
               setUpload(!upload);
+              setUpdatesSelects(!updateSelects)
             });
           } else {
             // Si la eliminación no fue exitosa, puedes mostrar un mensaje de error aquí

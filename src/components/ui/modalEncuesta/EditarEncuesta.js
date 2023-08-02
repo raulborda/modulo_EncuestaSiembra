@@ -20,6 +20,8 @@ export const EditarEncuesta = () => {
         encuestaSeleccionada,
         setUpdatesSelects,
         updateSelects,
+        isLoading,
+        setIsLoading,
     } = useContext(GlobalContext);
 
 
@@ -47,6 +49,7 @@ export const EditarEncuesta = () => {
 
     const onSubmitEdit = async (values) => {
         try {
+            setIsLoading(true);
             const dataAdd = new FormData();
             dataAdd.append("usuid", usu);
             //console.log("encid: ", encuestaSeleccionada.idEncuesta);
@@ -70,19 +73,22 @@ export const EditarEncuesta = () => {
                 const resp = await response.text();
                 const data = resp;
                 form.resetFields();
-                message.success("Encuesta agregada exitosamente");
+                message.success("Encuesta editada exitosamente");
+                setIsLoading(false);
             } else {
                 throw new Error("Error al agregar encuesta");
             }
         } catch (error) {
             //console.log("Error: ", error);
             message.error("Error al agregar encuesta");
+            setIsLoading(false);
         } finally {
             form.resetFields();
             setIsModalOpenEdit(false);
             setAddEncCliente(null);
             setUpload(!upload);
             setUpdatesSelects(!updateSelects);
+            setIsLoading(false);
         }
     };
 

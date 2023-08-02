@@ -40,7 +40,10 @@ export const NuevaEncuesta = () => {
     isModalOpen,
     upload,
     setUpload,
-    updateSelects, setUpdatesSelects,
+    updateSelects,
+    setUpdatesSelects,
+    isLoading,
+    setIsLoading,
   } = useContext(GlobalContext);
   const [loteEncuestaAdd, setLoteEncuestaAdd] = useState([]);
   const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
@@ -102,6 +105,7 @@ export const NuevaEncuesta = () => {
 
   const onSubmitAdd = async (values) => {
     try {
+      setIsLoading(true);
       // Parsear la fecha en formato GMT
       const fechaSiembra = new Date(values.fechaSiembra);
       // Obtener los componentes de la fecha
@@ -111,7 +115,7 @@ export const NuevaEncuesta = () => {
       // Formatear la fecha en el formato "yyyy-mm-dd"
       const fechaFormateada = `${year}-${month}-${day}`;
 
-      console.log(values.cultivo)
+      //console.log(values.cultivo)
 
       if (values.ciclo === undefined) {
         if (values.cultivo === "1" || values.cultivo === "3") {
@@ -121,7 +125,7 @@ export const NuevaEncuesta = () => {
         }
       }
 
-      console.log("ciclo: ", values.ciclo);
+      //console.log("ciclo: ", values.ciclo);
       const dataAdd = new FormData();
       dataAdd.append("usuid", usu);
       dataAdd.append("opciones", values.estado);
@@ -151,18 +155,24 @@ export const NuevaEncuesta = () => {
         const data = resp;
         form.resetFields();
         message.success("Encuesta agregada exitosamente");
+        setIsLoading(false);
+        setUpdatesSelects(!updateSelects);
+
       } else {
         throw new Error("Error al agregar encuesta");
+      
       }
     } catch (error) {
       console.log("Error: ", error);
       message.error("Error al agregar encuesta");
+      setIsLoading(false);
     } finally {
       form.resetFields();
       setIsModalOpen(false);
       setAddEncCliente(null);
       setUpload(!upload);
       setUpdatesSelects(!updateSelects);
+      setIsLoading(false);
     }
   };
 

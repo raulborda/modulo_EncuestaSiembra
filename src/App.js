@@ -52,6 +52,7 @@ function App() {
 
   //! reinicia selects encuesta
   const [updateSelects, setUpdatesSelects] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // //* FUNCION QUE TRAE LOS DATOS DE COSECHA ACTIVA Y LAS QUE SE PUEDEN VISUALIZAR DEL CLIENTE
   function cosechas(idCliente) {
@@ -159,6 +160,8 @@ function App() {
 
         updateSelects, 
         setUpdatesSelects,
+        isLoading,
+        setIsLoading,
       }}
     >
       <ConfigProvider
@@ -169,7 +172,7 @@ function App() {
           },
         }}
       >
-        {selectedAcosDesc.length == 0 ? (
+        {isLoading === true || selectedAcosDesc.length == 0 ? (
           <div
             style={{
               display: "flex",

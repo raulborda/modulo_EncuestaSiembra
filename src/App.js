@@ -48,6 +48,7 @@ function App() {
 
   const [selectedCosechaId, setSelectedCosechaId] = useState(null);
   const [encuestaSeleccionada, setEncuestaSeleccionada] = useState([]);
+  const [cosInicial,setCosInicial] = useState("")
 
   //! reinicia selects encuesta
   const [updateSelects, setUpdatesSelects] = useState(false);
@@ -75,6 +76,10 @@ function App() {
         setCosechaAnterior(
           objetoData.length > 0 ? objetoData[1]?.acos_desc : null
         );
+
+        setCosInicial(
+          objetoData.length > 0 ? objetoData[0]?.acos_id : null
+        )
       });
     });
   }

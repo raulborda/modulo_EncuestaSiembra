@@ -465,6 +465,22 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     });
   };
 
+
+  //! ACTUALIZAR SELECTS DEFINITIVAMENTE
+
+  useEffect(() => {
+    setIdCli(0);
+    setSelectedLote("todos");
+    setSelectedCultivo("todos");
+    setSelectedEstado(3);
+    
+  }, [updateSelects])
+  
+
+
+
+
+
   //! INICIO - Abrir Editar Encuesta
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
   useEffect(() => {

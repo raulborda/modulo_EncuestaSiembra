@@ -85,7 +85,7 @@ const renderActiveShape = (props) => {
         y={ey}
         textAnchor={textAnchor}
         fill="#333"
-      >{`${value.toLocaleString("de-DE")}`}</text>
+      >{`${Math.trunc(value).toLocaleString().replace(/,/g, ".")}`}</text>
       <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
@@ -153,6 +153,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     addEncCultivos,
 
     updateSelects, setUpdatesSelects,
+    updateGraph, setUpdateGraph,
 
   } = useContext(GlobalContext);
 
@@ -739,7 +740,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         }, 0);
         // Hacer algo con el total, como asignarlo a un estado
         // setSupEncuestadas(total);
-        setTotalSuperficie(total.toLocaleString("de-DE"));
+        setTotalSuperficie(Math.trunc(total).toLocaleString("de-DE"));
       });
     });
   }, [
@@ -748,7 +749,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     cosechaSeleccionada,
     idCli,
     selectedLote,
-    updateSelects
+    updateSelects,
+    updateGraph
   ]);
 
   useEffect(() => {
@@ -790,7 +792,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         const total = transformedData.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.value;
         }, 0);
-        setTotalProduccion(total.toLocaleString("de-DE"));
+        setTotalProduccion(Math.trunc(total).toLocaleString("de-DE"));
       });
     });
   }, [
@@ -799,7 +801,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     cosechaSeleccionada,
     idCli,
     selectedLote,
-    updateSelects
+    updateSelects,
+    updateGraph
   ]);
 
   useEffect(() => {
@@ -842,7 +845,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         const total = transformedData.reduce((accumulator, currentValue) => {
           return accumulator + currentValue.value;
         }, 0);
-        setTotalCosto(total.toLocaleString("de-DE"));
+        setTotalCosto(Math.trunc(total).toLocaleString("de-DE"));
       });
     });
   }, [
@@ -851,7 +854,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     cosechaSeleccionada,
     idCli,
     selectedLote,
-    updateSelects
+    updateSelects,
+    updateGraph
   ]);
 
   useEffect(() => {
@@ -1306,7 +1310,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                     </Pie>
                     <Tooltip
                       formatter={(value) =>
-                        value.toLocaleString().replace(/,/g, ".")
+                        Math.trunc(value).toLocaleString().replace(/,/g, ".")
                       }
                     />
                   </PieChart>
@@ -1349,7 +1353,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                     </Pie>
                     <Tooltip
                       formatter={(value) =>
-                        value.toLocaleString().replace(/,/g, ".")
+                        Math.trunc(value).toLocaleString().replace(/,/g, ".")
                       }
                     />
                   </PieChart>
@@ -1392,7 +1396,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                     </Pie>
                     <Tooltip
                       formatter={(value) =>
-                        value.toLocaleString().replace(/,/g, ".")
+                        Math.trunc(value).toLocaleString().replace(/,/g, ".")
                       }
                     />
                   </PieChart>

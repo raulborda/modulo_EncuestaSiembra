@@ -10,8 +10,8 @@ function App() {
   const URL = process.env.REACT_APP_URL;
 
   //* Id de usuario que se obtiene desde local storage
-  const idUsu = localStorage.getItem("usuario");
-  //const idUsu = 1; //.28
+  //const idUsu = localStorage.getItem("usuario");
+  const idUsu = 1; //.28
   const [usu, setUsu] = useState(idUsu);
   //* Id de cliente que se obtine desde local storage
   const idC = localStorage.getItem("cliSelect");
@@ -52,6 +52,7 @@ function App() {
 
   //! reinicia selects encuesta
   const [updateSelects, setUpdatesSelects] = useState(false);
+  const [updateGraph, setUpdateGraph] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // //* FUNCION QUE TRAE LOS DATOS DE COSECHA ACTIVA Y LAS QUE SE PUEDEN VISUALIZAR DEL CLIENTE
@@ -160,6 +161,8 @@ function App() {
 
         updateSelects, 
         setUpdatesSelects,
+        updateGraph,
+        setUpdateGraph,
         isLoading,
         setIsLoading,
       }}

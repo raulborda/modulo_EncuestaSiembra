@@ -10,8 +10,8 @@ function App() {
   const URL = process.env.REACT_APP_URL;
 
   //* Id de usuario que se obtiene desde local storage
-  //const idUsu = localStorage.getItem("usuario");
-  const idUsu = 1; //.28
+  const idUsu = localStorage.getItem("usuario");
+  //const idUsu = 1; //.28
   const [usu, setUsu] = useState(idUsu);
   //* Id de cliente que se obtine desde local storage
   const idC = localStorage.getItem("cliSelect");

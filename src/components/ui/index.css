@@ -10,13 +10,6 @@
     color: #605d5f !important;
   }
 
-  .contSubtitulo-cliente {
-    display: flex; 
-    flex-direction: column;
-    width: 100%;
-    padding-right: 25px;
-  }
-
 /*//!------Boton agregar--------*/
 .btnAddCosecha {
   margin-left: auto;
@@ -113,12 +106,7 @@
 
 /*//!------Boton nuevo evento--------*/
 .btnNuevoEvento {
-  margin-left: auto;
-  margin-right: -2px;
-  border: none;
-  font-size: 18px !important;
-  color: #F6BB42;
-  background-color: transparent; 
+  color: #F6BB42; 
 }
 .ant-btn-default.btnNuevoEvento{
   box-shadow: none;
@@ -161,12 +149,7 @@
 
 /*//!------Boton ver encuesta--------*/
 .btnVerEncuesta {
-  margin-left: auto;
-  margin-right: -2px;
-  border: none;
-  font-size: 18px !important;
   color: #4fc1e9;
-  background-color: transparent; 
 }
 .ant-btn-default.btnVerEncuesta{
   box-shadow: none;
@@ -208,12 +191,7 @@
 
 /*//!------Boton Uploads--------*/
 .btnUploadEncuesta {
-  margin-left: auto;
-  margin-right: -2px;
-  border: none;
-  font-size: 18px !important;
   color: #00b33c;
-  background-color: transparent; 
 }
 .ant-btn-default.btnUploadEncuesta{
   box-shadow: none;

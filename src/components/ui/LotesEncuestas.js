@@ -7,10 +7,8 @@ import "./index.css";
 import { GlobalContext } from "../context/GlobalContext";
 
 const styles = {
-  width: "98%",
-  height: "88%",
-  position: "absolute",
-  marginTop: "-10px",
+  width: "100%",
+  height: "100%",
 };
 
 const LotesEncuestas = () => {
@@ -163,9 +161,6 @@ const LotesEncuestas = () => {
     if (!map) initializeMap({ setMap, mapContainer });
   });
 
-
-
-
   //! CONVERSION DEL DATA LOTES A GEOJSON
   function convertirGeoJSON(dataLotes) {
     setGeoJSON([]);
@@ -181,7 +176,7 @@ const LotesEncuestas = () => {
       result.push(coordinates);
     }
     setGeoJSON(result);
-    console.log("result geojson: ", result);
+    // console.log("result geojson: ", result);
     return result;
   }
 

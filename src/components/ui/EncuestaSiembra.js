@@ -152,13 +152,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setEncuestaSeleccionada,
     addEncCultivos,
 
-    updateSelects, setUpdatesSelects,
-    updateGraph, setUpdateGraph,
-
+    updateSelects,
+    setUpdatesSelects,
+    updateGraph,
+    setUpdateGraph,
   } = useContext(GlobalContext);
 
-  const [idCli, setIdCli] = useState(0);
-  const [selectedLote, setSelectedLote] = useState("todos");
+  const [idCli, setIdCli] = useState("0");
+  const [selectedLote, setSelectedLote] = useState("-1");
   const [selectedCultivo, setSelectedCultivo] = useState("todos");
   const [selectedEstado, setSelectedEstado] = useState("3");
   const [infoTable, setInfoTable] = useState([]);
@@ -289,29 +290,32 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             record.estado.props.children === "NE")
         ) {
           return (
-            <span>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: 16,
+              }}
+            >
               <ProfileOutlined
                 title="Agregar Evento"
-                style={{ marginRight: "5px" }}
                 className="btnNuevoEvento"
                 onClick={() => handleEventClick(record, index)}
               />
               <ReadOutlined
                 title="Ver Encuesta"
-                style={{ marginRight: "5px" }}
                 className="btnVerEncuesta"
                 onClick={() => handleVerEnc(record, index)}
               />
               <EnvironmentOutlined
                 title="Ver Lotes Encuesta"
-                style={{ marginRight: "5px" }}
                 // className='btnNuevoEvento'
                 onClick={() => handleLoteClick(record, index)}
               />
               <PaperClipOutlined
                 className="btnUploadEncuesta"
                 title="Archivos"
-                style={{ marginRight: "5px" }}
                 onClick={() => handleUploadClick(record, index)}
               />
               <DeleteOutlined
@@ -323,35 +327,37 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           );
         } else {
           return (
-            <span>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                fontSize: 16,
+              }}
+            >
               <EditOutlined
                 title="Editar Encuesta"
-                style={{ marginRight: "5px" }}
-                className="btnEditEncuesta"
+                style={{ color: "#00b33c" }}
                 onClick={() => handleEditClick(record, index)}
               />
               <ProfileOutlined
                 title="Agregar Evento"
-                style={{ marginRight: "5px" }}
-                className="btnNuevoEvento"
+                style={{ color: "#F6BB42" }}
                 onClick={() => handleEventClick(record, index)}
               />
               <ReadOutlined
                 title="Ver Encuesta"
-                style={{ marginRight: "5px" }}
-                className="btnVerEncuesta"
+                style={{ color: "#4fc1e9" }}
                 onClick={() => handleVerEnc(record, index)}
               />
               <EnvironmentOutlined
                 title="Ver Lotes Encuesta"
-                style={{ marginRight: "5px" }}
-                // className='btnNuevoEvento'
+                // style={{ color:"#F6BB42" }}
                 onClick={() => handleLoteClick(record, index)}
               />
               <PaperClipOutlined
-                className="btnUploadEncuesta"
                 title="Archivos"
-                style={{ marginRight: "5px" }}
+                style={{ color: "#00b33c" }}
                 onClick={() => handleUploadClick(record, index)}
               />
               <DeleteOutlined
@@ -455,7 +461,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 "success"
               );
               setUpload(!upload);
-              setUpdatesSelects(!updateSelects)
+              setUpdatesSelects(!updateSelects);
             });
           } else {
             // Si la eliminación no fue exitosa, puedes mostrar un mensaje de error aquí
@@ -466,21 +472,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     });
   };
 
-
   //! ACTUALIZAR SELECTS DEFINITIVAMENTE
 
   useEffect(() => {
-    setIdCli(0);
-    setSelectedLote("todos");
+    setIdCli("0");
+    setSelectedLote("-1");
     setSelectedCultivo("todos");
     setSelectedEstado(3);
-    
-  }, [updateSelects])
-  
-
-
-
-
+  }, [updateSelects]);
 
   //! INICIO - Abrir Editar Encuesta
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
@@ -494,7 +493,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setInfoEncuesta(record);
   };
   //! FIN - Abrir Editar Encuesta
-
 
   //! INICIO - Abrir Nuevo Evento
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
@@ -531,7 +529,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setDrawerUpload(true);
     setModori(5);
     setFilter(5);
-    setCliEnc(Number(record.idCliente))
+    setCliEnc(Number(record.idCliente));
     setGenerico(Number(record.idEncuesta));
   };
 
@@ -541,7 +539,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   const handleCloseDrawer = () => {
     setDrawerUpload(false);
-  };  
+  };
 
   const handleMessageFromIframe = (event) => {
     if (event.data === "closeDrawer") {
@@ -560,9 +558,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }, []);
 
   //! FIN - Upload
-
-
-
 
   //! GRAFICOS ENCUESTA SIEMBRA
 
@@ -662,6 +657,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
+
         // console.log('objetoData - lot_listClientes: ', objetoData)
         // const ClientesConTodos = [{ cli_id: "TODOS", cli_nombre: "TODOS" }, ...objetoData];
         setClientes(objetoData);
@@ -683,7 +679,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           const data = resp;
           const objetoData = JSON.parse(data);
           const LotesConTodos = [
-            { alote_id: "todos", alote_nombre: "TODOS" },
+            { alote_id: "-1", alote_nombre: "TODOS" },
             { alote_id: "0", alote_nombre: "SIN LOTES" },
             ...objetoData,
           ];
@@ -713,11 +709,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     } else {
       dataAdd.append("idCul", selectedCultivo);
     }
-    if (selectedLote === "todos" || selectedLote === "0") {
-      dataAdd.append("idLote", "");
-    } else {
-      dataAdd.append("idLote", selectedLote);
-    }
+    // if (selectedLote === "todos" || selectedLote === "0") {
+    //   dataAdd.append("idLote", "");
+    // } else {
+    dataAdd.append("idLote", selectedLote);
+    // }
 
     fetch(`${URL}encuesta-siembra_SupEncuestasCultivo.php`, {
       method: "POST",
@@ -750,7 +746,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     idCli,
     selectedLote,
     updateSelects,
-    updateGraph
+    updateGraph,
   ]);
 
   useEffect(() => {
@@ -802,7 +798,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     idCli,
     selectedLote,
     updateSelects,
-    updateGraph
+    updateGraph,
   ]);
 
   useEffect(() => {
@@ -855,7 +851,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     idCli,
     selectedLote,
     updateSelects,
-    updateGraph
+    updateGraph,
   ]);
 
   useEffect(() => {
@@ -913,7 +909,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedAcosDesc,
     selectedEstado,
     upload,
-    updateSelects
+    updateSelects,
   ]);
 
   //! Para editar encuesta
@@ -1043,7 +1039,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     // traeLotes();
   }, []);
 
-
   const paginationConfig = {
     pageSizeOptions: ["5"], // Opciones de cantidad de elementos por página
     defaultPageSize: 5, // Cantidad de elementos por página por defecto
@@ -1054,7 +1049,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   return (
     <>
-      <div style={{ userSelect: "none", position: "relative" }}>
+      <div
+        style={{
+          userSelect: "none",
+          position: "relative",
+          height: "100%",
+          overflowY: "auto",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -1077,7 +1079,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </Button>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", width: "90%", marginLeft:"20px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
           <div className="contSubtitulo-cliente">
             <div style={{ marginLeft: "5px" }}>
               <h1 className="subtitulos">CLIENTE</h1>
@@ -1085,14 +1094,17 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             <Select
               defaultValue={idCli === "0" && "TODOS"}
               // defaultValue={0}
-              style={{ width: 250 }}
+              style={{ width: "100%", maxWidth: "250px" }}
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children &&
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
-              onChange={(value) => setIdCli(value)}
+              onChange={(value) => {
+                setIdCli(value);
+                setSelectedLote("-1");
+              }}
             >
               {clientes &&
                 clientes.length > 0 &&
@@ -1109,24 +1121,24 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             {idCli === "0" ? (
               <Select
-                defaultValue="TODOS"
-                style={{ width: 250 }}
+                value="-1"
+                style={{ width: "100%", maxWidth: "250px" }}
                 onChange={(value) => setSelectedLote(value)}
                 options={[
                   {
-                    value: "todos",
+                    value: "-1",
                     label: "TODOS",
                   },
-                  {
-                    value: "sinLotes",
-                    label: "SIN LOTES",
-                  },
+                  // {
+                  //   value: "0",
+                  //   label: "SIN LOTES",
+                  // },
                 ]}
               />
             ) : (
               <Select
-                defaultValue="TODOS"
-                style={{ width: 250 }}
+                value={selectedLote}
+                style={{ width: "100%", maxWidth: "250px" }}
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) =>
@@ -1138,11 +1150,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               >
                 {lotes &&
                   lotes.length > 0 &&
-                  lotes.map((lote) => (
-                    <Select.Option key={lote.alote_id} value={lote.alote_id}>
-                      {lote.alote_nombre}
-                    </Select.Option>
-                  ))}
+                  lotes.map((lote) => {
+                    console.log(lotes);
+                    return (
+                      <Select.Option key={lote.alote_id} value={lote.alote_id}>
+                        {lote.alote_nombre}
+                      </Select.Option>
+                    );
+                  })}
               </Select>
             )}
           </div>
@@ -1152,7 +1167,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue={selectedAcosDesc && selectedAcosDesc}
-              style={{ width: 260 }}
+              style={{ width: "100%", maxWidth: "250px" }}
               onChange={(value, option) => {
                 const cosecha = listCosechas.find(
                   (c) => c.acos_id === option.key
@@ -1179,7 +1194,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue="TODOS"
-              style={{ width: 250 }}
+              style={{ width: "100%", maxWidth: "250px" }}
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -1201,7 +1216,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             </div>
             <Select
               defaultValue="ENCUESTA OK"
-              style={{ width: 250 }}
+              style={{ width: "100%", maxWidth: "250px" }}
               onChange={(value) => setSelectedEstado(value)}
               options={[
                 { value: "todos", label: "TODOS" },
@@ -1262,12 +1277,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           placement="bottom"
           onClose={onClose}
           open={openDrawer}
-          style={{marginTop:"-30px", height:"100vh"}}
+          height={"80%"}
+          bodyStyle={{ padding: "12px" }}
+          headerStyle={{ border: "none" }}
         >
           {/* {console.log("lotesEncuestasKey: ", lotesEncuestasKey, "| dataLotes: ", dataLotes)} */}
           {openDrawer ? (
             <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
-          ): null} 
+          ) : null}
         </Drawer>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -1421,13 +1438,13 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               right: 0,
               bottom: 0,
               zIndex: 999,
-              height:"100%"
+              height: "100%",
             }}
           >
             <iframe
               loading="lazy"
-              src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
-              //src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
+              // src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
+              src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
               width={"100%"}
               height={"100%"}
               style={{ border: "none" }}

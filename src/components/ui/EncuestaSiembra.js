@@ -1016,6 +1016,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           userSelect: "none",
           position: "relative",
           height: "100%",
+          width: "100%",
           overflowY: "auto",
         }}
       >
@@ -1027,9 +1028,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             width: "100%",
           }}
         >
-          <div>
-            <h1 className="titulos">ENCUESTA DE SIEMBRA</h1>
-          </div>
+          <h1 className="titulos">ENCUESTA DE SIEMBRA</h1>
           <div>
             {/* <PlusCircleOutlined title='Agregar Encuesta' className='btnAddCosecha' onClick={showModal} /> */}
             <Button
@@ -1092,10 +1091,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                     value: "-1",
                     label: "TODOS",
                   },
-                  // {
-                  //   value: "0",
-                  //   label: "SIN LOTES",
-                  // },
                 ]}
               />
             ) : (
@@ -1403,8 +1398,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           >
             <iframe
               loading="lazy"
-              src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
-              // src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
+              // src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
+              src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
               width={"100%"}
               height={"100%"}
               style={{ border: "none" }}

@@ -116,7 +116,7 @@ export const NuevoEvento = () => {
               className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
             >
               <Select
-                defaultValue="SELECCIONE"
+                placeholder="SELECCIONE"
                 value={valorSeleccionado}
                 style={{
                   width: 200,

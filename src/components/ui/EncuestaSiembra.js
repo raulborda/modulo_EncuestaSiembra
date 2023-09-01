@@ -454,14 +454,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           if (response.ok) {
             response.text().then((resp) => {
               const data = resp;
-              //console.log("data: ", data);
+
               Swal.fire(
                 "Eliminado",
                 "El elemento ha sido eliminado exitosamente.",
                 "success"
               );
-              setUpload(!upload);
-              setUpdatesSelects(!updateSelects);
+              setUpload((prevState) => !prevState);
+              setUpdatesSelects((prevState) => !prevState);
             });
           } else {
             // Si la eliminación no fue exitosa, puedes mostrar un mensaje de error aquí
@@ -503,9 +503,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }, [infoEventoNew]);
 
   const handleEventClick = (record) => {
-    //console.log("Registro seleccionado:", record);
     setInfoEncuestaEvent(record);
-    // console.log('Registro seleccionado - infoEncuestaEvent:', infoEncuestaEvent);
   };
   //! FIN - Abrir Nuevo Evento
 
@@ -525,17 +523,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   //! INICIO -  Upload
 
   const handleUploadClick = (record) => {
-    //console.log("handleUploadClick: ",record);
     setDrawerUpload(true);
     setModori(5);
     setFilter(5);
     setCliEnc(Number(record.idCliente));
     setGenerico(Number(record.idEncuesta));
   };
-
-  // console.log("modori:", modori);
-  // console.log("cliEnc:", cliEnc);
-  // console.log("modori:", generico);
 
   const handleCloseDrawer = () => {
     setDrawerUpload(false);
@@ -597,7 +590,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   //! ACA EMPIEZA DRAWER VER LOTES
   const handleLoteClick = (record) => {
     setDataLotes({});
-    //console.log("Registro seleccionado:", record);
+
     setNombreCliLote(record.cliente);
     const data = new FormData();
     data.append("idEnc", record.idEncuesta);
@@ -607,12 +600,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       body: data,
     }).then(function (response) {
       response.text().then((resp) => {
-        //console.log('resp view lotes: ', resp);
         const data = resp;
         const objetoData = JSON.parse(data);
         setDataLotes(objetoData);
-        //console.log('siembra_viewLotesEncuesta - objetoData: ', objetoData);
-        //console.log('siembra_viewLotesEncuesta- dataLotes: ', dataLotes);
       });
     });
     // setOpenDrawer(true);
@@ -621,7 +611,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   //*Este useEffect es para que me traiga la info actualizada y no atrasada para Lotes
   useEffect(() => {
-    //console.log("siembra_viewLotesEncuesta- dataLotes: ", dataLotes);
     if (Object.keys(dataLotes).length > 0) {
       setOpenDrawer(true);
     }
@@ -636,7 +625,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        // console.log('objetoData - clientview_listCultivos.php: ', objetoData)
         const cultivosConTodos = [
           { acult_id: "todos", acult_desc: "TODOS" },
           ...objetoData,
@@ -658,8 +646,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         const data = resp;
         const objetoData = JSON.parse(data);
 
-        // console.log('objetoData - lot_listClientes: ', objetoData)
-        // const ClientesConTodos = [{ cli_id: "TODOS", cli_nombre: "TODOS" }, ...objetoData];
         setClientes(objetoData);
       });
     });
@@ -667,8 +653,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   useEffect(() => {
     if (idCli) {
-      // console.log('idCli: ', idCli);
-      // setLotes([]);
       const data = new FormData();
       data.append("idC", idCli);
       fetch(`${URL}encuesta-siembra_listLotes.php`, {
@@ -678,12 +662,13 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         response.text().then((resp) => {
           const data = resp;
           const objetoData = JSON.parse(data);
+
           const LotesConTodos = [
             { alote_id: "-1", alote_nombre: "TODOS" },
             { alote_id: "0", alote_nombre: "SIN LOTES" },
             ...objetoData,
           ];
-          // console.log('objetoData - encuesta-siembra_listLotes: ', objetoData);
+
           if (idCli === 0) {
             setLotes([]);
           } else {
@@ -722,12 +707,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        // console.log('objetoData - clientview_SupEncuestasCultivo.php: ', objetoData)
         // Transformar los datos antes de asignarlos al estado
+
         const transformedData = objetoData.map((item) => {
           return { name: item[0], value: item[1], colors: item[2] };
         });
-        //console.log("transformedData: ", transformedData);
+
         setCultivosSupEncuestadas(transformedData);
 
         // Calcular el total de los valores
@@ -764,11 +749,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       dataAdd.append("idCul", selectedCultivo);
     }
 
-    if (selectedLote === "todos" || selectedLote === "0") {
-      dataAdd.append("idLote", "");
-    } else {
-      dataAdd.append("idLote", selectedLote);
-    }
+    // if (selectedLote === "todos" || selectedLote === "0") {
+    //   dataAdd.append("idLote", "");
+    // } else {
+    dataAdd.append("idLote", selectedLote);
+    // }
     // dataAdd.append("idLote", selectedLote);
     fetch(`${URL}encuesta-siembra_ProdEncuestasCultivo.php`, {
       method: "POST",
@@ -777,11 +762,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        // console.log('objetoData - clientview_ProdEncuestasCultivo.php: ', objetoData)
+
         // Transformar los datos antes de asignarlos al estado
         const transformedData = objetoData.map((item) => {
           return { name: item[0], value: item[1], colors: item[2] };
         });
+
         setCultivosProdEncuestadas(transformedData);
 
         // Calcular el total de los valores
@@ -805,7 +791,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     const dataAdd = new FormData();
     dataAdd.append("idU", usu);
     dataAdd.append("idC", parseInt(idCli));
-    //console.log("cosechaSeleccionada: ", cosechaSeleccionada);
+
     if (cosechaSeleccionada) {
       dataAdd.append("idCos", cosechaSeleccionada);
     } else {
@@ -816,11 +802,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     } else {
       dataAdd.append("idCul", selectedCultivo);
     }
-    if (selectedLote === "todos" || selectedLote === "0") {
-      dataAdd.append("idLote", "");
-    } else {
-      dataAdd.append("idLote", selectedLote);
-    }
+    // if (selectedLote === "todos" || selectedLote === "0") {
+    //   dataAdd.append("idLote", "");
+    // } else {
+    dataAdd.append("idLote", selectedLote);
+    // }
     fetch(`${URL}encuesta-siembra_CostoEncuestaCultivo.php`, {
       method: "POST",
       body: dataAdd,
@@ -828,13 +814,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        // console.log('objetoData - clientview_CostoEncuestasCultivo.php: ', objetoData)
+
         // Transformar los datos antes de asignarlos al estado
         const transformedData = objetoData.map((item) => {
           return { name: item[0], value: item[1], colors: item[2] };
         });
 
-        //console.log("setCultivosCostoEncuestadas: ", transformedData);
         setCultivosCostoEncuestadas(transformedData);
 
         // Calcular el total de los valores
@@ -858,22 +843,18 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     const dataAdd = new FormData();
     dataAdd.append("idU", usu);
     dataAdd.append("idC", idCli);
-    if (
-      selectedLote === "todos" ||
-      selectedLote === "" ||
-      selectedLote === -1
-    ) {
-      // console.log('selectedLote: ', selectedLote);
-      dataAdd.append("idLote", "");
-    } else {
-      dataAdd.append("idLote", selectedLote);
-    }
+    // if (
+    //   selectedLote === "todos" ||
+    //   selectedLote === "" ||
+    //   selectedLote === -1
+    // ) {
+    //   dataAdd.append("idLote", "");
+    // } else {
+    dataAdd.append("idLote", selectedLote);
+    // }
     if (cosechaSeleccionada) {
-      // console.log('cosechaSeleccionada0: ', cosechaSeleccionada);
       dataAdd.append("idCos", cosechaSeleccionada);
     } else {
-      // console.log('cosechaSeleccionada1: ', cosechaSeleccionada);
-      // console.log('cosechaSeleccionada: ', cosechaActiva);
       dataAdd.append("idCos", cosechaActiva);
     }
     if (selectedCultivo === "todos") {
@@ -893,11 +874,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       response.text().then((resp) => {
         try {
           const objetoData = JSON.parse(resp);
-          // console.log('objetoData - encuesta-siembra_datosTable :', objetoData);
           setInfoTable(objetoData);
         } catch (error) {
           console.error("Error al analizar la respuesta JSON:", error);
-          //console.log("Respuesta no válida:", resp);
         }
       });
     });
@@ -914,10 +893,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   //! Para editar encuesta
   useEffect(() => {
-    // console.log('infoEncuesta.idCliente: ', infoEncuesta.idCliente);
-    // console.log('infoEncuesta.idEncuesta: ', infoEncuesta.idEncuesta);
     if (infoEncuesta.idCliente && infoEncuesta.idEncuesta) {
-      // console.log('ENTRO')
       const dataAdd = new FormData();
       dataAdd.append("idU", usu);
       dataAdd.append("idC", parseInt(infoEncuesta.idCliente));
@@ -928,7 +904,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       }).then(function (response) {
         response.json().then((resp) => {
           try {
-            //console.log("Resp:", resp);
             setEditarEncuesta(resp);
             // setSelectedCosechaId(listCosechas.find(cosecha => cosecha.acos_id === resp[0]?.cos_id));
             setEncuestaSeleccionada({
@@ -947,8 +922,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               idCliente: resp[0]?.cli_id,
               nombreCli: resp[0]?.cli_nombre,
             });
-
-            // console.log('encuestaSeleccionada: ', encuestaSeleccionada);
           } catch (error) {
             console.error("Error al analizar la respuesta JSON:", error);
             console.log("Respuesta no válida:", resp);
@@ -960,10 +933,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   //! Para nuevo evento
   useEffect(() => {
-    // console.log('infoEncuesta.idCliente: ', infoEncuesta.idCliente);
-    // console.log('infoEncuesta.idEncuesta: ', infoEncuesta.idEncuesta);
     if (infoEncuestaEvent.idCliente && infoEncuestaEvent.idEncuesta) {
-      // console.log('ENTRO')
       const dataAdd = new FormData();
       dataAdd.append("idU", usu);
       dataAdd.append("idC", parseInt(infoEncuestaEvent.idCliente));
@@ -974,7 +944,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       }).then(function (response) {
         response.json().then((resp) => {
           try {
-            //console.log("Resp:", resp);
             // setEditarEncuesta(resp);
             setInfoEventoNew(resp);
             // setSelectedCosechaId(listCosechas.find(cosecha => cosecha.acos_id === resp[0]?.cos_id));
@@ -994,8 +963,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               idCliente: resp[0]?.cli_id,
               nombreCli: resp[0]?.cli_nombre,
             });
-
-            // console.log('encuestaSeleccionada: ', encuestaSeleccionada);
           } catch (error) {
             console.error("Error al analizar la respuesta JSON:", error);
             console.log("Respuesta no válida:", resp);
@@ -1009,10 +976,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   //! Para ver Encuesta
   useEffect(() => {
-    // console.log('infoVer.idCliente: ', infoVer.idCliente);
-    // console.log('infoVer.idEncuesta: ', infoVer.idEncuesta);
     if (infoVer.idCliente && infoVer.idEncuesta) {
-      //console.log('infoVer.idCliente: ', infoVer.idCliente);
       const dataAdd = new FormData();
       dataAdd.append("idEnc", parseInt(infoVer.idEncuesta));
       fetch(`${URL}encuesta-siembra_verEncuesta.php`, {
@@ -1030,8 +994,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       });
     }
   }, [infoVer]);
-
-  //console.log("infoVerEncuesta: ", infoVerEncuesta);
 
   useEffect(() => {
     traeCultivos();
@@ -1096,24 +1058,25 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               // defaultValue={0}
               style={{ width: "100%", maxWidth: "250px" }}
               showSearch
-              optionFilterProp="children"
+              // optionFilterProp="children"
               filterOption={(input, option) =>
-                option.children &&
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               onChange={(value) => {
                 setIdCli(value);
                 setSelectedLote("-1");
               }}
-            >
-              {clientes &&
-                clientes.length > 0 &&
-                clientes.map((cliente) => (
-                  <Select.Option key={cliente.cli_id} value={cliente.cli_id}>
-                    {cliente.cli_nombre}
-                  </Select.Option>
-                ))}
-            </Select>
+              options={
+                clientes?.length > 0
+                  ? clientes.map((cliente) => {
+                      return {
+                        value: cliente.cli_id,
+                        label: cliente.cli_nombre,
+                      };
+                    })
+                  : []
+              }
+            />
           </div>
           <div className="contSubtitulo-cliente">
             <div style={{ marginLeft: "5px" }}>
@@ -1140,25 +1103,22 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 value={selectedLote}
                 style={{ width: "100%", maxWidth: "250px" }}
                 showSearch
-                optionFilterProp="children"
+                // optionFilterProp="children"
                 filterOption={(input, option) =>
-                  option.children &&
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
-                    0
+                  option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
                 onChange={(value) => setSelectedLote(value)}
-              >
-                {lotes &&
-                  lotes.length > 0 &&
-                  lotes.map((lote) => {
-                    console.log(lotes);
-                    return (
-                      <Select.Option key={lote.alote_id} value={lote.alote_id}>
-                        {lote.alote_nombre}
-                      </Select.Option>
-                    );
-                  })}
-              </Select>
+                options={
+                  lotes?.length > 0
+                    ? lotes.map((lote) => {
+                        return {
+                          value: lote.alote_id,
+                          label: lote.alote_nombre,
+                        };
+                      })
+                    : []
+                }
+              />
             )}
           </div>
           <div className="contSubtitulo-cliente">
@@ -1174,19 +1134,20 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 );
                 setCosechaSeleccionada(cosecha.acos_id);
               }}
-            >
-              {listCosechas.length > 0 &&
-                listCosechas.map((cosecha) => {
-                  return (
-                    <Select.Option
-                      key={cosecha.acos_id} // Cambiar de cosecha.acos_desc a cosecha.acos_id
-                      value={cosecha.acos_desc}
-                    >
-                      {cosecha.acos_desc}
-                    </Select.Option>
-                  );
-                })}
-            </Select>
+              filterOption={(input, option) =>
+                option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              options={
+                listCosechas.length > 0
+                  ? listCosechas.map((cosecha) => {
+                      return {
+                        value: cosecha.acos_id,
+                        label: cosecha.acos_desc,
+                      };
+                    })
+                  : []
+              }
+            />
           </div>
           <div className="contSubtitulo-cliente">
             <div style={{ marginLeft: "5px" }}>
@@ -1196,19 +1157,18 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               defaultValue="TODOS"
               style={{ width: "100%", maxWidth: "250px" }}
               showSearch
-              optionFilterProp="children"
+              // optionFilterProp="children"
               filterOption={(input, option) =>
-                option.children &&
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               onChange={(value) => setSelectedCultivo(value)}
-            >
-              {cultivos.map((cultivo) => (
-                <Select.Option key={cultivo.acult_id} value={cultivo.acult_id}>
-                  {cultivo.acult_desc}
-                </Select.Option>
-              ))}
-            </Select>
+              options={cultivos?.map((cultivo) => {
+                return {
+                  value: cultivo.acult_id,
+                  label: cultivo.acult_desc,
+                };
+              })}
+            />
           </div>
           <div className="contSubtitulo-cliente">
             <div style={{ marginLeft: "5px" }}>
@@ -1281,7 +1241,6 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           bodyStyle={{ padding: "12px" }}
           headerStyle={{ border: "none" }}
         >
-          {/* {console.log("lotesEncuestasKey: ", lotesEncuestasKey, "| dataLotes: ", dataLotes)} */}
           {openDrawer ? (
             <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
           ) : null}
@@ -1428,6 +1387,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           dataSource={data}
           pagination={paginationConfig}
           size="small"
+          rowKey={(record) => record.idEncuesta}
         />
         {drawerUpload ? (
           <div
@@ -1443,8 +1403,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           >
             <iframe
               loading="lazy"
-              // src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
-              src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
+              src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
+              // src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
               width={"100%"}
               height={"100%"}
               style={{ border: "none" }}

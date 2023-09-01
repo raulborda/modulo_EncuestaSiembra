@@ -101,7 +101,7 @@ export const NuevoEvento = () => {
             gap: "4px",
           }}
         >
-          <div className="contSubtitulo-cliente">
+          <div className="contSubtitulo-evento">
             <div style={{ marginLeft: "5px" }}>
               <h1 className="subtitulos">Tipo de Evento</h1>
             </div>
@@ -145,7 +145,7 @@ export const NuevoEvento = () => {
           </div>
 
           {valorSeleccionado === "0" && (
-            <div className="contSubtitulo-cliente">
+            <div className="contSubtitulo-evento">
               <div style={{ marginLeft: "5px" }}>
                 <h1 className="subtitulos">Rinde Real (TT)</h1>
               </div>
@@ -174,7 +174,7 @@ export const NuevoEvento = () => {
             //     <option>% Est. Acopio</option>
             //     {/* Otros options aquí */}
             // </select>
-            <div className="contSubtitulo-cliente">
+            <div className="contSubtitulo-evento">
               <div style={{ marginLeft: "5px" }}>
                 <h1 className="subtitulos">% Est. Acopio</h1>
               </div>
@@ -203,7 +203,7 @@ export const NuevoEvento = () => {
             //     <option>Superficie Real (HAS)</option>
             //     {/* Otros options aquí */}
             // </select>
-            <div className="contSubtitulo-cliente">
+            <div className="contSubtitulo-evento">
               <div style={{ marginLeft: "5px" }}>
                 <h1 className="subtitulos">Superficie Real (HAS)</h1>
               </div>
@@ -229,7 +229,7 @@ export const NuevoEvento = () => {
 
           {valorSeleccionado === "3" && (
             <>
-              <div className="contSubtitulo-cliente">
+              <div className="contSubtitulo-evento">
                 <div style={{ marginLeft: "5px" }}>
                   <h1 className="subtitulos">Destino</h1>
                 </div>
@@ -268,7 +268,7 @@ export const NuevoEvento = () => {
                 </Form.Item>
               </div>
 
-              <div className="contSubtitulo-cliente">
+              <div className="contSubtitulo-evento">
                 <div style={{ marginLeft: "5px" }}>
                   <h1 className="subtitulos">Hectáreas</h1>
                 </div>

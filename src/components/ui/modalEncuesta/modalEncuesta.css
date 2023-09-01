@@ -29,7 +29,6 @@
   .contSubtitulo-cliente {
     display: flex; 
     flex-direction: column;
-    width: 19.5%;
   }
   
   .wrapper_divVerEnc{

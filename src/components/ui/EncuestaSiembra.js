@@ -1018,6 +1018,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           height: "100%",
           width: "100%",
           overflowY: "auto",
+          backgroundColor: "white",
         }}
       >
         <div
@@ -1398,8 +1399,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           >
             <iframe
               loading="lazy"
-              // src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
-              src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
+              src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
+              // src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
               width={"100%"}
               height={"100%"}
               style={{ border: "none" }}

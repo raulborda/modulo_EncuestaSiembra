@@ -92,7 +92,15 @@ export const NuevoEvento = () => {
   return (
     <>
       <Form form={form} onFinish={onSubmitAddEvent}>
-        <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "4px",
+          }}
+        >
           <div className="contSubtitulo-cliente">
             <div style={{ marginLeft: "5px" }}>
               <h1 className="subtitulos">Tipo de Evento</h1>
@@ -166,10 +174,7 @@ export const NuevoEvento = () => {
             //     <option>% Est. Acopio</option>
             //     {/* Otros options aquí */}
             // </select>
-            <div
-              className="contSubtitulo-cliente"
-              style={{ marginLeft: "30px" }}
-            >
+            <div className="contSubtitulo-cliente">
               <div style={{ marginLeft: "5px" }}>
                 <h1 className="subtitulos">% Est. Acopio</h1>
               </div>
@@ -198,10 +203,7 @@ export const NuevoEvento = () => {
             //     <option>Superficie Real (HAS)</option>
             //     {/* Otros options aquí */}
             // </select>
-            <div
-              className="contSubtitulo-cliente"
-              style={{ marginLeft: "40px", width: "25%" }}
-            >
+            <div className="contSubtitulo-cliente">
               <div style={{ marginLeft: "5px" }}>
                 <h1 className="subtitulos">Superficie Real (HAS)</h1>
               </div>
@@ -305,9 +307,9 @@ export const NuevoEvento = () => {
             <Button
               style={{ borderRadius: "0px" }}
               onClick={() => (
-                form.resetFields(),
                 setIsModalOpenEvent(false),
-                setValorSeleccionado("")
+                setValorSeleccionado(""),
+                form.resetFields()
               )}
             >
               CANCELAR

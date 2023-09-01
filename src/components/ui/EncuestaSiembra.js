@@ -1002,7 +1002,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }, []);
 
   const paginationConfig = {
-    pageSizeOptions: ["5"], // Opciones de cantidad de elementos por página
+    pageSizeOptions: [5, 10, 20], // Opciones de cantidad de elementos por página
     defaultPageSize: 5, // Cantidad de elementos por página por defecto
     showSizeChanger: true, // Mostrar selector de cantidad de elementos por página
     showTotal: (total, range) =>

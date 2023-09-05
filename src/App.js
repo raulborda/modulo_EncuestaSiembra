@@ -15,12 +15,12 @@ function App() {
   const idC = 2; // .153
   // const idC = 2083; //.28
   // const idC = 2049; //.28
-  
-  //! PRODUCCION 
+
+  //! PRODUCCION
   //* Id de cliente que se obtine desde local storage
   // const idUsu = localStorage.getItem("usuario");
   // const idC = localStorage.getItem("cliSelect");
-  
+
   const [usu, setUsu] = useState(idUsu);
   const [idCliente, setIdCliente] = useState(idC);
 
@@ -52,7 +52,7 @@ function App() {
 
   const [selectedCosechaId, setSelectedCosechaId] = useState(null);
   const [encuestaSeleccionada, setEncuestaSeleccionada] = useState([]);
-  const [cosInicial,setCosInicial] = useState("")
+  const [cosInicial, setCosInicial] = useState("");
 
   //! reinicia selects encuesta
   const [updateSelects, setUpdatesSelects] = useState(false);
@@ -83,9 +83,7 @@ function App() {
           objetoData.length > 0 ? objetoData[1]?.acos_desc : null
         );
 
-        setCosInicial(
-          objetoData.length > 0 ? objetoData[0]?.acos_id : null
-        )
+        setCosInicial(objetoData.length > 0 ? objetoData[0]?.acos_id : null);
       });
     });
   }
@@ -99,7 +97,6 @@ function App() {
       cosechas(idCliente);
     }
   }, [idCliente]);
-
 
   return (
     <GlobalContext.Provider
@@ -163,7 +160,7 @@ function App() {
         isModalOpenVerEncuesta,
         setIsModalOpenVerEncuesta,
 
-        updateSelects, 
+        updateSelects,
         setUpdatesSelects,
         updateGraph,
         setUpdateGraph,

@@ -6,3 +6,17 @@ html,
   padding: 0;
   box-sizing: border-box;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+  background: transparent;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

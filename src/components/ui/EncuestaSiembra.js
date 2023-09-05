@@ -1010,405 +1010,403 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   };
 
   return (
-    <>
+    <div
+      style={{
+        userSelect: "none",
+        position: "relative",
+        height: "100%",
+        width: "100%",
+        padding: 8,
+        overflowY: "auto",
+        backgroundColor: "white",
+        boxSizing: "border-box",
+      }}
+    >
       <div
         style={{
-          userSelect: "none",
-          position: "relative",
-          height: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
           width: "100%",
-          overflowY: "auto",
-          backgroundColor: "white",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <h1 className="titulos">ENCUESTA DE SIEMBRA</h1>
-          <div>
-            {/* <PlusCircleOutlined title='Agregar Encuesta' className='btnAddCosecha' onClick={showModal} /> */}
-            <Button
-              type="primary"
-              style={{ borderRadius: "0px", fontWeight: "500" }}
-              onClick={showModal}
-            >
-              NUEVA ENCUESTA
-            </Button>
-          </div>
+        <h1 className="titulos">ENCUESTA DE SIEMBRA</h1>
+        <div>
+          {/* <PlusCircleOutlined title='Agregar Encuesta' className='btnAddCosecha' onClick={showModal} /> */}
+          <Button
+            type="primary"
+            style={{ borderRadius: "0px", fontWeight: "500" }}
+            onClick={showModal}
+          >
+            NUEVA ENCUESTA
+          </Button>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: "100%",
-            justifyContent: "space-between",
-          }}
-        >
-          <div className="contSubtitulo-cliente">
-            <div style={{ marginLeft: "5px" }}>
-              <h1 className="subtitulos">CLIENTE</h1>
-            </div>
-            <Select
-              defaultValue={idCli === "0" && "TODOS"}
-              // defaultValue={0}
-              style={{ width: "100%", maxWidth: "250px" }}
-              showSearch
-              // optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              onChange={(value) => {
-                setIdCli(value);
-                setSelectedLote("-1");
-              }}
-              options={
-                clientes?.length > 0
-                  ? clientes.map((cliente) => {
-                      return {
-                        value: cliente.cli_id,
-                        label: cliente.cli_nombre,
-                      };
-                    })
-                  : []
-              }
-            />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        <div className="contSubtitulo-cliente">
+          <div style={{ marginLeft: "5px" }}>
+            <h1 className="subtitulos">CLIENTE</h1>
           </div>
-          <div className="contSubtitulo-cliente">
-            <div style={{ marginLeft: "5px" }}>
-              <h1 className="subtitulos">LOTES</h1>
-            </div>
-            {idCli === "0" ? (
-              <Select
-                value="-1"
-                style={{ width: "100%", maxWidth: "250px" }}
-                onChange={(value) => setSelectedLote(value)}
-                options={[
-                  {
-                    value: "-1",
-                    label: "TODOS",
-                  },
-                ]}
-              />
-            ) : (
-              <Select
-                value={selectedLote}
-                style={{ width: "100%", maxWidth: "250px" }}
-                showSearch
-                // optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                onChange={(value) => setSelectedLote(value)}
-                options={
-                  lotes?.length > 0
-                    ? lotes.map((lote) => {
-                        return {
-                          value: lote.alote_id,
-                          label: lote.alote_nombre,
-                        };
-                      })
-                    : []
-                }
-              />
-            )}
+          <Select
+            defaultValue={idCli === "0" && "TODOS"}
+            // defaultValue={0}
+            style={{ width: "100%", maxWidth: "250px" }}
+            showSearch
+            // optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            onChange={(value) => {
+              setIdCli(value);
+              setSelectedLote("-1");
+            }}
+            options={
+              clientes?.length > 0
+                ? clientes.map((cliente) => {
+                    return {
+                      value: cliente.cli_id,
+                      label: cliente.cli_nombre,
+                    };
+                  })
+                : []
+            }
+          />
+        </div>
+        <div className="contSubtitulo-cliente">
+          <div style={{ marginLeft: "5px" }}>
+            <h1 className="subtitulos">LOTES</h1>
           </div>
-          <div className="contSubtitulo-cliente">
-            <div style={{ marginLeft: "5px" }}>
-              <h1 className="subtitulos">COSECHA</h1>
-            </div>
+          {idCli === "0" ? (
             <Select
-              defaultValue={selectedAcosDesc && selectedAcosDesc}
+              value="-1"
               style={{ width: "100%", maxWidth: "250px" }}
-              onChange={(value, option) => {
-                const cosecha = listCosechas.find(
-                  (c) => c.acos_id === option.key
-                );
-                setCosechaSeleccionada(cosecha.acos_id);
-              }}
-              filterOption={(input, option) =>
-                option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              options={
-                listCosechas.length > 0
-                  ? listCosechas.map((cosecha) => {
-                      return {
-                        value: cosecha.acos_id,
-                        label: cosecha.acos_desc,
-                      };
-                    })
-                  : []
-              }
-            />
-          </div>
-          <div className="contSubtitulo-cliente">
-            <div style={{ marginLeft: "5px" }}>
-              <h1 className="subtitulos">CULTIVO</h1>
-            </div>
-            <Select
-              defaultValue="TODOS"
-              style={{ width: "100%", maxWidth: "250px" }}
-              showSearch
-              // optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-              onChange={(value) => setSelectedCultivo(value)}
-              options={cultivos?.map((cultivo) => {
-                return {
-                  value: cultivo.acult_id,
-                  label: cultivo.acult_desc,
-                };
-              })}
-            />
-          </div>
-          <div className="contSubtitulo-cliente">
-            <div style={{ marginLeft: "5px" }}>
-              <h1 className="subtitulos">ESTADO</h1>
-            </div>
-            <Select
-              defaultValue="ENCUESTA OK"
-              style={{ width: "100%", maxWidth: "250px" }}
-              onChange={(value) => setSelectedEstado(value)}
+              onChange={(value) => setSelectedLote(value)}
               options={[
-                { value: "todos", label: "TODOS" },
-                { value: "3", label: "ENCUESTA OK" },
-                { value: "0", label: "NO ENCUESTADO" },
-                { value: "1", label: "NO ACCEDE" },
-                { value: "2", label: "NO SIEMBRA" },
+                {
+                  value: "-1",
+                  label: "TODOS",
+                },
               ]}
             />
-          </div>
+          ) : (
+            <Select
+              value={selectedLote}
+              style={{ width: "100%", maxWidth: "250px" }}
+              showSearch
+              // optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              onChange={(value) => setSelectedLote(value)}
+              options={
+                lotes?.length > 0
+                  ? lotes.map((lote) => {
+                      return {
+                        value: lote.alote_id,
+                        label: lote.alote_nombre,
+                      };
+                    })
+                  : []
+              }
+            />
+          )}
         </div>
-        <Modal
-          title="NUEVA ENCUESTA"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={null}
-          width={650}
-          style={{ userSelect: "none", marginTop: "-70px" }}
-        >
-          <NuevaEncuesta />
-        </Modal>
-        <Modal
-          title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`}
-          open={isModalOpenEdit}
-          onOk={handleOkEdit}
-          onCancel={handleCancelEdit}
-          footer={null}
-          width={650}
-          style={{ userSelect: "none" }}
-        >
-          <EditarEncuesta />
-        </Modal>
-        <Modal
-          title={`INFORMACIÓN ENCUESTA / ${infoVerEncuesta[0]?.cli_nombre}`}
-          open={isModalOpenVerEncuesta}
-          onOk={handleOkVerEncuesta}
-          onCancel={handleCancelVerEncuesta}
-          footer={null}
-          width={700}
-          style={{ userSelect: "none", marginTop: "-70px" }}
-        >
-          <VerEncuesta />
-        </Modal>
-        <Modal
-          title={`NUEVO EVENTO / ${encuestaSeleccionada?.nombreCli} / ${encuestaSeleccionada?.cultivo?.acult_desc} / ${encuestaSeleccionada?.ciclo}°`}
-          open={isModalOpenEvent}
-          onOk={handleOkEvent}
-          onCancel={handleCancelEvent}
-          footer={null}
-          width={700}
-          style={{ userSelect: "none" }}
-        >
-          <NuevoEvento />
-        </Modal>
-        <Drawer
-          title={`LOTES ENCUESTA / ${nombreCliLote}`}
-          placement="bottom"
-          onClose={onClose}
-          open={openDrawer}
-          height={"80%"}
-          bodyStyle={{ padding: "12px" }}
-          headerStyle={{ border: "none" }}
-        >
-          {openDrawer ? (
-            <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
-          ) : null}
-        </Drawer>
-
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{ display: "flex", flexDirection: "row", paddingTop: "5px" }}
-          >
-            <div
-              className="grafico-container"
-              style={{
-                width: "33%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <h1 className="titulos">
-                  SUP. ENCUESTADA: {totalSuperficie} HAS.
-                </h1>
-              </div>
-              {cultivosSupEncuestadas.length === 0 ? (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-              ) : (
-                <ResponsiveContainer className="" width="100%" height={260}>
-                  <PieChart width={800} height={400}>
-                    <Pie
-                      data={cultivosSupEncuestadas && cultivosSupEncuestadas}
-                      activeIndex={legendSupEncuestadas.activeIndex}
-                      activeShape={renderActiveShape}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      dataKey="value"
-                      onMouseEnter={onPieEnterSupEncuestadas}
-                    >
-                      {cultivosSupEncuestadas.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.colors} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value) =>
-                        Math.trunc(value).toLocaleString().replace(/,/g, ".")
-                      }
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-            <div
-              className="grafico-container"
-              style={{
-                width: "33%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <h1 className="titulos">
-                  PRODUCCION ESTIMADA: {totalProduccion} TT
-                </h1>
-              </div>
-              {cultivosProdEncuestadas.length === 0 ? (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-              ) : (
-                <ResponsiveContainer className="" width="100%" height={260}>
-                  <PieChart width={800} height={400}>
-                    <Pie
-                      data={cultivosProdEncuestadas && cultivosProdEncuestadas}
-                      activeIndex={legendProdEncuestadas.activeIndex}
-                      activeShape={renderActiveShape}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      dataKey="value"
-                      onMouseEnter={onPieEnterProdEncuestadas}
-                    >
-                      {cultivosProdEncuestadas.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.colors} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value) =>
-                        Math.trunc(value).toLocaleString().replace(/,/g, ".")
-                      }
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-            <div
-              className="grafico-container"
-              style={{
-                width: "33%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <h1 className="titulos">COSTO ESTIMADO: U$S {totalCosto}</h1>
-              </div>
-              {cultivosCostoEncuestadas.length === 0 ? (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-              ) : (
-                <ResponsiveContainer className="" width="100%" height={260}>
-                  <PieChart width={800} height={400}>
-                    <Pie
-                      data={
-                        cultivosCostoEncuestadas && cultivosCostoEncuestadas
-                      }
-                      activeIndex={legendCostoEncuestadas.activeIndex}
-                      activeShape={renderActiveShape}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      dataKey="value"
-                      onMouseEnter={onPieEnterCostoEncuestadas}
-                    >
-                      {cultivosCostoEncuestadas.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.colors} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value) =>
-                        Math.trunc(value).toLocaleString().replace(/,/g, ".")
-                      }
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </div>
+        <div className="contSubtitulo-cliente">
+          <div style={{ marginLeft: "5px" }}>
+            <h1 className="subtitulos">COSECHA</h1>
           </div>
+          <Select
+            defaultValue={selectedAcosDesc && selectedAcosDesc}
+            style={{ width: "100%", maxWidth: "250px" }}
+            onChange={(value, option) => {
+              const cosecha = listCosechas.find(
+                (c) => c.acos_id === option.key
+              );
+              setCosechaSeleccionada(cosecha.acos_id);
+            }}
+            filterOption={(input, option) =>
+              option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            options={
+              listCosechas.length > 0
+                ? listCosechas.map((cosecha) => {
+                    return {
+                      value: cosecha.acos_id,
+                      label: cosecha.acos_desc,
+                    };
+                  })
+                : []
+            }
+          />
         </div>
+        <div className="contSubtitulo-cliente">
+          <div style={{ marginLeft: "5px" }}>
+            <h1 className="subtitulos">CULTIVO</h1>
+          </div>
+          <Select
+            defaultValue="TODOS"
+            style={{ width: "100%", maxWidth: "250px" }}
+            showSearch
+            // optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            onChange={(value) => setSelectedCultivo(value)}
+            options={cultivos?.map((cultivo) => {
+              return {
+                value: cultivo.acult_id,
+                label: cultivo.acult_desc,
+              };
+            })}
+          />
+        </div>
+        <div className="contSubtitulo-cliente">
+          <div style={{ marginLeft: "5px" }}>
+            <h1 className="subtitulos">ESTADO</h1>
+          </div>
+          <Select
+            defaultValue="ENCUESTA OK"
+            style={{ width: "100%", maxWidth: "250px" }}
+            onChange={(value) => setSelectedEstado(value)}
+            options={[
+              { value: "todos", label: "TODOS" },
+              { value: "3", label: "ENCUESTA OK" },
+              { value: "0", label: "NO ENCUESTADO" },
+              { value: "1", label: "NO ACCEDE" },
+              { value: "2", label: "NO SIEMBRA" },
+            ]}
+          />
+        </div>
+      </div>
+      <Modal
+        title="NUEVA ENCUESTA"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+        width={650}
+        style={{ userSelect: "none", marginTop: "-70px" }}
+      >
+        <NuevaEncuesta />
+      </Modal>
+      <Modal
+        title={`EDITAR ENCUESTA / ${encuestaSeleccionada.nombreCli}`}
+        open={isModalOpenEdit}
+        onOk={handleOkEdit}
+        onCancel={handleCancelEdit}
+        footer={null}
+        width={650}
+        style={{ userSelect: "none" }}
+      >
+        <EditarEncuesta />
+      </Modal>
+      <Modal
+        title={`INFORMACIÓN ENCUESTA / ${infoVerEncuesta[0]?.cli_nombre}`}
+        open={isModalOpenVerEncuesta}
+        onOk={handleOkVerEncuesta}
+        onCancel={handleCancelVerEncuesta}
+        footer={null}
+        width={700}
+        style={{ userSelect: "none", marginTop: "-70px" }}
+      >
+        <VerEncuesta />
+      </Modal>
+      <Modal
+        title={`NUEVO EVENTO / ${encuestaSeleccionada?.nombreCli} / ${encuestaSeleccionada?.cultivo?.acult_desc} / ${encuestaSeleccionada?.ciclo}°`}
+        open={isModalOpenEvent}
+        onOk={handleOkEvent}
+        onCancel={handleCancelEvent}
+        footer={null}
+        width={700}
+        style={{ userSelect: "none" }}
+      >
+        <NuevoEvento />
+      </Modal>
+      <Drawer
+        title={`LOTES ENCUESTA / ${nombreCliLote}`}
+        placement="bottom"
+        onClose={onClose}
+        open={openDrawer}
+        height={"80%"}
+        bodyStyle={{ padding: "12px" }}
+        headerStyle={{ border: "none" }}
+      >
+        {openDrawer ? (
+          <LotesEncuestas key={lotesEncuestasKey} data={dataLotes} />
+        ) : null}
+      </Drawer>
 
-        <Table
-          columns={visibleColumns}
-          dataSource={data}
-          pagination={paginationConfig}
-          size="small"
-          rowKey={(record) => record.idEncuesta}
-        />
-        {drawerUpload ? (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+          style={{ display: "flex", flexDirection: "row", paddingTop: "5px" }}
+        >
           <div
+            className="grafico-container"
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 999,
-              height: "100%",
+              width: "33%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <iframe
-              loading="lazy"
-              // src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
-              src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
-              width={"100%"}
-              height={"100%"}
-              style={{ border: "none" }}
-              title="drawer"
-            ></iframe>
+            <div>
+              <h1 className="titulos">
+                SUP. ENCUESTADA: {totalSuperficie} HAS.
+              </h1>
+            </div>
+            {cultivosSupEncuestadas.length === 0 ? (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            ) : (
+              <ResponsiveContainer className="" width="100%" height={260}>
+                <PieChart width={800} height={400}>
+                  <Pie
+                    data={cultivosSupEncuestadas && cultivosSupEncuestadas}
+                    activeIndex={legendSupEncuestadas.activeIndex}
+                    activeShape={renderActiveShape}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    dataKey="value"
+                    onMouseEnter={onPieEnterSupEncuestadas}
+                  >
+                    {cultivosSupEncuestadas.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.colors} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value) =>
+                      Math.trunc(value).toLocaleString().replace(/,/g, ".")
+                    }
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
           </div>
-        ) : null}
+          <div
+            className="grafico-container"
+            style={{
+              width: "33%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <h1 className="titulos">
+                PRODUCCION ESTIMADA: {totalProduccion} TT
+              </h1>
+            </div>
+            {cultivosProdEncuestadas.length === 0 ? (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            ) : (
+              <ResponsiveContainer className="" width="100%" height={260}>
+                <PieChart width={800} height={400}>
+                  <Pie
+                    data={cultivosProdEncuestadas && cultivosProdEncuestadas}
+                    activeIndex={legendProdEncuestadas.activeIndex}
+                    activeShape={renderActiveShape}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    dataKey="value"
+                    onMouseEnter={onPieEnterProdEncuestadas}
+                  >
+                    {cultivosProdEncuestadas.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.colors} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value) =>
+                      Math.trunc(value).toLocaleString().replace(/,/g, ".")
+                    }
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+          <div
+            className="grafico-container"
+            style={{
+              width: "33%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <h1 className="titulos">COSTO ESTIMADO: U$S {totalCosto}</h1>
+            </div>
+            {cultivosCostoEncuestadas.length === 0 ? (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            ) : (
+              <ResponsiveContainer className="" width="100%" height={260}>
+                <PieChart width={800} height={400}>
+                  <Pie
+                    data={cultivosCostoEncuestadas && cultivosCostoEncuestadas}
+                    activeIndex={legendCostoEncuestadas.activeIndex}
+                    activeShape={renderActiveShape}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    dataKey="value"
+                    onMouseEnter={onPieEnterCostoEncuestadas}
+                  >
+                    {cultivosCostoEncuestadas.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.colors} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value) =>
+                      Math.trunc(value).toLocaleString().replace(/,/g, ".")
+                    }
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </div>
       </div>
-    </>
+
+      <Table
+        columns={visibleColumns}
+        dataSource={data}
+        pagination={paginationConfig}
+        size="small"
+        rowKey={(record) => record.idEncuesta}
+      />
+      {drawerUpload ? (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 999,
+            height: "100%",
+          }}
+        >
+          <iframe
+            loading="lazy"
+            src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
+            // src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
+            width={"100%"}
+            height={"100%"}
+            style={{ border: "none" }}
+            title="drawer"
+          ></iframe>
+        </div>
+      ) : null}
+    </div>
   );
 };

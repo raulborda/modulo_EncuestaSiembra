@@ -53,8 +53,6 @@ export const NuevaEncuesta = () => {
 
   const [dataRindes, setDataRindes] = useState({ rinde: null, costo: null });
 
-  // const [cosechaSeleccionada, setCosechaSeleccionada] = useState();
-
   const [value, setValue] = useState(3);
   const [disabledInputs, setDisabledInputs] = useState(false);
   const onChange = (e) => {
@@ -189,7 +187,7 @@ export const NuevaEncuesta = () => {
 
   const fetchNuevaEncuesta = async () => {
     const response = await fetch(
-      `${URL}encuesta-siembra_rindecosto.php?idcos=${cosechaSeleccionada}&idcul=${cultivoSeleccionado}&idcic=${cicloSeleccionado}&idcli=${addEncCliente}`,
+      `${URL}encuesta-siembra_rindecosto.php?idcos=${selectedAcosDesc}&idcul=${cultivoSeleccionado}&idcic=${cicloSeleccionado}&idcli=${addEncCliente}`,
       {
         method: "GET",
       }
@@ -211,20 +209,16 @@ export const NuevaEncuesta = () => {
   };
 
   useEffect(() => {
+    console.log(selectedAcosDesc);
     if (
-      cosechaSeleccionada &&
+      selectedAcosDesc &&
       cultivoSeleccionado &&
       cicloSeleccionado &&
       addEncCliente
     ) {
       fetchNuevaEncuesta();
     }
-  }, [
-    cosechaSeleccionada,
-    cultivoSeleccionado,
-    cicloSeleccionado,
-    addEncCliente,
-  ]);
+  }, [selectedAcosDesc, cultivoSeleccionado, cicloSeleccionado, addEncCliente]);
 
   return (
     <>

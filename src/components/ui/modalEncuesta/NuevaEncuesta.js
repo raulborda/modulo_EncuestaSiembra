@@ -47,7 +47,7 @@ export const NuevaEncuesta = () => {
   } = useContext(GlobalContext);
   const [loteEncuestaAdd, setLoteEncuestaAdd] = useState([]);
   const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
-  const [cultivoSeleccionado, setCultivoSeleccionado] = useState(0);
+  const [cultivoSeleccionado, setCultivoSeleccionado] = useState(null);
 
   const [cicloSeleccionado, setCicloSeleccionado] = useState("0");
 
@@ -121,15 +121,9 @@ export const NuevaEncuesta = () => {
       // Formatear la fecha en el formato "yyyy-mm-dd"
       const fechaFormateada = `${year}-${month}-${day}`;
 
-      //console.log(values.cultivo)
-
-      // if (values.ciclo === undefined) {
-      //   if (cultivoSeleccionado === "1" || cultivoSeleccionado === "3") {
-      //     values.ciclo = 1;
-      //   } else {
-      //     values.ciclo = 0;
-      //   }
-      // }
+      if (cultivoSeleccionado == null || cicloSeleccionado == null) {
+        return messageApi.info("Es necesario que seleccione cultivo y ciclo");
+      }
 
       const dataAdd = new FormData();
       dataAdd.append("usuid", usu);

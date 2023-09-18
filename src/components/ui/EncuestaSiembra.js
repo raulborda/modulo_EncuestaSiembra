@@ -947,6 +947,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             // setEditarEncuesta(resp);
             setInfoEventoNew(resp);
             // setSelectedCosechaId(listCosechas.find(cosecha => cosecha.acos_id === resp[0]?.cos_id));
+
             setEncuestaSeleccionada({
               cosecha: listCosechas.find(
                 (cosecha) => cosecha.acos_id === resp[0]?.cos_id
@@ -1125,11 +1126,14 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           <Select
             defaultValue={selectedAcosDesc && selectedAcosDesc}
             style={{ width: "100%", maxWidth: "250px" }}
-            onChange={(value, option) => {
-              const cosecha = listCosechas.find(
-                (c) => c.acos_id === option.key
-              );
-              setCosechaSeleccionada(cosecha.acos_id);
+            onChange={(value) => {
+              // console.log(value);
+              // const cosecha = listCosechas.find(
+              //   (c) => c.acos_id === option.value
+              // );
+
+              // console.log(cosecha);
+              setCosechaSeleccionada(value);
             }}
             filterOption={(input, option) =>
               option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -1398,8 +1402,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         >
           <iframe
             loading="lazy"
-            src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
-            // src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
+            // src={`${URLDrawer}/tati/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar local
+            src={`${URLDrawer}/duoc/file_dos/?drawer=${drawerUpload}&modori_id=${modori}&filter_id=${filter}&usu_id=${usu}&generico_id=${generico}&cli_id=${cliEnc}`} // para usar con resto de crm
             width={"100%"}
             height={"100%"}
             style={{ border: "none" }}

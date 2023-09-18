@@ -20,6 +20,8 @@ export const NuevoEvento = () => {
 
   const [valorSeleccionado, setValorSeleccionado] = useState("");
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   const handleSelectChange = (value) => {
     // console.log('value: ', value);
     setValorSeleccionado(value);
@@ -68,13 +70,13 @@ export const NuevoEvento = () => {
         const resp = await response.text();
         const data = resp;
         form.resetFields();
-        message.success("Evento agregado exitosamente");
+        messageApi.success("Evento agregado exitosamente");
       } else {
         throw new Error("Error al agregar evento");
       }
     } catch (error) {
       console.log("Error: ", error);
-      message.error("Error al agregar evento");
+      messageApi.error("Error al agregar evento");
     } finally {
       form.resetFields();
       setIsModalOpenEvent(false);
@@ -92,6 +94,7 @@ export const NuevoEvento = () => {
   return (
     <>
       <Form form={form} onFinish={onSubmitAddEvent}>
+        {contextHolder}
         <div
           style={{
             width: "100%",

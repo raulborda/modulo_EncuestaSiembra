@@ -75,14 +75,14 @@ export const EditarEncuesta = () => {
                 const resp = await response.text();
                 const data = resp;
                 form.resetFields();
-                message.success("Encuesta editada exitosamente");
+                messageApi.success("Encuesta editada exitosamente");
                 //setIsLoading(false);
             } else {
                 throw new Error("Error al agregar encuesta");
             }
         } catch (error) {
             //console.log("Error: ", error);
-            message.error("Error al agregar encuesta");
+            messageApi.error("Error al agregar encuesta");
             //setIsLoading(false);
         } finally {
             form.resetFields();

@@ -49,6 +49,12 @@ export const NuevaEncuesta = () => {
   const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
   const [cultivoSeleccionado, setCultivoSeleccionado] = useState(0);
 
+  const [cicloSeleccionado, setCicloSeleccionado] = useState("0");
+
+  const [dataRindes, setDataRindes] = useState({ rinde: null, costo: null });
+
+  // const [cosechaSeleccionada, setCosechaSeleccionada] = useState();
+
   const [value, setValue] = useState(3);
   const [disabledInputs, setDisabledInputs] = useState(false);
   const onChange = (e) => {
@@ -117,31 +123,30 @@ export const NuevaEncuesta = () => {
 
       //console.log(values.cultivo)
 
-      if (values.ciclo === undefined) {
-        if (values.cultivo === "1" || values.cultivo === "3") {
-          values.ciclo = 1;
-        } else {
-          values.ciclo = 0;
-        }
-      }
+      // if (values.ciclo === undefined) {
+      //   if (cultivoSeleccionado === "1" || cultivoSeleccionado === "3") {
+      //     values.ciclo = 1;
+      //   } else {
+      //     values.ciclo = 0;
+      //   }
+      // }
 
-      //console.log("ciclo: ", values.ciclo);
       const dataAdd = new FormData();
       dataAdd.append("usuid", usu);
       dataAdd.append("opciones", values.estado);
       dataAdd.append("newc_clienc", values.cliente);
       dataAdd.append("newc_lote", lotesSeleccionados);
       dataAdd.append("newc_cosa", values.cosecha);
-      dataAdd.append("newc_cult", values.cultivo);
-      dataAdd.append("newc_ciclo", values.ciclo);
+      dataAdd.append("newc_cult", cultivoSeleccionado);
+      dataAdd.append("newc_ciclo", cicloSeleccionado);
       if (values.estado === 1 || values.estado === 2 || values.estado === 0) {
         dataAdd.append("newc_has", 0);
         dataAdd.append("newc_rinde", 0);
         dataAdd.append("newc_costo", 0);
       } else {
         dataAdd.append("newc_has", values.hasEst);
-        dataAdd.append("newc_rinde", values.rinde);
-        dataAdd.append("newc_costo", values.costo);
+        dataAdd.append("newc_rinde", dataRindes.rinde);
+        dataAdd.append("newc_costo", dataRindes.costo);
       }
       dataAdd.append("newc_fechas", fechaFormateada);
       dataAdd.append("newc_culta", values.cultivoAnterior);
@@ -153,18 +158,15 @@ export const NuevaEncuesta = () => {
       if (response.ok) {
         const resp = await response.text();
         const data = resp;
-        form.resetFields();
-        message.success("Encuesta agregada exitosamente");
+        messageApi.success("Encuesta agregada exitosamente");
         setIsLoading(false);
         setUpdatesSelects(!updateSelects);
-
       } else {
         throw new Error("Error al agregar encuesta");
-      
       }
     } catch (error) {
       console.log("Error: ", error);
-      message.error("Error al agregar encuesta");
+      messageApi.error("Error al agregar encuesta");
       setIsLoading(false);
     } finally {
       form.resetFields();
@@ -184,8 +186,51 @@ export const NuevaEncuesta = () => {
 
   const handleChangeCultivo = (v) => {
     setCultivoSeleccionado(v);
+    if (["1", "3"].includes(v)) {
+      setCicloSeleccionado("1");
+    } else {
+      setCicloSeleccionado("0");
+    }
   };
 
+  const fetchNuevaEncuesta = async () => {
+    const response = await fetch(
+      `${URL}encuesta-siembra_rindecosto.php?idcos=${cosechaSeleccionada}&idcul=${cultivoSeleccionado}&idcic=${cicloSeleccionado}&idcli=${addEncCliente}`,
+      {
+        method: "GET",
+      }
+    );
+    if (response.ok) {
+      const resp = await response.text();
+      let data = resp;
+
+      if (data) {
+        data = JSON.parse(data);
+
+        data = data?.[0];
+
+        setDataRindes({ rinde: data.arinde, costo: data.acosto });
+      }
+    } else {
+      messageApi.error("Ocurrió un error al actualizar rindes");
+    }
+  };
+
+  useEffect(() => {
+    if (
+      cosechaSeleccionada &&
+      cultivoSeleccionado &&
+      cicloSeleccionado &&
+      addEncCliente
+    ) {
+      fetchNuevaEncuesta();
+    }
+  }, [
+    cosechaSeleccionada,
+    cultivoSeleccionado,
+    cicloSeleccionado,
+    addEncCliente,
+  ]);
 
   return (
     <>
@@ -242,27 +287,24 @@ export const NuevaEncuesta = () => {
                     // style={{ width: 300 }}
                     showSearch
                     optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.children &&
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
+                    filterOption={(input, option) => {
+                      return (
+                        option.label &&
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      );
+                    }}
                     onChange={handleSelectChange} // Utilizar la nueva función de cambio de selección
-                  >
-                    {clientes &&
-                      clientes.length > 0 &&
-                      clientes
-                        .filter((cliente) => cliente.cli_id !== "0") // Filtrar el cliente con ID 0
-                        .map((cliente) => (
-                          <Select.Option
-                            key={cliente.cli_id}
-                            value={cliente.cli_id}
-                          >
-                            {cliente.cli_nombre}
-                          </Select.Option>
-                        ))}
-                  </Select>
+                    options={clientes
+                      ?.filter((cliente) => cliente.cli_id !== "0")
+                      ?.map((cliente) => {
+                        return {
+                          value: cliente.cli_id,
+                          label: cliente.cli_nombre,
+                        };
+                      })}
+                  />
                 </Form.Item>
               </div>
             </div>
@@ -337,7 +379,7 @@ export const NuevaEncuesta = () => {
                     style={{ width: 200, textAlign: "right" }}
                     onChange={(value) => setSelectedAcosDesc(value)}
                   >
-                    {listCosechas.length > 0 &&
+                    {listCosechas?.length > 0 &&
                       listCosechas.map((cosecha) => {
                         return (
                           <Select.Option
@@ -358,13 +400,13 @@ export const NuevaEncuesta = () => {
               </div>
               <div>
                 <Form.Item
-                  name="cultivo"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor seleccione un cultivo",
-                    },
-                  ]}
+                  // name="cultivo"
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //     message: "Por favor seleccione un cultivo",
+                  //   },
+                  // ]}
                   className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
                 >
                   <Select
@@ -372,6 +414,7 @@ export const NuevaEncuesta = () => {
                     style={{ width: 200 }}
                     showSearch
                     optionFilterProp="children"
+                    value={cultivoSeleccionado}
                     filterOption={(input, option) =>
                       option.children &&
                       option.children
@@ -382,14 +425,16 @@ export const NuevaEncuesta = () => {
                   >
                     {addEncCultivos &&
                       addEncCultivos.length > 0 &&
-                      addEncCultivos.map((cultivo) => (
-                        <Select.Option
-                          key={cultivo.acult_id}
-                          value={cultivo.acult_id}
-                        >
-                          {cultivo.acult_desc}
-                        </Select.Option>
-                      ))}
+                      addEncCultivos.map((cultivo) => {
+                        return (
+                          <Select.Option
+                            key={cultivo.acult_id}
+                            value={cultivo.acult_id}
+                          >
+                            {cultivo.acult_desc}
+                          </Select.Option>
+                        );
+                      })}
                   </Select>
                 </Form.Item>
               </div>
@@ -399,34 +444,27 @@ export const NuevaEncuesta = () => {
                 <h1 className="subtitulos">Ciclo</h1>
               </div>
               <div>
-                
-                  <Form.Item
-                    name="ciclo"
-                  >
-                    {cultivoSeleccionado == 1 || cultivoSeleccionado == 3 ? (
+                <Form.Item>
+                  {cultivoSeleccionado === "1" ||
+                  cultivoSeleccionado === "3" ? (
                     <Select
-                      
                       style={{ width: 200 }}
-                      placeholder="SELECCIONE"
-                      // onChange={(value) => setSelectedEstado(value)}
+                      onChange={(value) => setCicloSeleccionado(value)}
+                      value={cicloSeleccionado}
                       options={[
                         { value: "1", label: "1°" },
                         { value: "2", label: "2°" },
                       ]}
                     />
-                    ) : (
-                      <Select
-                      disabled="disabled"
-                      
+                  ) : (
+                    <Select
                       style={{ width: 200 }}
-                      placeholder="SELECCIONE"
-                      // onChange={(value) => setSelectedEstado(value)}
-                      options={[
-                        { value: "1", label: "1°" },
-                        { value: "2", label: "2°" },
-                      ]}
-                    />)}
-                  </Form.Item>
+                      onChange={(value) => setCicloSeleccionado(value)}
+                      value={cicloSeleccionado}
+                      options={[{ value: "0", label: " - " }]}
+                    />
+                  )}
+                </Form.Item>
               </div>
             </div>
           </div>
@@ -460,19 +498,17 @@ export const NuevaEncuesta = () => {
               </div>
               <div>
                 <Form.Item
-                  name="rinde"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor ingrese un valor",
-                    },
-                  ]}
                   className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
                 >
                   <Input
-                    disabled={disabledInputs}
+                    // disabled={disabledInputs}
+                    value={dataRindes.rinde}
                     style={{ width: 200, textAlign: "right" }}
-                    defaultValue={disabledInputs ? 0 : undefined}
+                    onChange={(v) =>
+                      setDataRindes((prevState) => {
+                        return { ...prevState, rinde: v.target.value };
+                      })
+                    }
                   />
                 </Form.Item>
               </div>
@@ -483,19 +519,17 @@ export const NuevaEncuesta = () => {
               </div>
               <div>
                 <Form.Item
-                  name="costo"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor ingrese un valor",
-                    },
-                  ]}
                   className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
                 >
                   <Input
-                    disabled={disabledInputs}
+                    // disabled={disabledInputs}
                     style={{ width: 200, textAlign: "right" }}
-                    defaultValue={disabledInputs ? 0 : undefined}
+                    value={dataRindes.costo}
+                    onChange={(v) =>
+                      setDataRindes((prevState) => {
+                        return { ...prevState, costo: v.target.value };
+                      })
+                    }
                   />
                 </Form.Item>
               </div>

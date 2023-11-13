@@ -1068,6 +1068,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               setIdCli(value);
               setSelectedLote("-1");
             }}
+            value={idCli}
             options={
               clientes?.length > 0
                 ? clientes.map((cliente) => {
@@ -1197,6 +1198,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         footer={null}
         width={650}
         style={{ userSelect: "none", marginTop: "-70px" }}
+        destroyOnClose={true}
       >
         <NuevaEncuesta />
       </Modal>

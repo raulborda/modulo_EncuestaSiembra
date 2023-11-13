@@ -10,7 +10,6 @@ import {
   List,
   Radio,
   Select,
-  message,
 } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -19,35 +18,28 @@ export const NuevaEncuesta = () => {
   const URL = process.env.REACT_APP_URL;
 
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
   const {
-    idCliente,
     usu,
-    selectedAcosDesc,
-    setSelectedAcosDesc,
-    cosechaSeleccionada,
     listCosechas,
     clientes,
-    setClientes,
-    lotes,
-    setLotes,
-    // cultivos,
-    addEncCliente,
-    setAddEncCliente,
     addEncCultivos,
-    setAddEncCultivos,
     setIsModalOpen,
     isModalOpen,
     upload,
     setUpload,
     updateSelects,
     setUpdatesSelects,
-    isLoading,
+    loading,
     setIsLoading,
+    messageApi,
   } = useContext(GlobalContext);
   const [loteEncuestaAdd, setLoteEncuestaAdd] = useState([]);
   const [lotesSeleccionados, setLotesSeleccionados] = useState([]);
   const [cultivoSeleccionado, setCultivoSeleccionado] = useState(null);
+
+  const [addEncCliente, setAddEncCliente] = useState(null);
+
+  const [cosechaSeleccionada, setCosechaSeleccionada] = useState(null);
 
   const [cicloSeleccionado, setCicloSeleccionado] = useState("0");
 
@@ -63,6 +55,11 @@ export const NuevaEncuesta = () => {
     } else {
       setDisabledInputs(false);
     }
+  };
+
+  const acceptOnlyNumber = (value) => {
+    let valor = value.replace(",", ".");
+    return valor;
   };
 
   useEffect(() => {
@@ -119,16 +116,23 @@ export const NuevaEncuesta = () => {
       // Formatear la fecha en el formato "yyyy-mm-dd"
       const fechaFormateada = `${year}-${month}-${day}`;
 
-      if (cultivoSeleccionado == null || cicloSeleccionado == null) {
-        return messageApi.info("Es necesario que seleccione cultivo y ciclo");
+      if (
+        cultivoSeleccionado == null ||
+        cicloSeleccionado == null ||
+        cosechaSeleccionada == null ||
+        addEncCliente == null
+      ) {
+        return messageApi.info(
+          "Es necesario que seleccione cliente, cosecha, cultivo y ciclo"
+        );
       }
 
       const dataAdd = new FormData();
       dataAdd.append("usuid", usu);
       dataAdd.append("opciones", values.estado);
-      dataAdd.append("newc_clienc", values.cliente);
+      dataAdd.append("newc_clienc", addEncCliente);
       dataAdd.append("newc_lote", lotesSeleccionados);
-      dataAdd.append("newc_cosa", values.cosecha);
+      dataAdd.append("newc_cosa", cosechaSeleccionada);
       dataAdd.append("newc_cult", cultivoSeleccionado);
       dataAdd.append("newc_ciclo", cicloSeleccionado);
       if (values.estado === 1 || values.estado === 2 || values.estado === 0) {
@@ -136,7 +140,7 @@ export const NuevaEncuesta = () => {
         dataAdd.append("newc_rinde", 0);
         dataAdd.append("newc_costo", 0);
       } else {
-        dataAdd.append("newc_has", values.hasEst);
+        dataAdd.append("newc_has", acceptOnlyNumber(values.hasEst));
         dataAdd.append("newc_rinde", dataRindes.rinde);
         dataAdd.append("newc_costo", dataRindes.costo);
       }
@@ -173,6 +177,9 @@ export const NuevaEncuesta = () => {
   useEffect(() => {
     form.resetFields();
     setLoteEncuestaAdd([]);
+    setCicloSeleccionado(null);
+    setCosechaSeleccionada(null);
+    setCultivoSeleccionado(null);
     setAddEncCliente(null);
   }, [isModalOpen]);
 
@@ -187,7 +194,7 @@ export const NuevaEncuesta = () => {
 
   const fetchNuevaEncuesta = async () => {
     const response = await fetch(
-      `${URL}encuesta-siembra_rindecosto.php?idcos=${selectedAcosDesc}&idcul=${cultivoSeleccionado}&idcic=${cicloSeleccionado}&idcli=${addEncCliente}`,
+      `${URL}encuesta-siembra_rindecosto.php?idcos=${cosechaSeleccionada}&idcul=${cultivoSeleccionado}&idcic=${cicloSeleccionado}&idcli=${addEncCliente}`,
       {
         method: "GET",
       }
@@ -209,21 +216,29 @@ export const NuevaEncuesta = () => {
   };
 
   useEffect(() => {
-    console.log(selectedAcosDesc);
     if (
-      selectedAcosDesc &&
+      cosechaSeleccionada &&
       cultivoSeleccionado &&
       cicloSeleccionado &&
       addEncCliente
     ) {
       fetchNuevaEncuesta();
     }
-  }, [selectedAcosDesc, cultivoSeleccionado, cicloSeleccionado, addEncCliente]);
+  }, [
+    cosechaSeleccionada,
+    cultivoSeleccionado,
+    cicloSeleccionado,
+    addEncCliente,
+  ]);
+
+  useEffect(() => {
+    if (listCosechas?.length > 0) {
+      setCosechaSeleccionada(listCosechas?.[0]?.acos_id);
+    }
+  }, []);
 
   return (
     <>
-      {/* Renderizar el componente de mensaje */}
-      {contextHolder}
       <Form form={form} onFinish={onSubmitAdd}>
         <div style={{ userSelect: "none" }}>
           <div>
@@ -349,25 +364,20 @@ export const NuevaEncuesta = () => {
               </div>
               <div>
                 <Form.Item
-                  name="cosecha"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor seleccione una cosecha",
-                    },
-                  ]}
                   className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
-                  initialValue={
-                    listCosechas.length > 0
-                      ? listCosechas[0].acos_id
-                      : undefined
-                  }
                 >
                   <Select
                     style={{ width: 200, textAlign: "right" }}
-                    onChange={(value) => setSelectedAcosDesc(value)}
-                  >
-                    {listCosechas?.length > 0 &&
+                    onChange={(value) => setCosechaSeleccionada(value)}
+                    value={cosechaSeleccionada}
+                    options={listCosechas.map((cosecha) => {
+                      return {
+                        value: cosecha.acos_id,
+                        label: cosecha.acos_desc,
+                      };
+                    })}
+                  />
+                  {/* {listCosechas?.length > 0 &&
                       listCosechas.map((cosecha) => {
                         return (
                           <Select.Option
@@ -378,7 +388,7 @@ export const NuevaEncuesta = () => {
                           </Select.Option>
                         );
                       })}
-                  </Select>
+                  </Select> */}
                 </Form.Item>
               </div>
             </div>
@@ -473,6 +483,7 @@ export const NuevaEncuesta = () => {
                   className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
                 >
                   <Input
+                    type="number"
                     disabled={disabledInputs}
                     style={{ width: 200, textAlign: "right" }}
                     defaultValue={disabledInputs ? 0 : undefined}
@@ -489,14 +500,18 @@ export const NuevaEncuesta = () => {
                   className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
                 >
                   <Input
+                    type="number"
                     // disabled={disabledInputs}
                     value={dataRindes.rinde}
                     style={{ width: 200, textAlign: "right" }}
-                    onChange={(v) =>
+                    onChange={(v) => {
                       setDataRindes((prevState) => {
-                        return { ...prevState, rinde: v.target.value };
-                      })
-                    }
+                        return {
+                          ...prevState,
+                          rinde: acceptOnlyNumber(v.target.value),
+                        };
+                      });
+                    }}
                   />
                 </Form.Item>
               </div>
@@ -510,12 +525,16 @@ export const NuevaEncuesta = () => {
                   className="hidden-asterisk" // Agregar esta línea para ocultar el asterisco
                 >
                   <Input
+                    type="number"
                     // disabled={disabledInputs}
                     style={{ width: 200, textAlign: "right" }}
                     value={dataRindes.costo}
                     onChange={(v) =>
                       setDataRindes((prevState) => {
-                        return { ...prevState, costo: v.target.value };
+                        return {
+                          ...prevState,
+                          costo: acceptOnlyNumber(v.target.value),
+                        };
                       })
                     }
                   />
@@ -591,6 +610,7 @@ export const NuevaEncuesta = () => {
                 type="primary"
                 htmlType="submitAdd"
                 style={{ borderRadius: "0px" }}
+                loading={loading}
               >
                 GUARDAR
               </Button>

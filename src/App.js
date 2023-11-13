@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ConfigProvider, Spin } from "antd";
+import { ConfigProvider, Spin, message } from "antd";
 import esES from "antd/lib/locale/es_ES";
 import "./App.css";
 import { useEffect, useState } from "react";
@@ -23,6 +23,8 @@ function App() {
 
   const [usu, setUsu] = useState(idUsu);
   const [idCliente, setIdCliente] = useState(idC);
+
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [addSubmit, setAddSubmit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -166,6 +168,8 @@ function App() {
         setUpdateGraph,
         isLoading,
         setIsLoading,
+
+        messageApi
       }}
     >
       <ConfigProvider
@@ -176,6 +180,7 @@ function App() {
           },
         }}
       >
+        {contextHolder}
         {isLoading === true || selectedAcosDesc.length == 0 ? (
           <div
             style={{

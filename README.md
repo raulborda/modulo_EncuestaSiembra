@@ -1,7 +1,8 @@
 # Node v14.17.0
 
 # modulos/encuesta_siembra
-# 
+
+`./deploy.sh 10.0.0.153 modulos/encuesta_siembra`
 
 ## LOCAL
 
@@ -13,7 +14,6 @@
     - Descomentar lineas:
         - const idUsu = 1; //.28 (También para .153)
         - const idC = 2049; //.28 (a modo ejemplo, hay más)
-
 
 ### .env
 
@@ -39,7 +39,6 @@
     - Comentar lineas:
         - const idUsu = 1; //.28 (También para .153)
         - const idC = 2049; //.28 (a modo ejemplo, hay más)
-
 
 ### .env
 

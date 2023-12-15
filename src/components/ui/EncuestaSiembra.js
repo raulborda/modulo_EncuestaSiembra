@@ -14,9 +14,6 @@ import {
 import {
   DeleteOutlined,
   EditOutlined,
-  EnvironmentOutlined,
-  PaperClipOutlined,
-  ProfileOutlined,
   ReadOutlined,
 } from "@ant-design/icons";
 import { NuevaEncuesta } from "./modalEncuesta/NuevaEncuesta";
@@ -25,6 +22,7 @@ import Swal from "sweetalert2";
 import { NuevoEvento } from "./modalEncuesta/NuevoEvento";
 import LotesEncuestas from "./LotesEncuestas";
 import { VerEncuesta } from "./modalEncuesta/VerEncuesta";
+import milesFormat  from "../utils/milesFormat"
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -229,59 +227,72 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const columns = [
     {
       key: "idCliente",
-      width: "1%", // Ajustar el ancho de la columna
     },
     {
       key: "idEncuesta",
-      width: "1%", // Ajustar el ancho de la columna
     },
     {
       title: "CLIENTE",
       dataIndex: "cliente",
       key: "cliente",
-      width: "20%", // Ajustar el ancho de la columna
+      ellipsis: true,
     },
     {
-      title: "CULTIVO/CICLO",
+      title: "CAMPAÑA",
+      dataIndex: "acos_desc",
+      key: "acos_desc",
+      ellipsis: true,
+      width:"120px",
+      align: "center"
+    },
+    {
+      // title: "CULTIVO/CICLO",
+      title:'DESTINO',
       dataIndex: "cultivo",
       key: "cultivo",
-      width: "10%", // Ajustar el ancho de la columna
+      ellipsis: true,
+      align: "center",
     },
     {
-      title: "SUP. EST. (HAS)",
+      // title: "SUP. EST. (HAS)",
+      title:'LITROS',
       dataIndex: "supEstimado",
       key: "supEstimado",
       align: "right",
-      width: "10%", // Ajustar el ancho de la columna
+      render: (fila) => {
+        return(milesFormat(fila))
+      },
+      ellipsis: true,
+      width:"140px"
     },
-    {
-      title: "RINDE. EST. (TT)",
-      dataIndex: "rindeEstimado",
-      key: "rindeEstimado",
-      align: "right",
-      width: "10%", // Ajustar el ancho de la columna
-    },
+    // {
+    //   title: "RINDE. EST. (TT)",
+    //   dataIndex: "rindeEstimado",
+    //   key: "rindeEstimado",
+    //   align: "right",
+    //   width: "10%", // Ajustar el ancho de la columna
+    // },
     {
       title: "COSTO. EST. (U$S)",
       dataIndex: "costoEstimado",
       key: "costoEstimado",
       align: "right",
-      width: "10%", // Ajustar el ancho de la columna
+      ellipsis: true,
+      width:"210px"
     },
     {
       title: "ESTADO",
       key: "estado",
       dataIndex: "estado",
       align: "center", // Centrar el contenido de la columna
-      // width: 100, // Ajustar el ancho de la columna
-      width: "10%", // Ajustar el ancho de la columna
+      width:"140px",
     },
     {
       title: "...",
       dataIndex: "botones",
       key: "botones",
       align: "center", // Centrar el contenido de la columna
-      width: "10%", // Ajustar el ancho de la columna
+      width:"130px",
       render: (_, record, index) => {
         if (
           record.estado &&
@@ -294,30 +305,31 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
                 fontSize: 16,
               }}
             >
-              <ProfileOutlined
+              {/* <ProfileOutlined
                 title="Agregar Evento"
                 className="btnNuevoEvento"
                 onClick={() => handleEventClick(record, index)}
-              />
+              /> */}
               <ReadOutlined
                 title="Ver Encuesta"
                 className="btnVerEncuesta"
                 onClick={() => handleVerEnc(record, index)}
               />
-              <EnvironmentOutlined
+              {/* <EnvironmentOutlined
                 title="Ver Lotes Encuesta"
                 // className='btnNuevoEvento'
                 onClick={() => handleLoteClick(record, index)}
-              />
-              <PaperClipOutlined
+              /> */}
+              {/* <PaperClipOutlined
                 className="btnUploadEncuesta"
                 title="Archivos"
                 onClick={() => handleUploadClick(record, index)}
-              />
+              /> */}
               <DeleteOutlined
                 title="Borrar Encuesta"
                 style={{ color: "red" }}
@@ -331,6 +343,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
                 fontSize: 16,
               }}
@@ -340,26 +353,26 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 style={{ color: "#00b33c" }}
                 onClick={() => handleEditClick(record, index)}
               />
-              <ProfileOutlined
+              {/* <ProfileOutlined
                 title="Agregar Evento"
                 style={{ color: "#F6BB42" }}
                 onClick={() => handleEventClick(record, index)}
-              />
+              /> */}
               <ReadOutlined
                 title="Ver Encuesta"
                 style={{ color: "#4fc1e9" }}
                 onClick={() => handleVerEnc(record, index)}
               />
-              <EnvironmentOutlined
+              {/* <EnvironmentOutlined
                 title="Ver Lotes Encuesta"
                 // style={{ color:"#F6BB42" }}
                 onClick={() => handleLoteClick(record, index)}
-              />
-              <PaperClipOutlined
+              /> */}
+              {/* <PaperClipOutlined
                 title="Archivos"
                 style={{ color: "#00b33c" }}
                 onClick={() => handleUploadClick(record, index)}
-              />
+              /> */}
               <DeleteOutlined
                 title="Borrar Encuesta"
                 style={{ color: "red" }}
@@ -375,9 +388,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   const data = infoTable.map((item) => {
     const cultivo =
-      item.ciclo !== "0"
-        ? item.acult_desc + " / " + item.ciclo + "°"
-        : item.acult_desc;
+      // item.ciclo !== "0"
+      //   ? item.acult_desc + " / " + item.ciclo + "°":
+         item.acult_desc;
     let estadoTag;
     switch (item.aencc_estado) {
       case "3":
@@ -421,6 +434,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       costoEstimado: item.costoest,
       estado: estadoTag,
       botones: "...",
+      acos_desc: item.acos_desc 
     };
   });
 
@@ -483,14 +497,16 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
   //! INICIO - Abrir Editar Encuesta
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
-  useEffect(() => {
-    if (Object.keys(infoEncuesta).length > 0 && editarEncuesta.length > 0) {
-      showModalEdit();
-    }
-  }, [editarEncuesta]);
+  // useEffect(() => {
+  //   if (Object.keys(infoEncuesta).length > 0 && editarEncuesta.length > 0) {
+  //     showModalEdit();
+  //   }
+  // }, [editarEncuesta]);
 
   const handleEditClick = (record) => {
+    //console.log(record);
     setInfoEncuesta(record);
+    setIsModalOpenEdit(true);
   };
   //! FIN - Abrir Editar Encuesta
 
@@ -502,21 +518,22 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     }
   }, [infoEventoNew]);
 
-  const handleEventClick = (record) => {
-    setInfoEncuestaEvent(record);
-  };
+  // const handleEventClick = (record) => {
+  //   setInfoEncuestaEvent(record);
+  // };
   //! FIN - Abrir Nuevo Evento
 
   //! INICIO - Abrir Ver Encuesta
   //*Este useEffect es para que me traiga la info actualizada y no atrasada
-  useEffect(() => {
-    if (Object.keys(infoVer).length > 0 && infoVerEncuesta.length > 0) {
-      showModalVerEncuesta();
-    }
-  }, [infoVerEncuesta]);
+  // useEffect(() => {
+  //   if (Object.keys(infoVer).length > 0 & infoVerEncuesta.length > 0) {
+  //     showModalVerEncuesta();
+  //   }
+  // }, [infoVerEncuesta]);
 
   const handleVerEnc = (record) => {
     setInfoVer(record);
+    setIsModalOpenVerEncuesta(true);
   };
   //! FIN - Abrir Editar Encuesta
 
@@ -1010,6 +1027,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       `${range[0]}-${range[1]} de ${total} registros`, // Texto que muestra la cantidad total de registros
   };
 
+
   return (
     <div
       style={{
@@ -1031,7 +1049,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           width: "100%",
         }}
       >
-        <h1 className="titulos">ENCUESTA DE SIEMBRA</h1>
+        <h1 className="titulos">ENCUESTA DE PRODUCCIÓN</h1>
         <div>
           {/* <PlusCircleOutlined title='Agregar Encuesta' className='btnAddCosecha' onClick={showModal} /> */}
           <Button
@@ -1081,7 +1099,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             }
           />
         </div>
-        <div className="contSubtitulo-cliente">
+        {/* <div className="contSubtitulo-cliente">
           <div style={{ marginLeft: "5px" }}>
             <h1 className="subtitulos">LOTES</h1>
           </div>
@@ -1119,10 +1137,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               }
             />
           )}
-        </div>
+        </div> */}
         <div className="contSubtitulo-cliente">
           <div style={{ marginLeft: "5px" }}>
-            <h1 className="subtitulos">COSECHA</h1>
+            <h1 className="subtitulos">CAMPAÑA</h1>
           </div>
           <Select
             defaultValue={selectedAcosDesc && selectedAcosDesc}
@@ -1153,7 +1171,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         </div>
         <div className="contSubtitulo-cliente">
           <div style={{ marginLeft: "5px" }}>
-            <h1 className="subtitulos">CULTIVO</h1>
+            <h1 className="subtitulos">DESTINO</h1>
           </div>
           <Select
             defaultValue="TODOS"
@@ -1172,7 +1190,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             })}
           />
         </div>
-        <div className="contSubtitulo-cliente">
+        {/* <div className="contSubtitulo-cliente">
           <div style={{ marginLeft: "5px" }}>
             <h1 className="subtitulos">ESTADO</h1>
           </div>
@@ -1188,7 +1206,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               { value: "2", label: "NO SIEMBRA" },
             ]}
           />
-        </div>
+        </div> */}
       </div>
       <Modal
         title="NUEVA ENCUESTA"
@@ -1210,8 +1228,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         footer={null}
         width={650}
         style={{ userSelect: "none" }}
+        destroyOnClose={true}
       >
-        <EditarEncuesta />
+        <EditarEncuesta infoEncuesta={infoEncuesta} />
       </Modal>
       <Modal
         title={`INFORMACIÓN ENCUESTA / ${infoVerEncuesta[0]?.cli_nombre}`}
@@ -1221,6 +1240,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
         footer={null}
         width={700}
         style={{ userSelect: "none", marginTop: "-70px" }}
+        destroyOnClose={true}
       >
         <VerEncuesta />
       </Modal>
@@ -1251,7 +1271,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
-          style={{ display: "flex", flexDirection: "row", paddingTop: "5px" }}
+          style={{ display: "flex", flexDirection: "row", paddingTop: "5px", justifyContent:"space-evenly" }}
         >
           <div
             className="grafico-container"
@@ -1264,7 +1284,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           >
             <div>
               <h1 className="titulos">
-                SUP. ENCUESTADA: {totalSuperficie} HAS.
+                LITROS: {totalSuperficie}
               </h1>
             </div>
             {cultivosSupEncuestadas.length === 0 ? (
@@ -1296,7 +1316,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               </ResponsiveContainer>
             )}
           </div>
-          <div
+          {/* <div
             className="grafico-container"
             style={{
               width: "33%",
@@ -1338,7 +1358,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
                 </PieChart>
               </ResponsiveContainer>
             )}
-          </div>
+          </div> */}
           <div
             className="grafico-container"
             style={{

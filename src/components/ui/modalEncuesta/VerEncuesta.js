@@ -9,6 +9,7 @@ import jpgIcon from "../icons/jpg.png";
 import pngIcon from "../icons/png.png";
 import excelIcon from "../icons/xlsx.png";
 import wordIcon from "../icons/docx.png";
+import milesFormat  from "../../utils/milesFormat"
 
 // ...
 
@@ -189,7 +190,6 @@ export const VerEncuesta = () => {
   };
 
   //! FIN SECCION LOTES
-
   
 
   return (
@@ -198,22 +198,25 @@ export const VerEncuesta = () => {
         {/* LINEA 1 */}
         <div className="div_formato_horizontal">
           <div className="div_formato_vertical">
-            <span className="spanTitulo">Cosecha</span>
+            {/* <span className="spanTitulo">Cosecha</span> */}
+            <span className="spanTitulo">Campaña</span>
             <span className="spanCuerpo">{infoVerEncuesta[0]?.acos_desc}</span>
           </div>
           <div className="div_formato_vertical">
-            <span className="spanTitulo">Cultivo / Ciclo</span>
+            {/* <span className="spanTitulo">Cultivo / Ciclo</span> */}
+            <span className="spanTitulo">Destino</span>
             <span className="spanCuerpo">
-              {infoVerEncuesta[0]?.acult_desc} /{" "}
-              {infoVerEncuesta[0]?.aencc_ciclo}º
+              {/* {infoVerEncuesta[0]?.acult_desc} /{" "}
+              {infoVerEncuesta[0]?.aencc_ciclo}º */}
+              {infoVerEncuesta[0]?.acult_desc}
             </span>
           </div>
-          <div className="div_formato_vertical">
+          {/* <div className="div_formato_vertical">
             <span className="spanTitulo">Cultivo Anterior</span>
             <span className="spanCuerpo">
               {infoVerEncuesta[0]?.acult_desc_anterior}
             </span>
-          </div>
+          </div> */}
           <div className="div_formato_vertical">
             <span className="spanTitulo">Estado</span>
             {estadoMensaje}
@@ -222,28 +225,29 @@ export const VerEncuesta = () => {
         <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
         {/* LINEA 2 */}
         <div className="div_formato_horizontal">
-          <div className="div_formato_vertical">
-            <span className="spanTitulo">Fecha de siembra</span>
+          {/* <div className="div_formato_vertical">
+            <span className="spanTitulo">Fecha de siembra ?</span>
             <span className="spanCuerpo">
               {formatDate(infoVerEncuesta[0]?.fechasiembra)}
             </span>
-          </div>
+          </div> */}
           <div className="div_formato_vertical">
-            <span className="spanTitulo">Sup. Est.(Has)</span>
+            {/* <span className="spanTitulo">Sup. Est.(Has)</span> */}
+            <span className="spanTitulo">Litros</span>
             <span className="spanCuerpo spanNumber">
               {infoVerEncuesta[0]?.superficie
-                ? infoVerEncuesta[0]?.superficie
+                ? milesFormat(infoVerEncuesta[0]?.superficie)
                 : "0"}
             </span>
           </div>
-          <div className="div_formato_vertical">
+          {/* <div className="div_formato_vertical">
             <span className="spanTitulo">Rinde Est. (TT)</span>
             <span className="spanCuerpo spanNumber">
               {infoVerEncuesta[0]?.rindeest
                 ? infoVerEncuesta[0]?.rindeest
                 : "0"}
             </span>
-          </div>
+          </div> */}
           <div className="div_formato_vertical">
             <span className="spanTitulo">Costo (U$S)</span>
             <span className="spanCuerpo spanNumber">
@@ -253,9 +257,9 @@ export const VerEncuesta = () => {
             </span>
           </div>
         </div>
-        <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
+        {/* <Divider style={{ marginTop: "8px", marginBottom: "8px" }} /> */}
         {/* LINEA 3 */}
-        <span className="spanSuperTitulo">Eventos</span>
+        {/* <span className="spanSuperTitulo">Eventos ?</span>
         <div className="div_formato_horizontal">
           <div className="div_formato_vertical">
             <span className="spanTitulo">Sup. Real(Has)</span>
@@ -291,11 +295,11 @@ export const VerEncuesta = () => {
                 : "-"}
             </span>
           </div>
-        </div>
-        <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
+        </div> */}
+        {/* <Divider style={{ marginTop: "10px", marginBottom: "10px" }} /> */}
         {/* LINEA 4 */}
-        <span className="spanSuperTitulo">Archivos</span>
-        <div className="div_formato_archivo_horizontal">
+        {/* <span className="spanSuperTitulo">Archivos ?</span> */}
+        {/* <div className="div_formato_archivo_horizontal">
           {archivosUnicos.length > 0 && archivosUnicos.every(archivo => archivo.up_hashname && archivo.up_filename && archivo.up_mimetype) ? (
             archivosUnicos.map((archivo) => {
               const { up_filename, up_hashname, up_mimetype } = archivo;
@@ -323,9 +327,6 @@ export const VerEncuesta = () => {
                   >
                     {up_filename}.{up_mimetype}
                   </a>
-                  {/* <span className="spanArchivos">
-                    {up_filename}.{up_mimetype}
-                  </span> */}
                 </div>
               );
             })
@@ -334,10 +335,10 @@ export const VerEncuesta = () => {
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             </div>
           )}
-        </div>
-        <Divider />
+        </div> */}
+        {/* <Divider /> */}
         {/* LINEA 5 */}
-        <span className="spanSuperTitulo">Lotes</span>
+        {/* <span className="spanSuperTitulo">Lotes ?</span>
         {data.length > 0 ? (
           <Table
             columns={columns}
@@ -348,7 +349,7 @@ export const VerEncuesta = () => {
         ) : (
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
-        <Divider style={{ marginTop: "10px", marginBottom: "10px" }} />
+        <Divider style={{ marginTop: "10px", marginBottom: "10px" }} /> */}
 
         <div style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"flex-end"}}>
           <Button type="primary" style={{borderRadius:"0px"}} onClick={() =>  setIsModalOpenVerEncuesta(false)}>

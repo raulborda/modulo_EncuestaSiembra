@@ -5,7 +5,7 @@ import { Button, Form, Input, List, Radio, message } from 'antd';
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../../context/GlobalContext';
 
-export const EditarEncuesta = () => {
+export const EditarEncuesta = ({infoEncuesta}) => {
     const URL = process.env.REACT_APP_URL;
 
     const [form] = Form.useForm();
@@ -16,12 +16,7 @@ export const EditarEncuesta = () => {
         isModalOpenEdit, 
         setIsModalOpenEdit,
         upload, setUpload,
-        editarEncuesta,
         encuestaSeleccionada,
-        setUpdatesSelects,
-        updateSelects,
-        isLoading,
-        setIsLoading,
         updateGraph,
         setUpdateGraph,
     } = useContext(GlobalContext);
@@ -63,7 +58,8 @@ export const EditarEncuesta = () => {
                 dataAdd.append("newc_costo", 0);
             } else {
                 dataAdd.append("newc_has", values.hasEst);
-                dataAdd.append("newc_rinde", values.rinde);
+                // dataAdd.append("newc_rinde", values.rinde);
+                dataAdd.append("newc_rinde", 0);
                 dataAdd.append("newc_costo", values.costo);
             }
 
@@ -100,13 +96,12 @@ export const EditarEncuesta = () => {
     }, [isModalOpenEdit]);
 
     // infoEncuesta
-    // console.log('editarEncuesta && parseInt(editarEncuesta.aencc_estado): ', editarEncuesta[0]?.aencc_estado);
-    // console.log('editarEncuesta: ', editarEncuesta);
+    //console.log('encuestaSeleccionada.cosecha?.acos_desc', encuestaSeleccionada);
     return (
         <>
             {/* Renderizar el componente de mensaje */}
             {contextHolder}
-            <Form form={form} onFinish={onSubmitEdit}>
+            <Form form={form} onFinish={onSubmitEdit} >
                 <div style={{ userSelect: 'none' }}>
                     <div>
                         <div>
@@ -122,24 +117,25 @@ export const EditarEncuesta = () => {
                                     },
                                 ]}
                                 className="hidden-asterisk"
-                                initialValue={encuestaSeleccionada && parseInt(encuestaSeleccionada.estado)}
+                                // initialValue={encuestaSeleccionada && parseInt(encuestaSeleccionada.estado)}
+                                initialValue={parseInt(infoEncuesta.estado?.key)}
                             >
                                 <Radio.Group onChange={onChange} >
                                     <Radio style={{ paddingRight: '15px' }} value={3}>
                                         ENCUESTA OK
                                     </Radio>
-                                    <Radio style={{ paddingRight: '15px' }} value={0}>
+                                    {/* <Radio style={{ paddingRight: '15px' }} value={0}>
                                         NO ENCUESTADO
                                     </Radio>
                                     <Radio style={{ paddingRight: '15px' }} value={1}>
                                         NO ACCEDE
                                     </Radio>
-                                    <Radio value={2}>NO SIEMBRA</Radio>
+                                    <Radio value={2}>NO SIEMBRA</Radio> */}
                                 </Radio.Group>
                             </Form.Item>
                         </div>
                     </div>
-                    <div>
+                    {/* <div>
                         <div>
                             <h1 className='subtitulos'>Lote</h1>
                         </div>
@@ -170,16 +166,18 @@ export const EditarEncuesta = () => {
 
 
                         </div>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    </div> */}
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "space-around" }}>
                         <div style={{ paddingRight: '5px' }}>
                             <div>
-                                <h1 className='subtitulos'>Cosecha</h1>
+                                {/* <h1 className='subtitulos'>Cosecha</h1> */}
+                                <h1 className='subtitulos'>Campaña</h1>
                             </div>
                             <div>
                                 <Form.Item
                                     name="cosecha"
-                                    initialValue={encuestaSeleccionada && encuestaSeleccionada.cosecha.acos_desc}
+                                    // initialValue={encuestaSeleccionada && encuestaSeleccionada.cosecha?.acos_desc}
+                                    initialValue={infoEncuesta?.acos_desc}
                                 >
                                     <Input disabled={true} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
@@ -189,19 +187,21 @@ export const EditarEncuesta = () => {
                         </div>
                         <div style={{ paddingRight: '5px' }}>
                             <div>
-                                <h1 className='subtitulos'>Cultivo</h1>
+                                {/* <h1 className='subtitulos'>Cultivo</h1> */}
+                                <h1 className='subtitulos'>Destino</h1>
                             </div>
                             <div>
                                 <Form.Item
                                     // disabled={true}
                                     name="cultivo"
-                                    initialValue={encuestaSeleccionada && encuestaSeleccionada.cultivo.acult_desc}
+                                    // initialValue={encuestaSeleccionada && encuestaSeleccionada.cultivo?.acult_desc}
+                                    initialValue={infoEncuesta?.cultivo}
                                 >
                                     <Input disabled={true} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>
-                        <div>
+                        {/* <div>
                             <div>
                                 <h1 className='subtitulos'>Ciclo</h1>
                             </div>
@@ -214,23 +214,25 @@ export const EditarEncuesta = () => {
                                     <Input disabled={true} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "space-around" }}>
                         <div style={{ paddingRight: '5px' }}>
                             <div>
-                                <h1 className='subtitulos'>Has. Estimadas</h1>
+                                {/* <h1 className='subtitulos'>Has. Estimadas</h1> */}
+                                <h1 className='subtitulos'>Litros</h1>
                             </div>
                             <div>
                                 <Form.Item
                                     name="hasEst"
-                                    initialValue={value === 0 || value === 1 || value === 2 ? 0 : (encuestaSeleccionada && encuestaSeleccionada.superficie)}
+                                    // initialValue={value === 0 || value === 1 || value === 2 ? 0 : (encuestaSeleccionada && encuestaSeleccionada.superficie)}
+                                    initialValue={value === 0 || value === 1 || value === 2 ? 0 : (infoEncuesta && infoEncuesta?.supEstimado)}
                                 >
-                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
+                                    <Input type="number" disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>
-                        <div style={{ paddingRight: '5px' }}>
+                        {/* <div style={{ paddingRight: '5px' }}>
                             <div>
                                 <h1 className='subtitulos'>Rinde (TT)</h1>
                             </div>
@@ -242,7 +244,7 @@ export const EditarEncuesta = () => {
                                     <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
-                        </div>
+                        </div> */}
                         <div>
                             <div>
                                 <h1 className='subtitulos'>Costo (U$S)</h1>
@@ -250,9 +252,10 @@ export const EditarEncuesta = () => {
                             <div>
                                 <Form.Item
                                     name="costo"
-                                    initialValue={value === 0 || value === 1 || value === 2 ? 0 : (encuestaSeleccionada && encuestaSeleccionada.costoEst)}
+                                    // initialValue={value === 0 || value === 1 || value === 2 ? 0 : (encuestaSeleccionada && encuestaSeleccionada.costoEst)}
+                                    initialValue={value === 0 || value === 1 || value === 2 ? 0 : (infoEncuesta && infoEncuesta?.costoEstimado)}
                                 >
-                                    <Input disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
+                                    <Input type="number" disabled={disabledInputs} style={{ width: 200, textAlign: 'right' }} />
                                 </Form.Item>
                             </div>
                         </div>

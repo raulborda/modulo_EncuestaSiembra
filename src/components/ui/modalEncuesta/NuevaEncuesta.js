@@ -144,7 +144,10 @@ export const NuevaEncuesta = () => {
         dataAdd.append("newc_rinde", dataRindes.rinde);
         dataAdd.append("newc_costo", dataRindes.costo);
       }
-      dataAdd.append("newc_fechas", fechaFormateada);
+      //dataAdd.append("newc_fechas", fechaFormateada);
+      //Como en FISA no hay necesidad de insertar la fechaFormateada, lo sacamos.
+      dataAdd.append("newc_fechas", Date.now());
+
       dataAdd.append("newc_culta", values.cultivoAnterior);
 
       const response = await fetch(`${URL}encuesta-siembra_nuevaEncuesta.php`, {
@@ -261,13 +264,13 @@ export const NuevaEncuesta = () => {
                   <Radio style={{ paddingRight: "15px" }} value={3}>
                     ENCUESTA OK
                   </Radio>
-                  <Radio style={{ paddingRight: "15px" }} value={0}>
+                  {/* <Radio style={{ paddingRight: "15px" }} value={0}>
                     NO ENCUESTADO
                   </Radio>
                   <Radio style={{ paddingRight: "15px" }} value={1}>
                     NO ACCEDE
                   </Radio>
-                  <Radio value={2}>NO SIEMBRA</Radio>
+                  <Radio value={2}>NO SIEMBRA</Radio> */}
                 </Radio.Group>
               </Form.Item>
             </div>
@@ -312,7 +315,7 @@ export const NuevaEncuesta = () => {
               </div>
             </div>
           </div>
-          <div>
+          {/* <div>
             <div>
               <h1 className="subtitulos">Lote</h1>
             </div>
@@ -356,11 +359,12 @@ export const NuevaEncuesta = () => {
                 />
               </Form.Item>
             </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          </div> */}
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
             <div style={{ paddingRight: "5px" }}>
               <div>
-                <h1 className="subtitulos">Cosecha</h1>
+                {/* <h1 className="subtitulos">Cosecha</h1> */}
+                <h1 className="subtitulos">Campaña</h1>
               </div>
               <div>
                 <Form.Item
@@ -394,7 +398,8 @@ export const NuevaEncuesta = () => {
             </div>
             <div style={{ paddingRight: "5px" }}>
               <div>
-                <h1 className="subtitulos">Cultivo</h1>
+                {/* <h1 className="subtitulos">Cultivo</h1> */}
+                <h1 className="subtitulos">Destino</h1>
               </div>
               <div>
                 <Form.Item
@@ -437,7 +442,7 @@ export const NuevaEncuesta = () => {
                 </Form.Item>
               </div>
             </div>
-            <div>
+            {/* <div>
               <div>
                 <h1 className="subtitulos">Ciclo</h1>
               </div>
@@ -464,13 +469,14 @@ export const NuevaEncuesta = () => {
                   )}
                 </Form.Item>
               </div>
-            </div>
+            </div> */}
           </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
             <div style={{ paddingRight: "5px" }}>
               <div>
-                <h1 className="subtitulos">Has. Estimadas</h1>
-              </div>
+                {/* <h1 className="subtitulos">Has. Estimadas</h1> */}
+                <h1 className="subtitulos">Litros</h1>
+                </div>
               <div>
                 <Form.Item
                   name="hasEst"
@@ -491,7 +497,7 @@ export const NuevaEncuesta = () => {
                 </Form.Item>
               </div>
             </div>
-            <div style={{ paddingRight: "5px" }}>
+            {/* <div style={{ paddingRight: "5px" }}>
               <div>
                 <h1 className="subtitulos">Rinde (TT)</h1>
               </div>
@@ -515,7 +521,7 @@ export const NuevaEncuesta = () => {
                   />
                 </Form.Item>
               </div>
-            </div>
+            </div> */}
             <div>
               <div>
                 <h1 className="subtitulos">Costo (U$S)</h1>
@@ -542,7 +548,7 @@ export const NuevaEncuesta = () => {
               </div>
             </div>
           </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          {/* <div style={{ display: "flex", flexDirection: "row" }}>
             <div style={{ paddingRight: "5px" }}>
               <div>
                 <h1 className="subtitulos">Fecha de Siembra:</h1>
@@ -603,7 +609,7 @@ export const NuevaEncuesta = () => {
                 </Form.Item>
               </div>
             </div>
-          </div>
+          </div> */}
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <div style={{ paddingRight: "5px" }}>
               <Button

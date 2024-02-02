@@ -273,7 +273,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     //   width: "10%", // Ajustar el ancho de la columna
     // },
     {
-      title: "COSTO. EST. (U$S)",
+      title: "VENTA x LTR (U$S)",
       dataIndex: "costoEstimado",
       key: "costoEstimado",
       align: "right",
@@ -1369,7 +1369,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             }}
           >
             <div>
-              <h1 className="titulos">COSTO ESTIMADO: U$S {totalCosto}</h1>
+              <h1 className="titulos">VENTA ANUAL ESTIMADA: U$S {totalCosto}</h1>
             </div>
             {cultivosCostoEncuestadas.length === 0 ? (
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

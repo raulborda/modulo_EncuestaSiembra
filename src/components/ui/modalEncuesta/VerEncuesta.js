@@ -249,7 +249,7 @@ export const VerEncuesta = () => {
             </span>
           </div> */}
           <div className="div_formato_vertical">
-            <span className="spanTitulo">Costo (U$S)</span>
+            <span className="spanTitulo">Venta x Ltr (U$S)</span>
             <span className="spanCuerpo spanNumber">
               {infoVerEncuesta[0]?.costoest
                 ? infoVerEncuesta[0]?.costoest

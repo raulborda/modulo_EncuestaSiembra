@@ -524,7 +524,7 @@ export const NuevaEncuesta = () => {
             </div> */}
             <div>
               <div>
-                <h1 className="subtitulos">Costo (U$S)</h1>
+                <h1 className="subtitulos">Venta x Ltr (U$S)</h1>
               </div>
               <div>
                 <Form.Item

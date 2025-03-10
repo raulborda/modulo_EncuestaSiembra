@@ -25,6 +25,7 @@ import Swal from "sweetalert2";
 import { NuevoEvento } from "./modalEncuesta/NuevoEvento";
 import LotesEncuestas from "./LotesEncuestas";
 import { VerEncuesta } from "./modalEncuesta/VerEncuesta";
+import BtnExcel from "./BtnExcel";
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -1010,6 +1011,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       `${range[0]}-${range[1]} de ${total} registros`, // Texto que muestra la cantidad total de registros
   };
 
+  const updatedDataSource = data?.map(item => ({
+    ...item,
+    estado: item.estado?.props?.children || item.estado
+  }));
+
   return (
     <div
       style={{
@@ -1072,11 +1078,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             options={
               clientes?.length > 0
                 ? clientes.map((cliente) => {
-                    return {
-                      value: cliente.cli_id,
-                      label: cliente.cli_nombre,
-                    };
-                  })
+                  return {
+                    value: cliente.cli_id,
+                    label: cliente.cli_nombre,
+                  };
+                })
                 : []
             }
           />
@@ -1110,11 +1116,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
               options={
                 lotes?.length > 0
                   ? lotes.map((lote) => {
-                      return {
-                        value: lote.alote_id,
-                        label: lote.alote_nombre,
-                      };
-                    })
+                    return {
+                      value: lote.alote_id,
+                      label: lote.alote_nombre,
+                    };
+                  })
                   : []
               }
             />
@@ -1142,11 +1148,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             options={
               listCosechas.length > 0
                 ? listCosechas.map((cosecha) => {
-                    return {
-                      value: cosecha.acos_id,
-                      label: cosecha.acos_desc,
-                    };
-                  })
+                  return {
+                    value: cosecha.acos_id,
+                    label: cosecha.acos_desc,
+                  };
+                })
                 : []
             }
           />
@@ -1382,7 +1388,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           </div>
         </div>
       </div>
-
+      <BtnExcel
+        columns={visibleColumns?.filter(col => !['idCliente', 'idEncuesta', 'botones'].includes(col.key)).map(({ width, ...rest }) => rest)} dataSource={updatedDataSource} saveAsName={"enc_siembra"}
+      />
       <Table
         columns={visibleColumns}
         dataSource={data}

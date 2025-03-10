@@ -23,6 +23,7 @@ import { NuevoEvento } from "./modalEncuesta/NuevoEvento";
 import LotesEncuestas from "./LotesEncuestas";
 import { VerEncuesta } from "./modalEncuesta/VerEncuesta";
 import milesFormat  from "../utils/milesFormat"
+import BtnExcel from "./BtnExcel";
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -1027,6 +1028,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       `${range[0]}-${range[1]} de ${total} registros`, // Texto que muestra la cantidad total de registros
   };
 
+  const updatedDataSource = data?.map(item => ({
+    ...item,
+    estado: item.estado?.props?.children || item.estado
+  }));
 
   return (
     <div
@@ -1402,7 +1407,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           </div>
         </div>
       </div>
-
+      <BtnExcel
+        columns={visibleColumns?.filter(col => !['idCliente', 'idEncuesta', 'botones'].includes(col.key)).map(({ width, ...rest }) => rest)} dataSource={updatedDataSource} saveAsName={"enc_siembra"}
+      />
       <Table
         columns={visibleColumns}
         dataSource={data}

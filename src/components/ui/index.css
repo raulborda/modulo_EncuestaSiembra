@@ -257,24 +257,42 @@
 }
 
 /* Estilo personalizado para el botón "Cancelar" */
-.my-swal-cancel-button {
+/* .my-swal-cancel-button { */
   /* background-color: white !important;
   color: #605d5f !important;
   border: 1px solid #605d5f !important;
   border-radius: 0px !important;
   box-shadow: none; */
-}
+/* } */
 
 /* Estilo personalizado para el borde y la letra cuando se hace hover */
-.my-swal-cancel-button:hover,
-.my-swal-cancel-button:focus {
+/* .my-swal-cancel-button:hover, */
+/* .my-swal-cancel-button:focus { */
   /* border: 1px solid #56b43c !important;
   color: #56b43c !important;
   background-color: white !important;
   border-radius: 0px !important; */
-}
+/* } */
 
 
 :focus {
   outline: none;
+}
+
+/*Boton exportar a excel*/
+.btn-export {
+  border-radius: 0px;
+  width: 100px;
+}
+
+.btn-export-contenedor {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  margin-top: -5px;
+}
+
+/*Ocultar columna antD*/
+.hidden-column {
+  display: none;
 }

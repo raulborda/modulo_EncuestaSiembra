@@ -100,6 +100,8 @@ function App() {
     }
   }, [idCliente]);
 
+  console.log("version modulo_EncuestaSiembra: 10.03.25.F");
+
   return (
     <GlobalContext.Provider
       value={{

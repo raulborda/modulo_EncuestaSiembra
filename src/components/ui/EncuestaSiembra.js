@@ -157,6 +157,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setUpdatesSelects,
     updateGraph,
     setUpdateGraph,
+
+    isAdmin,
+    parametros
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState("0");
@@ -172,6 +175,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const [filter, setFilter] = useState(0);
   const [generico, setGenerico] = useState(0);
   const [cliEnc, setCliEnc] = useState(0);
+  const [vendedores, setVendedores] = useState([{ gruuno_id: 'todos', gruuno_desc: 'TODOS' }]);
+  const [selectedVendedor, setSelectedVendedor] = useState("todos");
+
 
   //! Modal - Nueva Encuesta
   const showModal = () => {
@@ -868,6 +874,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     } else {
       dataAdd.append("idEst", selectedEstado);
     }
+    if (selectedVendedor === 'todos') {
+      dataAdd.append("idVendedor", "");
+    } else {
+      dataAdd.append("idVendedor", selectedVendedor);
+    }
+
     fetch(`${URL}encuesta-siembra_datosTable.php`, {
       method: "POST",
       body: dataAdd,
@@ -890,6 +902,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedEstado,
     upload,
     updateSelects,
+    selectedVendedor
   ]);
 
   //! Para editar encuesta
@@ -1016,6 +1029,40 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     estado: item.estado?.props?.children || item.estado
   }));
 
+
+  const fetchVendedores = async () => {
+
+    if (!isAdmin) return;
+
+    try {
+
+      const response = await fetch(`${URL}getVendedores.php`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error al obtener vendedores: ${response.status}`);
+      }
+
+      const jsonData = await response.json();
+
+      // Validamos que venga la propiedad isAdmin
+      if (jsonData !== undefined) {
+        setVendedores((prev) => [...prev, ...jsonData]);
+      } else {
+        console.warn("Respuesta inesperada:", jsonData);
+      }
+    } catch (error) {
+      console.error("Error al obtener vendedores:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVendedores();
+
+  }, [isAdmin]);
+  
+
   return (
     <div
       style={{
@@ -1055,10 +1102,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           flexDirection: "row",
           width: "100%",
           justifyContent: "space-between",
+          gap: '5px'
         }}
       >
         <div className="contSubtitulo-cliente">
-          <div style={{ marginLeft: "5px" }}>
+          <div>
             <h1 className="subtitulos">CLIENTE</h1>
           </div>
           <Select
@@ -1088,7 +1136,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           />
         </div>
         <div className="contSubtitulo-cliente">
-          <div style={{ marginLeft: "5px" }}>
+          <div>
             <h1 className="subtitulos">LOTES</h1>
           </div>
           {idCli === "0" ? (
@@ -1127,7 +1175,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           )}
         </div>
         <div className="contSubtitulo-cliente">
-          <div style={{ marginLeft: "5px" }}>
+          <div>
             <h1 className="subtitulos">COSECHA</h1>
           </div>
           <Select
@@ -1158,7 +1206,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           />
         </div>
         <div className="contSubtitulo-cliente">
-          <div style={{ marginLeft: "5px" }}>
+          <div>
             <h1 className="subtitulos">CULTIVO</h1>
           </div>
           <Select
@@ -1178,8 +1226,38 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             })}
           />
         </div>
+
+        {
+          isAdmin && (
+            <div className="contSubtitulo-cliente">
+              <div>
+                <h1 className="subtitulos">
+                  {
+                    Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo1 ? parametros[0].grupo1.toString().toUpperCase() : 'VENDEDOR'
+                  }
+                </h1>
+              </div>
+              <Select
+                defaultValue={selectedVendedor}
+                style={{ width: "100%", maxWidth: "250px" }}
+                showSearch
+                filterOption={(input, option) =>
+                  option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                onChange={(value) => setSelectedVendedor(value)}
+                options={vendedores?.map((vendedor) => {
+                  return {
+                    value: vendedor?.gruuno_id,
+                    label: vendedor?.gruuno_desc,
+                  };
+                })}
+              />
+            </div>
+          )
+        }
+
         <div className="contSubtitulo-cliente">
-          <div style={{ marginLeft: "5px" }}>
+          <div>
             <h1 className="subtitulos">ESTADO</h1>
           </div>
           <Select

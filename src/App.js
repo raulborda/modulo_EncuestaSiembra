@@ -213,7 +213,6 @@ function App() {
         setIsLoading,
 
         isAdmin,
-        setIsAdmin,
         parametros,
 
         messageApi

@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 import { NuevoEvento } from "./modalEncuesta/NuevoEvento";
 import LotesEncuestas from "./LotesEncuestas";
 import { VerEncuesta } from "./modalEncuesta/VerEncuesta";
-import milesFormat  from "../utils/milesFormat"
+import milesFormat from "../utils/milesFormat"
 import BtnExcel from "./BtnExcel";
 
 const renderActiveShape = (props) => {
@@ -155,6 +155,9 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     setUpdatesSelects,
     updateGraph,
     setUpdateGraph,
+
+    isAdmin,
+    parametros,
   } = useContext(GlobalContext);
 
   const [idCli, setIdCli] = useState("0");
@@ -170,6 +173,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const [filter, setFilter] = useState(0);
   const [generico, setGenerico] = useState(0);
   const [cliEnc, setCliEnc] = useState(0);
+  const [vendedores, setVendedores] = useState([{ gruuno_id: 'todos', gruuno_desc: 'TODOS' }]);
+  const [selectedVendedor, setSelectedVendedor] = useState("todos");
 
   //! Modal - Nueva Encuesta
   const showModal = () => {
@@ -243,12 +248,12 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       dataIndex: "acos_desc",
       key: "acos_desc",
       ellipsis: true,
-      width:"120px",
+      width: "120px",
       align: "center"
     },
     {
       // title: "CULTIVO/CICLO",
-      title:'DESTINO',
+      title: 'DESTINO',
       dataIndex: "cultivo",
       key: "cultivo",
       ellipsis: true,
@@ -256,15 +261,15 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     },
     {
       // title: "SUP. EST. (HAS)",
-      title:'LITROS',
+      title: 'LITROS',
       dataIndex: "supEstimado",
       key: "supEstimado",
       align: "right",
       render: (fila) => {
-        return(milesFormat(fila))
+        return (milesFormat(fila))
       },
       ellipsis: true,
-      width:"140px"
+      width: "140px"
     },
     // {
     //   title: "RINDE. EST. (TT)",
@@ -279,21 +284,21 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       key: "costoEstimado",
       align: "right",
       ellipsis: true,
-      width:"210px"
+      width: "210px"
     },
     {
       title: "ESTADO",
       key: "estado",
       dataIndex: "estado",
       align: "center", // Centrar el contenido de la columna
-      width:"140px",
+      width: "140px",
     },
     {
       title: "...",
       dataIndex: "botones",
       key: "botones",
       align: "center", // Centrar el contenido de la columna
-      width:"130px",
+      width: "130px",
       render: (_, record, index) => {
         if (
           record.estado &&
@@ -391,7 +396,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     const cultivo =
       // item.ciclo !== "0"
       //   ? item.acult_desc + " / " + item.ciclo + "°":
-         item.acult_desc;
+      item.acult_desc;
     let estadoTag;
     switch (item.aencc_estado) {
       case "3":
@@ -435,7 +440,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       costoEstimado: item.costoest,
       estado: estadoTag,
       botones: "...",
-      acos_desc: item.acos_desc 
+      acos_desc: item.acos_desc
     };
   });
 
@@ -885,6 +890,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     } else {
       dataAdd.append("idEst", selectedEstado);
     }
+    if (selectedVendedor === 'todos') {
+      dataAdd.append("idVendedor", "");
+    } else {
+      dataAdd.append("idVendedor", selectedVendedor);
+    }
     fetch(`${URL}encuesta-siembra_datosTable.php`, {
       method: "POST",
       body: dataAdd,
@@ -907,6 +917,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedEstado,
     upload,
     updateSelects,
+    selectedVendedor
   ]);
 
   //! Para editar encuesta
@@ -1033,6 +1044,39 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     estado: item.estado?.props?.children || item.estado
   }));
 
+
+  const fetchVendedores = async () => {
+
+    if (!isAdmin) return;
+
+    try {
+
+      const response = await fetch(`${URL}getVendedores.php`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error al obtener vendedores: ${response.status}`);
+      }
+
+      const jsonData = await response.json();
+
+      // Validamos que venga la propiedad isAdmin
+      if (jsonData !== undefined) {
+        setVendedores((prev) => [...prev, ...jsonData]);
+      } else {
+        console.warn("Respuesta inesperada:", jsonData);
+      }
+    } catch (error) {
+      console.error("Error al obtener vendedores:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVendedores();
+
+  }, [isAdmin]);
+
   return (
     <div
       style={{
@@ -1095,11 +1139,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             options={
               clientes?.length > 0
                 ? clientes.map((cliente) => {
-                    return {
-                      value: cliente.cli_id,
-                      label: cliente.cli_nombre,
-                    };
-                  })
+                  return {
+                    value: cliente.cli_id,
+                    label: cliente.cli_nombre,
+                  };
+                })
                 : []
             }
           />
@@ -1165,11 +1209,11 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             options={
               listCosechas.length > 0
                 ? listCosechas.map((cosecha) => {
-                    return {
-                      value: cosecha.acos_id,
-                      label: cosecha.acos_desc,
-                    };
-                  })
+                  return {
+                    value: cosecha.acos_id,
+                    label: cosecha.acos_desc,
+                  };
+                })
                 : []
             }
           />
@@ -1195,6 +1239,35 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
             })}
           />
         </div>
+
+        {
+          isAdmin && (
+            <div className="contSubtitulo-cliente">
+              <div>
+                <h1 className="subtitulos">
+                  {
+                    Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo1 ? parametros[0].grupo1.toString().toUpperCase() : 'VENDEDOR'
+                  }
+                </h1>
+              </div>
+              <Select
+                defaultValue={selectedVendedor}
+                style={{ width: "100%", maxWidth: "250px" }}
+                showSearch
+                filterOption={(input, option) =>
+                  option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                onChange={(value) => setSelectedVendedor(value)}
+                options={vendedores?.map((vendedor) => {
+                  return {
+                    value: vendedor?.gruuno_id,
+                    label: vendedor?.gruuno_desc,
+                  };
+                })}
+              />
+            </div>
+          )
+        }
         {/* <div className="contSubtitulo-cliente">
           <div style={{ marginLeft: "5px" }}>
             <h1 className="subtitulos">ESTADO</h1>
@@ -1276,7 +1349,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div
-          style={{ display: "flex", flexDirection: "row", paddingTop: "5px", justifyContent:"space-evenly" }}
+          style={{ display: "flex", flexDirection: "row", paddingTop: "5px", justifyContent: "space-evenly" }}
         >
           <div
             className="grafico-container"

@@ -61,6 +61,12 @@ function App() {
   const [updateGraph, setUpdateGraph] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Administrador
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Parametros generales de CRM
+  const [parametros, setParametros] = useState([]);
+
   // //* FUNCION QUE TRAE LOS DATOS DE COSECHA ACTIVA Y LAS QUE SE PUEDEN VISUALIZAR DEL CLIENTE
   function cosechas(idCliente) {
     const data = new FormData();
@@ -90,8 +96,35 @@ function App() {
     });
   }
 
+  const fetchIsAdmin = async () => {
+    const dataForm = new FormData();
+    // console.log("idU", idUser)
+    dataForm.append("idU", usu);
+
+    const requestOptions = {
+      method: 'POST',
+      body: dataForm
+    };
+
+    const data = await fetch(`${URL}cam_isAdmin.php`, requestOptions);
+    const jsonData = await data.json();
+    setIsAdmin(jsonData?.isAdmin);
+  };
+
+  const fetchParametros = async () => {
+    const requestOptions = {
+      method: 'GET',
+    };
+
+    const data = await fetch(`${URL}getParametros.php`, requestOptions)
+
+    const jsonData = await data.json();
+    setParametros(jsonData);
+  };
+
   useEffect(() => {
     cosechas(idCliente);
+    fetchParametros();
   }, []);
 
   useEffect(() => {
@@ -100,7 +133,14 @@ function App() {
     }
   }, [idCliente]);
 
-  console.log("version modulo_EncuestaSiembra: 10.03.25.F");
+  useEffect(() => {
+    if (usu) {
+      fetchIsAdmin()
+        .catch(console.error);;
+    }
+  }, [usu])
+
+  console.log("version modulo_EncuestaSiembra: 28.07.25.F");
 
   return (
     <GlobalContext.Provider
@@ -170,6 +210,9 @@ function App() {
         setUpdateGraph,
         isLoading,
         setIsLoading,
+
+        isAdmin,
+        parametros,
 
         messageApi
       }}

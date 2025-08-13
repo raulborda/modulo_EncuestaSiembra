@@ -141,7 +141,7 @@ function App() {
     }
   }, [usu])
 
-  console.log('version modulo_EncuestaSiembra: 28.07.25');
+  console.log('version modulo_EncuestaSiembra: 28.07.25'); 
 
   return (
     <GlobalContext.Provider

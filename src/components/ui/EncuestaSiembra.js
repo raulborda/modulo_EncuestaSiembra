@@ -175,8 +175,10 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   const [filter, setFilter] = useState(0);
   const [generico, setGenerico] = useState(0);
   const [cliEnc, setCliEnc] = useState(0);
-  const [vendedores, setVendedores] = useState([{ gruuno_id: 'todos', gruuno_desc: 'TODOS' }]);
-  const [selectedVendedor, setSelectedVendedor] = useState("todos");
+  const [gruunoOptions, setGruunoOptions] = useState([{ gruuno_id: 'todos', gruuno_desc: 'TODOS' }]);
+  const [selectedGruuno, setSelectedGruuno] = useState("todos");
+  const [grudosOptions, setGrudosOptions] = useState([{ grudos_id: 'todos', grudos_desc: 'TODOS' }]);
+  const [selectedGrudos, setSelectedGrudos] = useState("todos");
 
 
   //! Modal - Nueva Encuesta
@@ -276,13 +278,13 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       width: "10%", // Ajustar el ancho de la columna
     },
     {
-      title: Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo1 ? parametros[0].grupo1.toString().toUpperCase() : 'VENDEDOR',
+      title: Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo1 ? parametros[0].grupo1.toString().toUpperCase() : 'GRUPO 1',
       dataIndex: "gruuno_nombre",
       key: "gruuno_nombre",
       width: "10%", // Ajustar el ancho de la columna
     },
     {
-      title: Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo2 ? parametros[0].grupo2.toString().toUpperCase() : 'ZONA',
+      title: Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo2 ? parametros[0].grupo2.toString().toUpperCase() : 'GRUPO 2',
       dataIndex: "grudos_nombre",
       key: "grudos_nombre",
       width: "10%", // Ajustar el ancho de la columna
@@ -888,10 +890,15 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     } else {
       dataAdd.append("idEst", selectedEstado);
     }
-    if (selectedVendedor === 'todos') {
+    if (selectedGruuno === 'todos') {
       dataAdd.append("idVendedor", "");
     } else {
-      dataAdd.append("idVendedor", selectedVendedor);
+      dataAdd.append("idVendedor", selectedGruuno);
+    }
+    if (selectedGrudos === 'todos') {
+      dataAdd.append("idGrudos", "");
+    } else {
+      dataAdd.append("idGrudos", selectedGrudos);
     }
 
     fetch(`${URL}encuesta-siembra_datosTable.php`, {
@@ -916,7 +923,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedEstado,
     upload,
     updateSelects,
-    selectedVendedor
+    selectedGruuno,
+    selectedGrudos
   ]);
 
   //! Para editar encuesta
@@ -1044,7 +1052,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
   }));
 
 
-  const fetchVendedores = async () => {
+  const fetchGruuno = async () => {
 
     if (!isAdmin) return;
 
@@ -1055,24 +1063,53 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       });
 
       if (!response.ok) {
-        throw new Error(`Error al obtener vendedores: ${response.status}`);
+        throw new Error(`Error al obtener gruunoOptions: ${response.status}`);
       }
 
       const jsonData = await response.json();
 
       // Validamos que venga la propiedad isAdmin
       if (jsonData !== undefined) {
-        setVendedores((prev) => [...prev, ...jsonData]);
+        setGruunoOptions((prev) => [...prev, ...jsonData]);
       } else {
         console.warn("Respuesta inesperada:", jsonData);
       }
     } catch (error) {
-      console.error("Error al obtener vendedores:", error);
+      console.error("Error al obtener gruunoOptions:", error);
+    }
+  };
+
+  const fetchGrudos = async () => {
+
+    if (!isAdmin) return;
+
+    try {
+
+      const response = await fetch(`${URL}getGrudos.php`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error al obtener grudosOptions: ${response.status}`);
+      }
+
+      const jsonData = await response.json();
+
+      // Validamos que venga la propiedad isAdmin
+      if (jsonData !== undefined) {
+        setGrudosOptions((prev) => [...prev, ...jsonData]);
+      } else {
+        console.warn("Respuesta inesperada:", jsonData);
+      }
+    } catch (error) {
+      console.error("Error al obtener grudosOptions:", error);
     }
   };
 
   useEffect(() => {
-    fetchVendedores();
+    fetchGruuno();
+
+    fetchGrudos();
 
   }, [isAdmin]);
 
@@ -1243,30 +1280,57 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
 
         {
           isAdmin && (
-            <div className="contSubtitulo-cliente">
-              <div>
-                <h1 className="subtitulos">
-                  {
-                    Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo1 ? parametros[0].grupo1.toString().toUpperCase() : 'VENDEDOR'
+            <>
+              <div className="contSubtitulo-cliente">
+                <div>
+                  <h1 className="subtitulos">
+                    {
+                      Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo1 ? parametros[0].grupo1.toString().toUpperCase() : 'GRUPO 1'
+                    }
+                  </h1>
+                </div>
+                <Select
+                  defaultValue={selectedGruuno}
+                  style={{ width: "100%", maxWidth: "250px" }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
-                </h1>
+                  onChange={(value) => setSelectedGruuno(value)}
+                  options={gruunoOptions?.map((gruno) => {
+                    return {
+                      value: gruno?.gruuno_id,
+                      label: gruno?.gruuno_desc,
+                    };
+                  })}
+                />
               </div>
-              <Select
-                defaultValue={selectedVendedor}
-                style={{ width: "100%", maxWidth: "250px" }}
-                showSearch
-                filterOption={(input, option) =>
-                  option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                onChange={(value) => setSelectedVendedor(value)}
-                options={vendedores?.map((vendedor) => {
-                  return {
-                    value: vendedor?.gruuno_id,
-                    label: vendedor?.gruuno_desc,
-                  };
-                })}
-              />
-            </div>
+
+              <div className="contSubtitulo-cliente">
+                <div>
+                  <h1 className="subtitulos">
+                    {
+                      Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo2 ? parametros[0].grupo2.toString().toUpperCase() : 'GRUPO 2'
+                    }
+                  </h1>
+                </div>
+                <Select
+                  defaultValue={selectedGrudos}
+                  style={{ width: "100%", maxWidth: "250px" }}
+                  showSearch
+                  filterOption={(input, option) =>
+                    option.label?.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={(value) => setSelectedGrudos(value)}
+                  options={grudosOptions?.map((grudo) => {
+                    return {
+                      value: grudo?.grudos_id,
+                      label: grudo?.grudos_desc,
+                    };
+                  })}
+                />
+              </div>
+            </>
           )
         }
 

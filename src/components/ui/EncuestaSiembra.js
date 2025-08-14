@@ -287,6 +287,18 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       width: "210px"
     },
     {
+      title: Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo1 ? parametros[0].grupo1.toString().toUpperCase() : 'VENDEDOR',
+      dataIndex: "gruuno_nombre",
+      key: "gruuno_nombre",
+      width: "10%", // Ajustar el ancho de la columna
+    },
+    {
+      title: Array.isArray(parametros) && parametros.length > 0 && parametros[0]?.grupo2 ? parametros[0].grupo2.toString().toUpperCase() : 'ZONA',
+      dataIndex: "grudos_nombre",
+      key: "grudos_nombre",
+      width: "10%", // Ajustar el ancho de la columna
+    },
+    {
       title: "ESTADO",
       key: "estado",
       dataIndex: "estado",
@@ -438,6 +450,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
       supEstimado: item.superficie,
       rindeEstimado: item.rindeest,
       costoEstimado: item.costoest,
+      gruuno_nombre: item?.gruuno_nombre || "",
+      grudos_nombre: item?.grudos_nombre || "",
       estado: estadoTag,
       botones: "...",
       acos_desc: item.acos_desc

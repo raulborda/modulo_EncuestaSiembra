@@ -739,6 +739,17 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     dataAdd.append("idLote", selectedLote);
     // }
 
+    if (selectedGruuno === 'todos') {
+      dataAdd.append("idGruuno", "");
+    } else {
+      dataAdd.append("idGruuno", selectedGruuno);
+    }
+    if (selectedGrudos === 'todos') {
+      dataAdd.append("idGrudos", "");
+    } else {
+      dataAdd.append("idGrudos", selectedGrudos);
+    }
+
     fetch(`${URL}encuesta-siembra_SupEncuestasCultivo.php`, {
       method: "POST",
       body: dataAdd,
@@ -771,6 +782,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedLote,
     updateSelects,
     updateGraph,
+    selectedGruuno,
+    selectedGrudos
   ]);
 
   useEffect(() => {
@@ -794,6 +807,17 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     dataAdd.append("idLote", selectedLote);
     // }
     // dataAdd.append("idLote", selectedLote);
+    if (selectedGruuno === 'todos') {
+      dataAdd.append("idGruuno", "");
+    } else {
+      dataAdd.append("idGruuno", selectedGruuno);
+    }
+    if (selectedGrudos === 'todos') {
+      dataAdd.append("idGrudos", "");
+    } else {
+      dataAdd.append("idGrudos", selectedGrudos);
+    }
+
     fetch(`${URL}encuesta-siembra_ProdEncuestasCultivo.php`, {
       method: "POST",
       body: dataAdd,
@@ -824,6 +848,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedLote,
     updateSelects,
     updateGraph,
+    selectedGruuno,
+    selectedGrudos
   ]);
 
   useEffect(() => {
@@ -846,6 +872,17 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     // } else {
     dataAdd.append("idLote", selectedLote);
     // }
+    if (selectedGruuno === 'todos') {
+      dataAdd.append("idGruuno", "");
+    } else {
+      dataAdd.append("idGruuno", selectedGruuno);
+    }
+    if (selectedGrudos === 'todos') {
+      dataAdd.append("idGrudos", "");
+    } else {
+      dataAdd.append("idGrudos", selectedGrudos);
+    }
+
     fetch(`${URL}encuesta-siembra_CostoEncuestaCultivo.php`, {
       method: "POST",
       body: dataAdd,
@@ -876,6 +913,8 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
     selectedLote,
     updateSelects,
     updateGraph,
+    selectedGruuno,
+    selectedGrudos
   ]);
 
   useEffect(() => {
@@ -1483,7 +1522,7 @@ export const EncuestaSiembra = ({ cosechaActiva }) => {
           >
             <div>
               <h1 className="titulos">
-                PRODUCCION ESTIMADA: {totalProduccion} TT
+                PRODUCCIÓN ESTIMADA: {totalProduccion} TT
               </h1>
             </div>
             {cultivosProdEncuestadas.length === 0 ? (
